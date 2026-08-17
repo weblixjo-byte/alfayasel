@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Package, Plus, Search, Edit3, Trash2, PauseCircle, PlayCircle, X, Check, Layers, AlertCircle } from 'lucide-react';
 import { ProductData } from '@/lib/data/products';
 import { createProduct, updateProduct, deleteProduct, toggleProductStatus } from '@/lib/actions/products';
+import { ImageUploader } from '@/components/admin/ImageUploader';
 
 interface AdminVariationForm {
   id: string;
@@ -508,14 +509,13 @@ export default function AdminProductsPage() {
                 </div>
 
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">رابط صورة المنتج الرئيسية (Main Image URL) *</label>
-                  <input
-                    type="text"
-                    required
+                  <ImageUploader
                     value={formData.imageUrl}
-                    onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-1 focus:ring-black font-mono text-[10px]"
-                    placeholder="/images/uploads/be-clean-gel.png"
+                    onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+                    label="صورة المنتج الرئيسية (Main Image)"
+                    helperText="اختر صورة المنتج من جهازك أو موبايلك (JPG, PNG, WebP)"
+                    aspectRatio="square"
+                    required
                   />
                 </div>
               </div>
@@ -650,13 +650,12 @@ export default function AdminProductsPage() {
                             />
                           </div>
                           <div>
-                            <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">رابط صورة خاصة بالحجم (اختياري)</label>
-                            <input
-                              type="text"
+                            <ImageUploader
                               value={variant.imageUrl}
-                              onChange={(e) => handleUpdateVariation(vIdx, 'imageUrl', e.target.value)}
-                              placeholder="/images/uploads/500ml.png"
-                              className="w-full px-2.5 py-1.5 border rounded-lg text-[10px] font-mono"
+                              onChange={(url) => handleUpdateVariation(vIdx, 'imageUrl', url)}
+                              label="صورة خاصة بالحجم (اختياري)"
+                              helperText="اتركها فارغة لاستخدام الصورة الرئيسية"
+                              aspectRatio="square"
                             />
                           </div>
                         </div>
