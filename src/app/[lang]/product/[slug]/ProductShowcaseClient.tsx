@@ -11,9 +11,10 @@ import { useWishlistStore } from '@/lib/store/useWishlistStore';
 interface ProductShowcaseClientProps {
   product: ProductData;
   locale: Locale;
+  initialVariationSku?: string;
 }
 
-export default function ProductShowcaseClient({ product, locale }: ProductShowcaseClientProps) {
+export default function ProductShowcaseClient({ product, locale, initialVariationSku }: ProductShowcaseClientProps) {
   const dict = getDictionary(locale);
   const isAr = locale === 'ar';
   
@@ -26,20 +27,27 @@ export default function ProductShowcaseClient({ product, locale }: ProductShowca
   const variations = product.variations || [];
   const hasVariations = variations.length > 0;
 
-  // State for selected variation SKU
+  // State for selected variation SKU (checks initialVariationSku from URL searchParams first)
   const [selectedVariationSku, setSelectedVariationSku] = useState<string>(() => {
+    if (initialVariationSku && variations.some(v => v.sku === initialVariationSku)) {
+      return initialVariationSku;
+    }
     return variations[0]?.sku || '';
   });
 
   // Find matching variation based on selected SKU
   const activeVariation = variations.find((v) => v.sku === selectedVariationSku) || variations[0];
 
-  // Resolve active price, sku, images, stock status
+  // Resolve active price, sku, images, stock status, and description
   const currentSKU = activeVariation ? activeVariation.sku : product.sku;
   const currentPrice = activeVariation ? activeVariation.price : product.price;
   const currentOriginalPrice = activeVariation ? activeVariation.originalPrice : product.originalPrice;
   const inStock = activeVariation ? activeVariation.inStock : product.inStock;
   const stockQuantity = activeVariation ? activeVariation.stockQuantity : product.stockQuantity;
+  
+  const currentDescription = activeVariation?.description?.[locale]
+    ? activeVariation.description[locale]
+    : product.description[locale];
 
   // Resolve images
   const variationImages = activeVariation?.images || [];
@@ -52,6 +60,15 @@ export default function ProductShowcaseClient({ product, locale }: ProductShowca
   const hasPriceRange = hasVariations && minPrice !== maxPrice;
 
   const isLiked = isInWishlist(product.id);
+
+  const handleVariationChange = (sku: string) => {
+    setSelectedVariationSku(sku);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('sku', sku);
+      window.history.pushState({}, '', url.toString());
+    }
+  };
 
   const handleAddToCart = () => {
     // Build bilingual name for variation to show size/type in cart item description
@@ -189,7 +206,7 @@ export default function ProductShowcaseClient({ product, locale }: ProductShowca
                     return (
                       <button
                         key={v.sku}
-                        onClick={() => setSelectedVariationSku(v.sku)}
+                        onClick={() => handleVariationChange(v.sku)}
                         className={`px-4 py-2.5 text-xs font-bold rounded-xl border-2 transition-all cursor-pointer ${
                           isSelected
                             ? 'bg-[#0066b2] border-[#0066b2] text-white shadow-md'
@@ -208,7 +225,7 @@ export default function ProductShowcaseClient({ product, locale }: ProductShowca
           {/* Excerpt Description */}
           <div 
             className="text-xs md:text-sm text-gray-600 leading-relaxed border-t border-b border-gray-100 py-4 font-normal"
-            dangerouslySetInnerHTML={{ __html: product.description[locale] }}
+            dangerouslySetInnerHTML={{ __html: currentDescription }}
           />
 
           {/* Actions: Quantity + Add to Cart */}

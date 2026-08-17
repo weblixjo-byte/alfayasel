@@ -24,6 +24,7 @@ export interface VariationData {
   inStock: boolean;
   stockQuantity: number;
   name?: LocalizedText;
+  description?: LocalizedText;
 }
 
 export interface ProductData {

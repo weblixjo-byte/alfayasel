@@ -14,6 +14,7 @@ import Product from '@/lib/models/Product';
 
 interface ProductPageProps {
   params: { lang: Locale; slug: string };
+  searchParams: { sku?: string };
 }
 
 async function getDbProduct(slug: string): Promise<ProductData | null> {
@@ -50,6 +51,7 @@ async function getDbProduct(slug: string): Promise<ProductData | null> {
             inStock: v.inStock !== false,
             stockQuantity: v.stockQuantity || 0,
             name: v.name || { en: '', ar: '' },
+            description: v.description || { en: '', ar: '' },
           }))
         : [],
     };
@@ -94,6 +96,7 @@ async function getRelatedDbProducts(categorySlug: string, currentSlug: string): 
   }
 }
 
+// Clean HTML tags and truncate for Meta Description
 function cleanDescription(html: string): string {
   if (!html) return '';
   return html
@@ -103,20 +106,38 @@ function cleanDescription(html: string): string {
     .slice(0, 160);
 }
 
-export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: ProductPageProps): Promise<Metadata> {
   const product = await getDbProduct(params.slug);
   if (!product) return {};
 
-  const description = cleanDescription(product.description[params.lang] || product.usage[params.lang]);
-  const canonicalUrl = `https://alfayasel.com/${params.lang}/product/${product.slug}`;
-  const imageUrl = product.images?.[0]
-    ? (product.images[0].startsWith('http') 
-        ? product.images[0] 
-        : `https://alfayasel.com${product.images[0]}`)
+  // Check if a specific variation is requested in the URL parameter
+  const selectedVariation = searchParams?.sku
+    ? product.variations?.find((v) => v.sku === searchParams.sku)
+    : null;
+
+  // Customize SEO Title based on size/name variation
+  const variationName = selectedVariation?.name?.[params.lang];
+  const titleText = variationName
+    ? `${product.name[params.lang]} (${variationName}) | Al Fayasel Laboratories`
+    : `${product.name[params.lang]} | Al Fayasel Laboratories`;
+
+  // Customize SEO Description based on variation specific description
+  const variationDesc = selectedVariation?.description?.[params.lang];
+  const rawDescription = variationDesc || product.description[params.lang] || product.usage[params.lang];
+  const description = cleanDescription(rawDescription);
+
+  const canonicalUrl = searchParams?.sku
+    ? `https://alfayasel.com/${params.lang}/product/${product.slug}?sku=${searchParams.sku}`
+    : `https://alfayasel.com/${params.lang}/product/${product.slug}`;
+
+  const imageUrl = selectedVariation?.images?.[0] || product.images?.[0]
+    ? ((selectedVariation?.images?.[0] || product.images[0]).startsWith('http')
+        ? (selectedVariation?.images?.[0] || product.images[0])
+        : `https://alfayasel.com${selectedVariation?.images?.[0] || product.images[0]}`)
     : 'https://alfayasel.com/images/placeholder.jpg';
 
   return {
-    title: `${product.name[params.lang]} | Al Fayasel Laboratories`,
+    title: titleText,
     description: description,
     alternates: {
       canonical: canonicalUrl,
@@ -126,7 +147,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       },
     },
     openGraph: {
-      title: product.name[params.lang],
+      title: titleText,
       description: description,
       url: canonicalUrl,
       siteName: 'Al Fayasel Laboratories',
@@ -143,14 +164,14 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     },
     twitter: {
       card: 'summary_large_image',
-      title: product.name[params.lang],
+      title: titleText,
       description: description,
       images: [imageUrl],
     },
   };
 }
 
-export default async function ProductDetailPage({ params: { lang, slug } }: ProductPageProps) {
+export default async function ProductDetailPage({ params: { lang, slug }, searchParams }: ProductPageProps) {
   const dict = getDictionary(lang);
   const product = await getDbProduct(slug);
 
@@ -171,8 +192,12 @@ export default async function ProductDetailPage({ params: { lang, slug } }: Prod
         ]}
       />
 
-      {/* Main Product Showcase */}
-      <ProductShowcaseClient product={product} locale={lang} />
+      {/* Main Product Showcase - passing selected variation SKU as initial parameter */}
+      <ProductShowcaseClient 
+        product={product} 
+        locale={lang} 
+        initialVariationSku={searchParams?.sku}
+      />
 
       {/* Tabs Section (Description / Usage / Reviews) */}
       <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200 shadow-xs space-y-6">

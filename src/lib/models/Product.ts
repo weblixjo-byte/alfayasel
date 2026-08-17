@@ -12,6 +12,10 @@ export interface IVariation {
     en: string;
     ar: string;
   };
+  description?: {
+    en: string;
+    ar: string;
+  };
 }
 
 export interface IProduct extends Document {
@@ -96,6 +100,10 @@ const ProductSchema: Schema<IProduct> = new Schema(
         name: {
           en: { type: String },
           ar: { type: String }
+        },
+        description: {
+          en: { type: String, default: '' },
+          ar: { type: String, default: '' }
         }
       }
     ],
