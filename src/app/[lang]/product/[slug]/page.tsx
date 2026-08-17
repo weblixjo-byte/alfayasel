@@ -2,8 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-
-export const revalidate = 60; // ISR - Cached on CDN to save serverless resources
 import { Locale, getDictionary } from '@/lib/i18n/config';
 import { ProductData } from '@/lib/data/products';
 import { ProductJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd';
@@ -12,9 +10,28 @@ import ProductShowcaseClient from './ProductShowcaseClient';
 import { dbConnect } from '@/lib/db/mongoose';
 import Product from '@/lib/models/Product';
 
+export const revalidate = 3600; // 1 Hour ISR - Cached on CDN Edge with 0 Serverless Function cost
+
+export async function generateStaticParams() {
+  try {
+    await dbConnect();
+    const products = await Product.find({ isPaused: false }, { slug: 1 }).lean();
+    const locales: Locale[] = ['en', 'ar'];
+    return products.flatMap((p: any) =>
+      locales.map((lang) => ({
+        lang,
+        slug: p.slug,
+      }))
+    );
+  } catch (error) {
+    console.error('Failed to generate static params for products:', error);
+    return [];
+  }
+}
+
 interface ProductPageProps {
   params: { lang: Locale; slug: string };
-  searchParams: { sku?: string };
+  searchParams?: { sku?: string };
 }
 
 async function getDbProduct(slug: string): Promise<ProductData | null> {
