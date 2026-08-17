@@ -10,11 +10,11 @@ export const AdminSidebar: React.FC = () => {
   const pathname = usePathname();
 
   const links = [
-    { label: 'Overview', href: '/admin/dashboard', icon: LayoutDashboard },
-    { label: 'Products', href: '/admin/products', icon: Package },
-    { label: 'Categories', href: '/admin/categories', icon: FolderKanban },
-    { label: 'Orders', href: '/admin/orders', icon: ShoppingCart },
-    { label: 'Settings', href: '/admin/settings', icon: Settings },
+    { label: 'الرئيسية (Overview)', href: '/admin/dashboard', icon: LayoutDashboard },
+    { label: 'المنتجات (Products)', href: '/admin/products', icon: Package },
+    { label: 'الأقسام (Categories)', href: '/admin/categories', icon: FolderKanban },
+    { label: 'الطلبيات (Orders)', href: '/admin/orders', icon: ShoppingCart },
+    { label: 'الإعدادات (Settings)', href: '/admin/settings', icon: Settings },
   ];
 
   return (
@@ -61,7 +61,7 @@ export const AdminSidebar: React.FC = () => {
           className="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-gray-400 hover:text-gray-900 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>View Store</span>
+          <span>عرض المتجر (View Store)</span>
         </Link>
 
         <button
@@ -69,7 +69,7 @@ export const AdminSidebar: React.FC = () => {
           className="w-full flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-red-600 hover:bg-red-50 px-3.5 py-2.5 border border-red-200 transition-colors rounded-none"
         >
           <LogOut className="w-3.5 h-3.5" />
-          <span>Sign Out</span>
+          <span>تسجيل الخروج (Sign Out)</span>
         </button>
       </div>
     </aside>

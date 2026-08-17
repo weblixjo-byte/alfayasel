@@ -243,51 +243,65 @@ export default function CategoriesPage() {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-700">Arabic Name *</label>
+                  <label className="text-xs font-bold text-gray-700">الاسم بالعربية (Arabic Name) *</label>
                   <input
                     type="text"
                     required
                     value={formData.nameAr}
                     onChange={(e) => setFormData({ ...formData, nameAr: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-black"
-                    placeholder="العناية بالبشرة"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black"
+                    placeholder="مثال: العناية بالبشرة"
                   />
+                  <p className="text-[10px] text-gray-400 font-normal">الاسم الذي سيظهر للزبائن في الموقع العربي</p>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-700">English Name *</label>
+                  <label className="text-xs font-bold text-gray-700">الاسم بالإنجليزية (English Name) *</label>
                   <input
                     type="text"
                     required
                     value={formData.nameEn}
-                    onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-black"
-                    placeholder="Skin Care"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setFormData({
+                        ...formData,
+                        nameEn: val,
+                        slug: editingCategory
+                          ? formData.slug
+                          : val.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '')
+                      });
+                    }}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black"
+                    placeholder="Example: Skin Care"
                   />
+                  <p className="text-[10px] text-gray-400 font-normal">الاسم بالإنجليزية للموقع والروابط</p>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-gray-700">Unique Slug *</label>
+                <label className="text-xs font-bold text-gray-700">الرابط الفريد (Unique URL Link - Slug) *</label>
                 <input
                   type="text"
                   required
                   value={formData.slug}
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-black font-mono"
+                  className="w-full bg-gray-100 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black font-mono"
                   placeholder="skin-care-product"
                   disabled={!!editingCategory}
                 />
+                <p className="text-[10px] text-brand-600 font-normal">
+                  💡 يتم إنشاؤه تلقائياً من الاسم الإنجليزي لتسهيل العمل (مثال: `skin-care`). لا داعي لتعديله.
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-700">Parent Category</label>
+                  <label className="text-xs font-bold text-gray-700">القسم الرئيسي التابع له (Parent Category)</label>
                   <select
                     value={formData.parentSlug}
                     onChange={(e) => setFormData({ ...formData, parentSlug: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-black"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black bg-white"
                   >
-                    <option value="">None (Primary Parent Category)</option>
+                    <option value="">-- بدون (هذا قسم رئيسي عريض) --</option>
                     {categories
                       .filter((c) => c._id !== editingCategory?._id && !c.parentSlug)
                       .map((c) => (
@@ -296,34 +310,36 @@ export default function CategoriesPage() {
                         </option>
                       ))}
                   </select>
+                  <p className="text-[10px] text-gray-400 font-normal">اختر القسم الأب لتجعله قسماً فرعياً، أو اتركه بدون ليكون رئيساً</p>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-700">Sort Order</label>
+                  <label className="text-xs font-bold text-gray-700">ترتيب الظهور (Sort Order)</label>
                   <input
                     type="number"
                     value={formData.order}
                     onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-black"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black"
                   />
+                  <p className="text-[10px] text-gray-400 font-normal">الرقم الأصغر يظهر أولاً بالموقع (مثال: 1 يظهر قبل 2)</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-700">Arabic Description</label>
+                  <label className="text-xs font-bold text-gray-700">شرح القسم بالعربية (Arabic Description)</label>
                   <textarea
                     value={formData.descAr}
                     onChange={(e) => setFormData({ ...formData, descAr: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-black h-20 resize-none"
-                    placeholder="وصف القسم بالعربية..."
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black h-20 resize-none"
+                    placeholder="وصف القسم بالتفصيل..."
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-700">English Description</label>
+                  <label className="text-xs font-bold text-gray-700">شرح القسم بالإنجليزية (English Description)</label>
                   <textarea
                     value={formData.descEn}
                     onChange={(e) => setFormData({ ...formData, descEn: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-black h-20 resize-none"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black h-20 resize-none"
                     placeholder="English description..."
                   />
                 </div>
@@ -333,15 +349,15 @@ export default function CategoriesPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="bg-gray-100 text-gray-700 hover:bg-gray-200 text-xs font-bold px-4 py-2.5 rounded-lg transition-colors"
+                  className="bg-gray-150 text-gray-700 hover:bg-gray-200 text-xs font-bold px-4 py-2.5 rounded-lg transition-colors"
                 >
-                  Cancel
+                  إلغاء (Cancel)
                 </button>
                 <button
                   type="submit"
-                  className="bg-black text-white hover:bg-gray-800 text-xs font-bold px-4 py-2.5 rounded-lg transition-colors"
+                  className="bg-black text-white hover:bg-gray-800 text-xs font-bold px-5 py-2.5 rounded-lg transition-colors"
                 >
-                  {editingCategory ? 'Save Changes' : 'Create Category'}
+                  {editingCategory ? 'حفظ التعديلات (Save Changes)' : 'إنشاء القسم (Create Category)'}
                 </button>
               </div>
             </form>

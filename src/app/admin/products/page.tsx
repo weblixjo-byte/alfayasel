@@ -311,142 +311,155 @@ export default function AdminProductsPage() {
             <form onSubmit={handleFormSubmit} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">SKU *</label>
+                  <label className="font-bold text-gray-700 block mb-1">رمز المنتج الفريد (SKU) *</label>
                   <input
                     type="text"
                     required
                     value={formData.sku}
                     onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl"
+                    className="w-full px-3 py-2 border rounded-xl bg-gray-50 focus:outline-none focus:ring-1 focus:ring-black"
                   />
+                  <p className="text-[9px] text-gray-400 mt-0.5">رمز خاص بكل منتج (يتم توليده تلقائياً ويمكنك تعديله)</p>
                 </div>
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">Price (JOD) *</label>
+                  <label className="font-bold text-gray-700 block mb-1">السعر بالدينار الأردني (Price JOD) *</label>
                   <input
                     type="number"
                     step="0.05"
                     required
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl"
+                    className="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-1 focus:ring-black"
+                    placeholder="مثال: 5.50"
                   />
+                  <p className="text-[9px] text-gray-400 mt-0.5">اكتب السعر بالدينار (مثال: 4.00 أو 12.50)</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">Name (English) *</label>
+                  <label className="font-bold text-gray-700 block mb-1">اسم المنتج بالإنجليزية (English Name) *</label>
                   <input
                     type="text"
                     required
                     value={formData.nameEn}
                     onChange={(e) => setFormData({ ...formData, nameEn: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl"
+                    className="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-1 focus:ring-black"
+                    placeholder="Example: Be Clean Gel"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">Name (Arabic) *</label>
+                  <label className="font-bold text-gray-700 block mb-1">اسم المنتج بالعربية (Arabic Name) *</label>
                   <input
                     type="text"
                     required
                     value={formData.nameAr}
                     onChange={(e) => setFormData({ ...formData, nameAr: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl font-arabic"
+                    className="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-1 focus:ring-black font-arabic"
+                    placeholder="مثال: بي كلين معقم جيل"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="font-bold text-gray-700 block mb-1">Category *</label>
+                <label className="font-bold text-gray-700 block mb-1">القسم التابع له المنتج (Category) *</label>
                 <select
                   value={formData.categorySlug}
                   onChange={(e) => setFormData({ ...formData, categorySlug: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-xl bg-white"
+                  className="w-full px-3 py-2 border rounded-xl bg-white focus:outline-none focus:ring-1 focus:ring-black"
                 >
                   {categories.map((c) => (
                     <option key={c.slug} value={c.slug}>
-                      {c.name.en}
+                      {c.name.ar} ({c.name.en})
                     </option>
                   ))}
                 </select>
+                <p className="text-[9px] text-gray-400 mt-0.5">اختر القسم الذي ينتمي إليه هذا المنتج ليظهر فيه بالمتجر</p>
               </div>
 
               <div>
-                <label className="font-bold text-gray-700 block mb-1">Image URL *</label>
+                <label className="font-bold text-gray-700 block mb-1">رابط صورة المنتج (Image URL) *</label>
                 <input
                   type="text"
                   required
                   value={formData.imageUrl}
                   onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-xl"
+                  className="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-1 focus:ring-black font-mono text-[10px]"
+                  placeholder="/images/uploads/product-image.jpg"
                 />
+                <p className="text-[9px] text-gray-400 mt-0.5">مسار أو رابط صورة المنتج بالموقع (مثال: `/images/uploads/your-image.jpg`)</p>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">Description (English)</label>
+                  <label className="font-bold text-gray-700 block mb-1">شرح المنتج بالإنجليزية (Description EN)</label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     value={formData.descriptionEn}
                     onChange={(e) => setFormData({ ...formData, descriptionEn: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl"
+                    className="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-1 focus:ring-black"
+                    placeholder="English description details..."
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">Description (Arabic)</label>
+                  <label className="font-bold text-gray-700 block mb-1">شرح المنتج بالعربية (Description AR)</label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     value={formData.descriptionAr}
                     onChange={(e) => setFormData({ ...formData, descriptionAr: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl font-arabic"
+                    className="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-1 focus:ring-black font-arabic"
+                    placeholder="تفاصيل وشرح المنتج بالعربية للزبائن..."
                   />
                 </div>
               </div>
 
               {/* Tab Visibility Flags */}
-              <div className="flex flex-wrap gap-6 py-3 border-t border-b border-gray-100 my-2">
-                <label className="flex items-center gap-2 cursor-pointer font-bold text-gray-700">
-                  <input
-                    type="checkbox"
-                    checked={formData.isNewArrival}
-                    onChange={(e) => setFormData({ ...formData, isNewArrival: e.target.checked })}
-                    className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
-                  />
-                  <span>New (جديد)</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer font-bold text-gray-700">
-                  <input
-                    type="checkbox"
-                    checked={formData.isFeatured}
-                    onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                    className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
-                  />
-                  <span>Featured (مميز)</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer font-bold text-gray-700">
-                  <input
-                    type="checkbox"
-                    checked={formData.isTopSeller}
-                    onChange={(e) => setFormData({ ...formData, isTopSeller: e.target.checked })}
-                    className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
-                  />
-                  <span>Top Seller (الأكثر مبيعاً)</span>
-                </label>
+              <div className="bg-gray-50 p-3 rounded-2xl border border-gray-150 space-y-2 my-2">
+                <span className="font-bold text-gray-700 block mb-1 text-[10px] uppercase tracking-wider">عرض المنتج في الصفحة الرئيسية (Home Showcase):</span>
+                <div className="flex flex-wrap gap-5">
+                  <label className="flex items-center gap-2 cursor-pointer font-semibold text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={formData.isNewArrival}
+                      onChange={(e) => setFormData({ ...formData, isNewArrival: e.target.checked })}
+                      className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
+                    />
+                    <span>جديدنا (New Arrivals)</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer font-semibold text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={formData.isFeatured}
+                      onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
+                      className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
+                    />
+                    <span>مميز (Featured)</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer font-semibold text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={formData.isTopSeller}
+                      onChange={(e) => setFormData({ ...formData, isTopSeller: e.target.checked })}
+                      className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
+                    />
+                    <span>الاكثر مبيعاً (Top Sellers)</span>
+                  </label>
+                </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-2">
+              <div className="flex items-center justify-end gap-3 pt-2 border-t border-gray-100">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-xl"
+                  className="px-4 py-2.5 text-gray-600 hover:bg-gray-100 rounded-xl font-bold transition-colors"
                 >
-                  Cancel
+                  إلغاء (Cancel)
                 </button>
                 <button
                   type="submit"
-                  className="bg-brand-500 hover:bg-brand-600 text-white font-bold px-5 py-2 rounded-xl"
+                  className="bg-[#0066b2] hover:bg-[#005594] text-white font-extrabold px-6 py-2.5 rounded-xl transition-all shadow-md"
                 >
-                  Save Product
+                  {editingProduct ? 'حفظ التعديلات (Save Product)' : 'إنشاء المنتج (Create Product)'}
                 </button>
               </div>
             </form>
