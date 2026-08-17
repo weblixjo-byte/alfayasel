@@ -1,0 +1,94 @@
+{
+  "topBar": {
+    "welcome": "Welcome to Al Fayasel Laboratories",
+    "newsletter": "NEWSLETTER",
+    "contact": "CONTACT US",
+    "faqs": "FAQS",
+    "deliveryNotice": "Any order under 10 JOD is subject to a 2 JOD delivery fee."
+  },
+  "nav": {
+    "home": "HOME",
+    "aboutUs": "ABOUT US",
+    "contactUs": "CONTACT US",
+    "ourCertificates": "OUR CERTIFICATES",
+    "specialOffer": "SPECIAL OFFER",
+    "browseCategories": "BROWSE CATEGORIES",
+    "searchPlaceholder": "Search for products...",
+    "allCategories": "Select Category",
+    "loginRegister": "LOGIN / REGISTER",
+    "cart": "Cart",
+    "wishlist": "Wishlist",
+    "adminDashboard": "Admin Dashboard"
+  },
+  "hero": {
+    "title1": "Be Well. Be Beautiful. Be You.",
+    "subtitle1": "High-quality pharmaceutical, hair, and skincare solutions produced under laboratory precision.",
+    "title2": "Surely Feel Better With Our Products",
+    "subtitle2": "Explore our certified dermatological creams, sunblocks, and specialized care products.",
+    "shopNow": "SHOP NOW",
+    "exploreCatalog": "EXPLORE CATALOG"
+  },
+  "sections": {
+    "featuredCategories": "Featured Categories",
+    "newArrivals": "NEW",
+    "featured": "FEATURED",
+    "topSellers": "TOP SELLERS",
+    "quickView": "Quick View",
+    "addToCart": "ADD TO CART",
+    "viewDetails": "View Details",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "jod": "JOD"
+  },
+  "filter": {
+    "title": "Filters",
+    "priceRange": "Price Range",
+    "categories": "Categories",
+    "search": "Filter by Name",
+    "clearAll": "Clear Filters",
+    "showing": "Showing",
+    "results": "products"
+  },
+  "product": {
+    "sku": "SKU",
+    "category": "Category",
+    "description": "Description",
+    "usage": "How to Use & Ingredients",
+    "reviews": "Customer Reviews",
+    "relatedProducts": "Related Products",
+    "addedToCart": "Product added to cart successfully!",
+    "quantity": "Quantity"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is currently empty",
+    "continueShopping": "Continue Shopping",
+    "subtotal": "Subtotal",
+    "deliveryFee": "Delivery Fee",
+    "freeDelivery": "Free Delivery (Orders 10 JOD+)",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "remove": "Remove item"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "billingDetails": "Shipping & Billing Details",
+    "fullName": "Full Name",
+    "phone": "Phone Number (WhatsApp)",
+    "city": "City / Region",
+    "address": "Detailed Address",
+    "notes": "Order Notes (Optional)",
+    "paymentMethod": "Payment Method",
+    "cod": "Cash on Delivery (COD)",
+    "placeOrder": "Place Order",
+    "successMessage": "Thank you! Your order has been placed successfully."
+  },
+  "footer": {
+    "about": "Al Fayasel Laboratories - Leading provider of pharmaceutical, dermatological, skin, hair, and paramedical care in Jordan.",
+    "address": "Amman, Seventh Circle",
+    "tel": "Tel: 009625810818",
+    "phone": "Phone: 00962776755550",
+    "fax": "Fax: 00962(6)5829837",
+    "rights": "AL FAYASEL © 2026 All rights reserved."
+  }
+}

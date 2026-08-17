@@ -33,7 +33,10 @@ next-env.d.ts
 # Large Database dumps or backups
 *.sql
 *.csv
-*.json
+!package.json
+!package-lock.json
+!.eslintrc.json
+!.github/
 /scratch
 /New folder
 /trash
