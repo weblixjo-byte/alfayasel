@@ -7,6 +7,8 @@ import { StickyHeader } from '@/components/layout/StickyHeader';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/store/CartDrawer';
 import { OrganizationJsonLd } from '@/components/seo/JsonLd';
+import { dbConnect } from '@/lib/db/mongoose';
+import Product from '@/lib/models/Product';
 import React, { Suspense } from 'react';
 
 export const metadata: Metadata = {
@@ -43,8 +45,34 @@ export const metadata: Metadata = {
   },
 };
 
-// Trigger build and redeploy on Netlify - clean build
-export default function RootHomePage() {
+// Fetch all 3 tabs server-side in parallel
+async function getTabProducts() {
+  try {
+    await dbConnect();
+    const [newProducts, featuredProducts, topSellerProducts] = await Promise.all([
+      Product.find({ isPaused: false, isNewArrival: true }).sort({ createdAt: -1 }).lean(),
+      Product.find({ isPaused: false, isFeatured: true }).sort({ createdAt: -1 }).lean(),
+      Product.find({ isPaused: false, isTopSeller: true }).sort({ createdAt: -1 }).lean(),
+    ]);
+
+    const serialize = (arr: any[]) =>
+      arr.map((p) => ({ ...p, _id: p._id.toString(), id: p._id.toString() }));
+
+    return {
+      new: serialize(newProducts),
+      featured: serialize(featuredProducts),
+      topSeller: serialize(topSellerProducts),
+    };
+  } catch (err) {
+    console.error('Failed to fetch tab products for root page:', err);
+    return { new: [], featured: [], topSeller: [] };
+  }
+}
+
+// RootHomePage fetches tab products on the server side to ensure English homepage has products
+export default async function RootHomePage() {
+  const initialTabData = await getTabProducts();
+
   return (
     <div dir="ltr" className="font-sans">
       <OrganizationJsonLd />
@@ -61,7 +89,7 @@ export default function RootHomePage() {
 
       <main className="min-h-screen">
         <Suspense fallback={<div className="h-[600px] bg-gray-50 animate-pulse" />}>
-          <HomePageClient lang="en" />
+          <HomePageClient lang="en" initialTabData={initialTabData} />
         </Suspense>
       </main>
 

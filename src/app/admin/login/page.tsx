@@ -28,7 +28,8 @@ export default function AdminLoginPage() {
       if (result?.error) {
         setErrorMsg('Invalid admin credentials. Default: admin@alfayasel.com / Admin@123456');
       } else {
-        router.push('/admin/dashboard');
+        // Use hard redirection to force browser session cookies reload, bypassing stale Next.js App Router cache
+        window.location.href = '/admin/dashboard';
       }
     } catch (err: any) {
       setErrorMsg('Login failed. Please try again.');

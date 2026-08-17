@@ -1,7 +1,18 @@
+'use client';
+
 import React from 'react';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
+import { usePathname } from 'next/navigation';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isLoginPage = pathname === '/admin/login';
+
+  // If we are on the login page, render clean layout without sidebar or admin header
+  if (isLoginPage) {
+    return <div className="min-h-screen bg-gray-50 font-sans">{children}</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row font-sans">
       {/* Editorial Sidebar */}
