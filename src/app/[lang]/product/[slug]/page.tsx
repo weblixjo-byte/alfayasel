@@ -191,7 +191,7 @@ export default async function ProductDetailPage({ params: { lang, slug } }: Prod
           <h3 className="text-xl font-bold text-gray-900 tracking-tight">
             {dict.product.relatedProducts}
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {relatedProducts.map((p) => (
               <ProductCard key={p.id} product={p} locale={lang} />
             ))}

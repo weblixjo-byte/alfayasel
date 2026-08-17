@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Heart, Search } from 'lucide-react';
@@ -26,6 +26,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   const isAr = locale === 'ar';
   const isLiked = isInWishlist(product.id);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Calculate price range for variable products
   const variations = product.variations || [];
@@ -61,7 +62,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="relative group w-full h-[320px] md:h-[370px] bg-transparent">
+    <div onMouseEnter={() => setIsHovered(true)} className="relative group w-full h-[320px] md:h-[370px] bg-transparent">
       {/* Dynamic Popover Container */}
       <div className="absolute top-0 left-0 w-full bg-white flex flex-col p-3 transition-all duration-200 z-10 group-hover:z-30 group-hover:shadow-2xl group-hover:border group-hover:border-gray-100 group-hover:rounded-b-lg">
         {/* Badges */}
@@ -93,14 +94,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 sizes="(max-width: 768px) 50vw, 25vw"
                 className="object-contain transition-opacity duration-500 group-hover:opacity-0"
               />
-              {/* Secondary Image on Hover */}
-              <Image
-                src={product.images[1]}
-                alt={product.name[locale]}
-                fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-contain absolute inset-0 opacity-0 transition-all duration-500 transform group-hover:opacity-100 group-hover:scale-105"
-              />
+              {/* Secondary Image on Hover (Lazy-Loaded only when hovered) */}
+              {isHovered && (
+                <Image
+                  src={product.images[1]}
+                  alt={product.name[locale]}
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-contain absolute inset-0 opacity-0 transition-all duration-500 transform group-hover:opacity-100 group-hover:scale-105"
+                />
+              )}
             </>
           ) : (
             /* Single Image with Zoom-in on Hover */

@@ -212,29 +212,55 @@ export default function ProductShowcaseClient({ product, locale }: ProductShowca
           />
 
           {/* Actions: Quantity + Add to Cart */}
-          <div className="flex items-center gap-4 pt-2">
-            {/* Quantity Controls */}
-            <div className="flex items-center border-2 border-gray-300 rounded-xl overflow-hidden bg-gray-50">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+            
+            {/* Mobile Top Row: Quantity + Wishlist side-by-side */}
+            <div className="flex items-center gap-3 sm:gap-0">
+              {/* Quantity Controls */}
+              <div className="flex items-center border-2 border-gray-300 rounded-xl overflow-hidden bg-gray-50 shrink-0">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="px-3.5 py-2.5 text-gray-600 hover:bg-gray-200 transition-colors font-bold text-sm"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className="px-5 font-extrabold text-sm text-gray-900">{quantity}</span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="px-3.5 py-2.5 text-gray-600 hover:bg-gray-200 transition-colors font-bold text-sm"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Wishlist Button - Mobile Only */}
               <button
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="px-3.5 py-2.5 text-gray-600 hover:bg-gray-200 transition-colors font-bold text-sm"
+                onClick={() =>
+                  toggleWishlist({
+                    id: product.id,
+                    sku: currentSKU,
+                    name: product.name,
+                    price: currentPrice,
+                    image: product.images[0],
+                    categorySlug: product.categorySlug,
+                  })
+                }
+                className={`sm:hidden p-3 rounded-xl border-2 transition-colors cursor-pointer ${
+                  isLiked
+                    ? 'bg-rose-50 border-rose-200 text-rose-500'
+                    : 'border-gray-300 text-gray-600 hover:text-rose-500'
+                }`}
+                title="Wishlist"
               >
-                <Minus className="w-4 h-4" />
-              </button>
-              <span className="px-5 font-extrabold text-sm text-gray-900">{quantity}</span>
-              <button
-                onClick={() => setQuantity(quantity + 1)}
-                className="px-3.5 py-2.5 text-gray-600 hover:bg-gray-200 transition-colors font-bold text-sm"
-              >
-                <Plus className="w-4 h-4" />
+                <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
               </button>
             </div>
 
-            {/* Add to Cart Button */}
+            {/* Add to Cart Button - full width on mobile, flex-1 on desktop */}
             <button
               onClick={handleAddToCart}
               disabled={!inStock}
-              className={`flex-1 text-white font-extrabold py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all text-xs tracking-wider uppercase ${
+              className={`w-full sm:flex-1 text-white font-extrabold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all text-xs tracking-wider uppercase ${
                 inStock 
                   ? 'bg-[#0066b2] hover:bg-[#005594] hover:shadow-xl cursor-pointer' 
                   : 'bg-gray-300 cursor-not-allowed shadow-none'
@@ -244,7 +270,7 @@ export default function ProductShowcaseClient({ product, locale }: ProductShowca
               <span>{dict.sections.addToCart}</span>
             </button>
 
-            {/* Wishlist Button */}
+            {/* Wishlist Button - Desktop Only */}
             <button
               onClick={() =>
                 toggleWishlist({
@@ -256,7 +282,7 @@ export default function ProductShowcaseClient({ product, locale }: ProductShowca
                   categorySlug: product.categorySlug,
                 })
               }
-              className={`p-3 rounded-xl border-2 transition-colors cursor-pointer ${
+              className={`hidden sm:block p-3 rounded-xl border-2 transition-colors cursor-pointer ${
                 isLiked
                   ? 'bg-rose-50 border-rose-200 text-rose-500'
                   : 'border-gray-300 text-gray-600 hover:text-rose-500'

@@ -185,13 +185,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
 
         {/* Right Column: Hero Image Slider */}
         <div className="flex-1 relative h-[240px] sm:h-[340px] md:h-[470px] bg-white border-b border-gray-200 overflow-hidden">
-          <Image
-            src={heroImages[currentSlide].src}
-            alt={heroImages[currentSlide].alt}
-            fill
-            priority
-            className="object-cover transition-opacity duration-700"
-          />
+          {heroImages.map((slide, idx) => (
+            <div
+              key={idx}
+              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                currentSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              }`}
+            >
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                priority={idx === 0} // Priority load only for first slider image
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 80vw"
+              />
+            </div>
+          ))}
 
           {/* Mobile quick-access categories overlay */}
           <div className="md:hidden absolute top-3 start-3 z-20">
