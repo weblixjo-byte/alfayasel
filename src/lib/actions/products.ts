@@ -5,6 +5,18 @@ import { dbConnect } from '@/lib/db/mongoose';
 import Product from '@/lib/models/Product';
 import Category from '@/lib/models/Category';
 
+export interface VariationInput {
+  sku: string;
+  name: { en: string; ar: string };
+  price: number;
+  originalPrice?: number;
+  description?: { en?: string; ar?: string };
+  images?: string[];
+  attributes?: Record<string, string>;
+  inStock?: boolean;
+  stockQuantity?: number;
+}
+
 export interface ProductInput {
   sku: string;
   name: { en: string; ar: string };
@@ -20,6 +32,7 @@ export interface ProductInput {
   isNewArrival: boolean;
   isFeatured: boolean;
   isTopSeller: boolean;
+  variations?: VariationInput[];
   saleStartDate?: string;
   saleEndDate?: string;
 }
