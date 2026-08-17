@@ -43,6 +43,7 @@ export const metadata: Metadata = {
   },
 };
 
+// Trigger build and redeploy on Netlify - clean build
 export default function RootHomePage() {
   return (
     <div dir="ltr" className="font-sans">
