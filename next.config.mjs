@@ -19,9 +19,6 @@ const nextConfig = {
 
   async redirects() {
     return [
-      // Language root redirect
-      { source: '/en', destination: '/', permanent: true },
-      { source: '/en/:path*', destination: '/:path*', permanent: true },
       // Static aliases
       { source: '/about', destination: '/about-us', permanent: true },
       { source: '/ar/about', destination: '/ar/about-us', permanent: true },
