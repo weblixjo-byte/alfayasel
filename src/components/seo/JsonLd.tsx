@@ -21,7 +21,9 @@ export const ProductJsonLd: React.FC<ProductJsonLdProps> = ({ product, locale })
     },
     offers: {
       '@type': 'Offer',
-      url: `https://alfayasel.com/${locale}/product/${product.slug}`,
+      url: locale === 'en' 
+        ? `https://alfayasel.com/product/${product.slug}` 
+        : `https://alfayasel.com/ar/product/${product.slug}`,
       priceCurrency: 'JOD',
       price: product.price,
       priceValidUntil: '2027-12-31',

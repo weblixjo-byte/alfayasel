@@ -5,6 +5,7 @@ import { dbConnect } from '@/lib/db/mongoose';
 import Product from '@/lib/models/Product';
 import { ProductData } from '@/lib/data/products';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
+import { Metadata } from 'next';
 
 interface OurProductsPageProps {
   params: { lang: Locale };
@@ -13,11 +14,22 @@ interface OurProductsPageProps {
 // Revalidate every 60s — fast ISR, no force-dynamic overhead
 export const revalidate = 60;
 
-export async function generateMetadata({ params }: OurProductsPageProps) {
+export async function generateMetadata({ params }: OurProductsPageProps): Promise<Metadata> {
   const isAr = params.lang === 'ar';
+  const canonicalUrl = params.lang === 'en' 
+    ? 'https://alfayasel.com/our-products' 
+    : `https://alfayasel.com/ar/our-products`;
+    
   return {
     title: isAr ? 'منتجاتنا | مختبرات الفياصل الدوائية' : 'Our Products | Al Fayasel Laboratories',
     description: isAr ? 'تصفح جميع المنتجات الطبية ومستحضرات التجميل المتميزة من مختبرات الفياصل الدوائية.' : 'Browse all medical and premium cosmetic products by Al Fayasel Laboratories.',
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: 'https://alfayasel.com/our-products',
+        ar: 'https://alfayasel.com/ar/our-products',
+      },
+    },
   };
 }
 

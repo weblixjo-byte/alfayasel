@@ -14,11 +14,22 @@ interface ShopPageProps {
 
 export async function generateMetadata({ params }: ShopPageProps): Promise<Metadata> {
   const isAr = params.lang === 'ar';
+  const canonicalUrl = params.lang === 'en' 
+    ? 'https://alfayasel.com/shop' 
+    : `https://alfayasel.com/ar/shop`;
+
   return {
     title: isAr ? 'تسوق الآن | مختبرات الفياصل' : 'Shop | Al Fayasel Laboratories',
     description: isAr
       ? 'تصفح جميع منتجات مختبرات الفياصل الدوائية من عناية بالبشرة والشعر والمعقمات.'
       : 'Browse all Al Fayasel Laboratories products including skincare, haircare, and sanitizers.',
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: 'https://alfayasel.com/shop',
+        ar: 'https://alfayasel.com/ar/shop',
+      },
+    },
   };
 }
 
