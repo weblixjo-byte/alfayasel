@@ -124,7 +124,7 @@ export const Header: React.FC<HeaderProps> = ({ locale }) => {
 
           {/* Wishlist */}
           <Link
-            href={getLocalizedPath('/shop?wishlist=true', locale)}
+            href={getLocalizedPath('/wishlist', locale)}
             className="relative p-1.5 text-gray-800 hover:text-[#0066b2] transition-colors flex items-center"
             title="Wishlist"
           >
@@ -134,6 +134,15 @@ export const Header: React.FC<HeaderProps> = ({ locale }) => {
                 {wishlistCount}
               </span>
             )}
+          </Link>
+
+          {/* Language Switcher Flag */}
+          <Link
+            href={getLanguageSwitcherPath()}
+            className="p-1.5 hover:opacity-80 transition-opacity flex items-center shrink-0"
+            title={isAr ? 'Switch to English' : 'تحويل للعربية'}
+          >
+            {isAr ? <UsFlag /> : <SaFlag />}
           </Link>
 
           {/* Cart */}
@@ -202,13 +211,6 @@ export const Header: React.FC<HeaderProps> = ({ locale }) => {
               </Link>
             ))}
             <Link
-              href={getLanguageSwitcherPath()}
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-3 px-2 text-sm font-bold text-gray-800 hover:text-[#0066b2] hover:bg-gray-50 border-b border-gray-100 transition-colors"
-            >
-              {isAr ? 'ENGLISH' : 'عربي'}
-            </Link>
-            <Link
               href="/admin/login"
               onClick={() => setMobileMenuOpen(false)}
               className="block py-3 px-2 text-sm font-bold text-gray-600 hover:text-[#0066b2] hover:bg-gray-50 transition-colors"
@@ -221,3 +223,38 @@ export const Header: React.FC<HeaderProps> = ({ locale }) => {
     </header>
   );
 };
+
+const SaFlag = () => (
+  <div className="w-5 h-3.5 relative overflow-hidden border border-gray-200 flex-shrink-0 select-none shadow-3xs">
+    <svg width="100%" height="100%" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="18" height="12" fill="#006C35" />
+      <path d="M5 8.5H13M12.5 7.5V9.5" stroke="white" strokeWidth="0.8" strokeLinecap="round" />
+      <path d="M5.5 5C5.8 4 7 4.2 7 5C7 5.8 8.2 6 8.5 5M9 5c.3-1 1.5-.8 1.5 0c0 .8 1.2 1 1.5 0" stroke="white" strokeWidth="0.6" strokeLinecap="round" />
+    </svg>
+  </div>
+);
+
+const UsFlag = () => (
+  <div className="w-5 h-3.5 relative overflow-hidden border border-gray-200 flex-shrink-0 select-none shadow-3xs">
+    <svg width="100%" height="100%" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="18" height="12" fill="white" />
+      <rect width="18" height="1.2" fill="#B22234" />
+      <rect y="2.4" width="18" height="1.2" fill="#B22234" />
+      <rect y="4.8" width="18" height="1.2" fill="#B22234" />
+      <rect y="7.2" width="18" height="1.2" fill="#B22234" />
+      <rect y="9.6" width="18" height="1.2" fill="#B22234" />
+      <rect y="10.8" width="18" height="1.2" fill="#B22234" />
+      <rect width="8" height="6.5" fill="#3C3B6E" />
+      <circle cx="1.5" cy="1.5" r="0.4" fill="white" />
+      <circle cx="3.5" cy="1.5" r="0.4" fill="white" />
+      <circle cx="5.5" cy="1.5" r="0.4" fill="white" />
+      <circle cx="2.5" cy="2.8" r="0.4" fill="white" />
+      <circle cx="4.5" cy="2.8" r="0.4" fill="white" />
+      <circle cx="1.5" cy="4.1" r="0.4" fill="white" />
+      <circle cx="3.5" cy="4.1" r="0.4" fill="white" />
+      <circle cx="5.5" cy="4.1" r="0.4" fill="white" />
+      <circle cx="2.5" cy="5.4" r="0.4" fill="white" />
+      <circle cx="4.5" cy="5.4" r="0.4" fill="white" />
+    </svg>
+  </div>
+);

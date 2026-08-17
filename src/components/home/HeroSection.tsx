@@ -83,6 +83,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
     return () => clearInterval(timer);
   }, [heroImages.length]);
 
+  useEffect(() => {
+    if (!categoriesOpen) return;
+    const handleScroll = () => {
+      setCategoriesOpen(false);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [categoriesOpen]);
+
   return (
     <div className="max-w-7xl mx-auto px-4 pt-0 pb-6">
       {/* Desktop-only Top Navbar Row */}
@@ -203,36 +214,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
             </div>
           ))}
 
-          {/* Mobile quick-access categories overlay */}
-          <div className="md:hidden absolute top-3 start-3 z-20">
-            <button
-              onClick={() => setCategoriesOpen(!categoriesOpen)}
-              className="bg-[#0066b2] text-white text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-2 shadow-md"
-            >
-              <Menu className="w-4 h-4" />
-              {isAr ? 'الأقسام' : 'CATEGORIES'}
-            </button>
-
-            {categoriesOpen && (
-              <div className="mt-1 bg-white border border-gray-200 rounded-xl shadow-xl w-52 max-h-72 overflow-y-auto">
-                {INITIAL_CATEGORIES.map((cat) => (
-                  <Link
-                    key={cat.slug}
-                    href={getLocalizedPath(`/shop?category=${cat.slug}`, locale)}
-                    onClick={() => setCategoriesOpen(false)}
-                    className="flex items-center justify-between px-4 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-[#0066b2] border-b border-gray-100 last:border-0 transition-colors"
-                  >
-                    <span>{cat.name[locale]}</span>
-                    {isAr
-                      ? <ChevronLeft className="w-3.5 h-3.5 text-gray-400" />
-                      : <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
-                    }
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
           {/* Pagination Dots */}
           <div className="absolute bottom-4 inset-x-0 flex items-center justify-center gap-3 z-20">
             {heroImages.map((_, idx) => (
@@ -246,6 +227,36 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
               />
             ))}
           </div>
+        </div>
+
+        {/* Mobile quick-access categories overlay (placed outside overflow-hidden sibling container) */}
+        <div className="md:hidden absolute top-3 start-7 z-30">
+          <button
+            onClick={() => setCategoriesOpen(!categoriesOpen)}
+            className="bg-[#0066b2] text-white text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-2 shadow-md hover:bg-[#005594] transition-colors"
+          >
+            <Menu className="w-4 h-4" />
+            {isAr ? 'الأقسام' : 'CATEGORIES'}
+          </button>
+
+          {categoriesOpen && (
+            <div className="mt-1 bg-white border border-gray-200 rounded-xl shadow-xl w-52 max-h-72 overflow-y-auto">
+              {INITIAL_CATEGORIES.map((cat) => (
+                <Link
+                  key={cat.slug}
+                  href={getLocalizedPath(`/shop?category=${cat.slug}`, locale)}
+                  onClick={() => setCategoriesOpen(false)}
+                  className="flex items-center justify-between px-4 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-[#0066b2] border-b border-gray-100 last:border-0 transition-colors"
+                >
+                  <span>{cat.name[locale]}</span>
+                  {isAr
+                    ? <ChevronLeft className="w-3.5 h-3.5 text-gray-400" />
+                    : <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
+                  }
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
