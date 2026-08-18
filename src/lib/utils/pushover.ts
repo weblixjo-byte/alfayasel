@@ -1,19 +1,35 @@
 import { IOrder } from '../models/Order';
 
-export async function sendOrderNotification(order: IOrder): Promise<boolean> {
+export async function sendOrderNotification(order: IOrder | any): Promise<boolean> {
   const token = process.env.PUSHOVER_API_TOKEN;
   const user = process.env.PUSHOVER_USER_KEY;
 
   if (!token || !user) {
-    console.warn('Pushover credentials are not configured.');
+    console.warn('Pushover credentials (PUSHOVER_API_TOKEN or PUSHOVER_USER_KEY) are not configured.');
     return false;
   }
 
-  const itemsList = order.items
-    .map((item) => `${item.nameEn} (x${item.quantity})`)
-    .join(', ');
+  const itemsFormatted = (order.items || [])
+    .map(
+      (item: any, idx: number) =>
+        `${idx + 1}. ${item.nameAr || item.nameEn} (x${item.quantity}) - ${(Number(item.price || 0) * Number(item.quantity || 1)).toFixed(2)} JOD`
+    )
+    .join('\n');
 
-  const message = `New Order Placed!\nOrder Number: ${order.orderNumber}\nCustomer: ${order.customerName}\nPhone: ${order.customerPhone}\nCity: ${order.customerCity}\nTotal: ${order.total.toFixed(2)} JOD\nItems: ${itemsList}`;
+  const message = `🛍️ طلب جديد من متجر مختبرات الفياصل!
+
+📋 رقم الطلب: ${order.orderNumber}
+👤 العميل: ${order.customerName}
+📱 الهاتف: ${order.customerPhone}
+📍 المدينة: ${order.customerCity}
+🏠 العنوان: ${order.customerAddress}
+${order.notes ? `📝 ملاحظات: ${order.notes}\n` : ''}
+📦 المنتجات المطلوبة:
+${itemsFormatted}
+
+💰 المجموع: ${Number(order.subtotal || 0).toFixed(2)} JOD
+🚚 التوصيل: ${Number(order.deliveryFee || 0).toFixed(2)} JOD
+💵 الإجمالي النهائي: ${Number(order.total || 0).toFixed(2)} JOD`;
 
   try {
     const response = await fetch('https://api.pushover.net/1/messages.json', {
@@ -25,7 +41,11 @@ export async function sendOrderNotification(order: IOrder): Promise<boolean> {
         token,
         user,
         message,
-        title: 'Al Fayasel Store Alert',
+        title: `🛒 طلب جديد: ${order.orderNumber} (${Number(order.total || 0).toFixed(2)} JOD)`,
+        sound: 'cashregister',
+        priority: 1,
+        url: 'https://alfayasel.netlify.app/admin/orders',
+        url_title: 'عرض الطلبات في لوحة التحكم',
       }),
     });
 
@@ -35,6 +55,7 @@ export async function sendOrderNotification(order: IOrder): Promise<boolean> {
       return false;
     }
 
+    console.log(`[PUSHOVER] Successfully sent notification for order ${order.orderNumber}`);
     return true;
   } catch (error) {
     console.error('Failed to send Pushover notification:', error);

@@ -3,6 +3,7 @@ import { dbConnect } from '@/lib/db/mongoose';
 import Order from '@/lib/models/Order';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { sendOrderNotification } from '@/lib/utils/pushover';
 
 export async function POST(request: NextRequest) {
   try {
@@ -38,6 +39,11 @@ export async function POST(request: NextRequest) {
       deliveryFee,
       total,
       status: 'pending',
+    });
+
+    // Send Pushover alert asynchronously (non-blocking for customer response)
+    sendOrderNotification(order).catch((err) => {
+      console.error('Pushover notification background error:', err);
     });
 
     return NextResponse.json({ success: true, orderNumber: order.orderNumber, order }, { status: 201 });
