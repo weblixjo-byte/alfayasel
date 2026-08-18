@@ -71,9 +71,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
   );
 
   const heroImages = [
-    { src: '/images/slider-3.jpg', alt: 'Be Well. Be beautiful. Be you.' },
-    { src: '/images/slider.jpg', alt: 'Modern effective formulas.' },
-    { src: '/images/slider-1.jpg', alt: 'Surely feel better with our products.' },
+    { src: '/images/slider-3.webp', alt: 'Be Well. Be beautiful. Be you.' },
+    { src: '/images/slider-2.webp', alt: 'Modern effective formulas.' },
+    { src: '/images/slider-1.webp', alt: 'Surely feel better with our products.' },
   ];
 
   useEffect(() => {
