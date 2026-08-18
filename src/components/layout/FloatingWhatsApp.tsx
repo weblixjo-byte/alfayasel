@@ -7,7 +7,7 @@ export const FloatingWhatsApp = () => {
   const phoneNumber = '962776755550';
   const message = 'Hello Al Fayasel Laboratories, I have an inquiry about...';
 
-  const whatsappUrl = \https://wa.me/\?text=\\;
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   return (
     <a

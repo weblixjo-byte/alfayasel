@@ -33,7 +33,7 @@ export const ProductReviews = ({ productId, initialReviews, locale }: ProductRev
 
     setIsSubmitting(true);
     try {
-      const res = await fetch(\/api/products/\/reviews\, {
+      const res = await fetch(`/api/products/${productId}/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, rating, comment }),
@@ -73,7 +73,7 @@ export const ProductReviews = ({ productId, initialReviews, locale }: ProductRev
                 <span className="font-bold text-sm text-gray-800">{rev.name}</span>
                 <div className="flex text-yellow-400">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className={\w-3 h-3 \\} />
+                    <Star key={i} className={`w-3 h-3 ${i < rev.rating ? 'fill-current' : 'text-gray-300'}`} />
                   ))}
                 </div>
               </div>
@@ -97,7 +97,7 @@ export const ProductReviews = ({ productId, initialReviews, locale }: ProductRev
                 <Star
                   key={star}
                   onClick={() => setRating(star)}
-                  className={\w-6 h-6 \\}
+                  className={`w-6 h-6 ${star <= rating ? 'text-yellow-400 fill-current' : 'text-gray-300 hover:text-yellow-200'}`}
                 />
               ))}
             </div>

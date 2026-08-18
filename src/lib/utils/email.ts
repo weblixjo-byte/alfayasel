@@ -21,26 +21,26 @@ export async function sendOrderConfirmationEmail(order: any) {
     },
   });
 
-  const orderItemsHtml = order.items.map((item: any) => 
+  const orderItemsHtml = order.items.map((item: any) => `
     <tr>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd;">\ <br> <span style="font-size: 10px; color: #666;">\</span></td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">\</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">\ JOD</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.nameEn} <br> <span style="font-size: 10px; color: #666;">${item.nameAr}</span></td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${item.quantity}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${item.price.toFixed(2)} JOD</td>
     </tr>
-  ).join('');
+  `).join('');
 
-  const htmlContent = 
+  const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
       <h2 style="color: #0066b2; text-align: center;">Order Confirmation</h2>
-      <p>Dear <strong>\</strong>,</p>
+      <p>Dear <strong>${order.customerName}</strong>,</p>
       <p>Thank you for shopping with <strong>Al Fayasel Laboratories</strong>! We have received your order and are currently processing it.</p>
       
       <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
         <h3 style="margin-top: 0; color: #333;">Order Details</h3>
-        <p><strong>Order Number:</strong> \</p>
-        <p><strong>Total Amount:</strong> \ JOD</p>
+        <p><strong>Order Number:</strong> ${order.orderNumber}</p>
+        <p><strong>Total Amount:</strong> ${order.total.toFixed(2)} JOD</p>
         <p><strong>Payment Method:</strong> Cash on Delivery (COD)</p>
-        <p><strong>Delivery Address:</strong> \, \</p>
+        <p><strong>Delivery Address:</strong> ${order.customerCity}, ${order.customerAddress}</p>
       </div>
 
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
@@ -52,20 +52,20 @@ export async function sendOrderConfirmationEmail(order: any) {
           </tr>
         </thead>
         <tbody>
-          \
+          ${orderItemsHtml}
         </tbody>
         <tfoot>
           <tr>
             <td colspan="2" style="padding: 10px; text-align: right; font-weight: bold;">Subtotal:</td>
-            <td style="padding: 10px; text-align: right;">\ JOD</td>
+            <td style="padding: 10px; text-align: right;">${order.subtotal.toFixed(2)} JOD</td>
           </tr>
           <tr>
             <td colspan="2" style="padding: 10px; text-align: right; font-weight: bold;">Delivery Fee:</td>
-            <td style="padding: 10px; text-align: right;">\ JOD</td>
+            <td style="padding: 10px; text-align: right;">${order.deliveryFee.toFixed(2)} JOD</td>
           </tr>
           <tr>
             <td colspan="2" style="padding: 10px; text-align: right; font-weight: bold; color: #0066b2;">Total:</td>
-            <td style="padding: 10px; text-align: right; font-weight: bold; color: #0066b2;">\ JOD</td>
+            <td style="padding: 10px; text-align: right; font-weight: bold; color: #0066b2;">${order.total.toFixed(2)} JOD</td>
           </tr>
         </tfoot>
       </table>
@@ -75,13 +75,13 @@ export async function sendOrderConfirmationEmail(order: any) {
         If you have any questions, reply to this email or contact us via WhatsApp: +962776755550.
       </p>
     </div>
-  ;
+  `;
 
   try {
     await transporter.sendMail({
-      from: \"Al Fayasel Laboratories" <\>\,
+      from: `"Al Fayasel Laboratories" <${SMTP_USER}>`,
       to: order.customerEmail,
-      subject: \Order Confirmation - \\,
+      subject: `Order Confirmation - ${order.orderNumber}`,
       html: htmlContent,
     });
     console.log('Order confirmation email sent to:', order.customerEmail);
