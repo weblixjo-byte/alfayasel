@@ -64,7 +64,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ lang }) => {
       // Access key can be set in .env.local as NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY
       const accessKey =
         process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ||
-        'YOUR_WEB3FORMS_ACCESS_KEY';
+        'b33cff69-e590-4fdc-89e6-68d87cda335e';
 
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
