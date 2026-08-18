@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { Locale } from '@/lib/i18n/config';
@@ -90,22 +90,22 @@ export default function FAQsPage({ params: { lang } }: FAQsPageProps) {
           return (
             <div 
               key={index} 
-              className={\order rounded-2xl overflow-hidden transition-colors duration-300 \\}
+              className={`border rounded-2xl overflow-hidden transition-colors duration-300 ${isOpen ? 'border-[#0066b2] bg-[#0066b2]/5' : 'border-gray-200 bg-white hover:border-[#0066b2]/50'}`}
             >
               <button
                 onClick={() => toggleAccordion(index)}
                 className="w-full flex items-center justify-between p-6 text-start cursor-pointer focus:outline-none"
               >
-                <h3 className={\ont-bold text-sm md:text-base pe-4 \\}>
+                <h3 className={`font-bold text-sm md:text-base pe-4 ${isOpen ? 'text-[#0066b2]' : 'text-gray-900'}`}>
                   {faq.q}
                 </h3>
-                <div className={\shrink-0 transition-transform duration-300 \\}>
+                <div className={`shrink-0 transition-transform duration-300 ${isOpen ? 'text-[#0066b2]' : 'text-gray-400'}`}>
                   {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                 </div>
               </button>
               
               <div 
-                className={\grid transition-all duration-300 ease-in-out \\}
+                className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
               >
                 <div className="overflow-hidden">
                   <p className="px-6 pb-6 text-sm text-gray-600 leading-relaxed">
