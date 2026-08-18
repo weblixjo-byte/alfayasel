@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: 'Al Fayasel Laboratories',
     images: [
       {
-        url: '/images/slider-3-600x472.jpg',
+        url: 'https://alfayasel.com/images/alfayasel-logo-new-02.png',
         width: 1200,
         height: 630,
         alt: 'Al Fayasel Laboratories',
@@ -39,6 +39,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Al Fayasel Laboratories',
     description: 'High-quality pharmaceutical, hair, and skincare solutions in Jordan.',
+    images: ['https://alfayasel.com/images/alfayasel-logo-new-02.png'],
   },
 };
 

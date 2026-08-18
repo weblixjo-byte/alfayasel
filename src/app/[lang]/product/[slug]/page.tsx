@@ -159,7 +159,7 @@ export async function generateMetadata({ params, searchParams }: ProductPageProp
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        en: `https://alfayasel.com/en/product/${product.slug}`,
+        en: `https://alfayasel.com/product/${product.slug}`,
         ar: `https://alfayasel.com/ar/product/${product.slug}`,
       },
     },

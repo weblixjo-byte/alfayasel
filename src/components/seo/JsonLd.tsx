@@ -57,7 +57,7 @@ export const OrganizationJsonLd: React.FC = () => {
     '@type': 'Organization',
     name: 'Al Fayasel Laboratories',
     url: 'https://alfayasel.com',
-    logo: 'https://alfayasel.com/images/logo.png',
+    logo: 'https://alfayasel.com/images/alfayasel-logo-new-02.png',
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: '+962776755550',
