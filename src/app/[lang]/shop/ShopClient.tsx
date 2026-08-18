@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Filter } from 'lucide-react';
 import { Locale, getDictionary } from '@/lib/i18n/config';
 import { INITIAL_CATEGORIES, ProductData } from '@/lib/data/products';
@@ -22,6 +22,14 @@ export function ShopClient({ lang, initialProducts, initialCategory, initialQuer
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [sortBy, setSortBy] = useState<'featured' | 'priceAsc' | 'priceDesc' | 'newest'>('featured');
   const [selectedQuickView, setSelectedQuickView] = useState<ProductData | null>(null);
+
+  useEffect(() => {
+    setSelectedCategory(initialCategory);
+  }, [initialCategory]);
+
+  useEffect(() => {
+    setSearchQuery(initialQuery);
+  }, [initialQuery]);
 
   const filteredProducts = useMemo(() => {
     return initialProducts
