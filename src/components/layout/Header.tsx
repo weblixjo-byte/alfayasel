@@ -114,13 +114,7 @@ export const Header: React.FC<HeaderProps> = ({ locale }) => {
 
         {/* Right Actions */}
         <div className="flex items-center gap-3 shrink-0">
-          {/* LOGIN REGISTER - hidden on mobile */}
-          <Link
-            href="/admin/login"
-            className="hidden md:block hover:text-[#0066b2] transition-colors uppercase tracking-wider text-[11px] font-bold text-gray-800"
-          >
-            LOGIN / REGISTER
-          </Link>
+
 
           {/* Wishlist */}
           <Link
@@ -210,13 +204,7 @@ export const Header: React.FC<HeaderProps> = ({ locale }) => {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/admin/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-3 px-2 text-sm font-bold text-gray-600 hover:text-[#0066b2] hover:bg-gray-50 transition-colors"
-            >
-              LOGIN / REGISTER
-            </Link>
+
           </nav>
         </div>
       )}

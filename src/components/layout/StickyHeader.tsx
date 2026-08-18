@@ -180,12 +180,7 @@ export const StickyHeader: React.FC<StickyHeaderProps> = ({ locale }) => {
 
         {/* 3. Account / Cart / Wishlist Actions (Right in LTR / Left in RTL) */}
         <div className="flex items-center gap-4 text-xs font-bold text-gray-800 shrink-0">
-          <Link
-            href="/admin/login"
-            className="hidden md:block hover:text-[#0066b2] transition-colors uppercase tracking-wider text-[11px] font-bold"
-          >
-            LOGIN / REGISTER
-          </Link>
+
 
           {/* Wishlist */}
           <Link

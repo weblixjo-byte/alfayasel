@@ -8,8 +8,8 @@ import Link from 'next/link';
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('admin@alfayasel.com');
-  const [password, setPassword] = useState('Admin@123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,7 +26,7 @@ export default function AdminLoginPage() {
       });
 
       if (result?.error) {
-        setErrorMsg('Invalid admin credentials. Default: admin@alfayasel.com / Admin@123456');
+        setErrorMsg('Invalid admin credentials.');
       } else {
         // Use hard redirection to force browser session cookies reload, bypassing stale Next.js App Router cache
         window.location.href = '/admin/dashboard';
@@ -84,12 +84,6 @@ export default function AdminLoginPage() {
               />
               <Lock className="w-4 h-4 text-gray-400 absolute start-3 top-1/2 -translate-y-1/2" />
             </div>
-          </div>
-
-          <div className="bg-blue-50 border border-blue-200 p-3 rounded-xl text-[11px] text-blue-800 space-y-1">
-            <p className="font-bold">🔑 Default Credentials:</p>
-            <p className="font-mono">Email: admin@alfayasel.com</p>
-            <p className="font-mono">Password: Admin@123456</p>
           </div>
 
           <button
