@@ -40,7 +40,15 @@ async function getProducts(category?: string, q?: string) {
   try {
     await dbConnect();
     const query: any = { isPaused: false };
-    if (category) query.categorySlug = category;
+    if (category) {
+      const cat = INITIAL_CATEGORIES.find(c => c.slug === category);
+      if (cat) {
+        const subSlugs = cat.subcategories.map(sub => sub.slug);
+        query.categorySlug = { $in: [category, ...subSlugs] };
+      } else {
+        query.categorySlug = category;
+      }
+    }
     if (q) {
       query.$or = [
         { 'name.en': { $regex: q, $options: 'i' } },

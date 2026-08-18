@@ -99,17 +99,10 @@ export default function AboutUsPage({ params: { lang } }: AboutUsPageProps) {
     <div dir={isAr ? 'rtl' : 'ltr'} className={`bg-white ${isAr ? 'font-arabic' : ''}`}>
 
       {/* ══════════════════════════════════════════
-          HERO — Dark navy with logo
+          HERO — Clean white background
       ══════════════════════════════════════════ */}
-      <section className="relative bg-[#0f1923] overflow-hidden">
-        {/* Subtle grid texture */}
-        <div className="absolute inset-0 opacity-[0.03]"
-          style={{ backgroundImage: 'repeating-linear-gradient(0deg,#fff,#fff 1px,transparent 1px,transparent 60px),repeating-linear-gradient(90deg,#fff,#fff 1px,transparent 1px,transparent 60px)' }}
-        />
-        {/* Blue glow */}
-        <div className="absolute top-0 start-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#0066b2]/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative max-w-6xl mx-auto px-4 py-20 md:py-28">
+      <section className="relative bg-white border-b border-gray-100 overflow-hidden">
+        <div className="relative max-w-6xl mx-auto px-4 py-20 md:py-24">
           {/* Eyebrow */}
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="h-px w-12 bg-[#0066b2]" />
@@ -119,7 +112,7 @@ export default function AboutUsPage({ params: { lang } }: AboutUsPageProps) {
             <div className="h-px w-12 bg-[#0066b2]" />
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white text-center leading-tight tracking-tight mb-6">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-gray-950 text-center leading-tight tracking-tight mb-6">
             {isAr ? (
               <>رائدون في صناعة<br /><span className="text-[#0066b2]">المستحضرات الطبية والتجميلية</span></>
             ) : (
@@ -127,7 +120,7 @@ export default function AboutUsPage({ params: { lang } }: AboutUsPageProps) {
             )}
           </h1>
 
-          <p className="text-gray-400 text-sm md:text-base leading-relaxed text-center max-w-2xl mx-auto mb-10">
+          <p className="text-gray-600 text-sm md:text-base leading-relaxed text-center max-w-2xl mx-auto mb-10">
             {isAr
               ? 'تأسست عام ١٩٨٩ كواحدة من أولى الشركات الأردنية المتخصصة في إنتاج المستحضرات الطبية المساندة، مستحضرات التجميل، والمنتجات الكيميائية المتطورة.'
               : 'Established in 1989 as one of the first Jordanian companies specializing in paramedical, cosmetical and advanced chemical products manufacturing.'}
@@ -137,14 +130,14 @@ export default function AboutUsPage({ params: { lang } }: AboutUsPageProps) {
           <div className="flex items-center justify-center gap-4">
             <Link
               href={getLocalizedPath('/contact-us', lang)}
-              className="inline-flex items-center gap-2 bg-[#0066b2] hover:bg-[#005594] text-white text-sm font-bold px-6 py-3 transition-all duration-200 hover:gap-3"
+              className="inline-flex items-center gap-2 bg-[#0066b2] hover:bg-[#005594] text-white text-sm font-bold px-6 py-3 transition-all duration-200"
             >
               {isAr ? 'تواصل معنا' : 'Contact Us'}
               <Arrow className="w-4 h-4" />
             </Link>
             <Link
               href={getLocalizedPath('/our-products', lang)}
-              className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white text-sm font-bold px-6 py-3 transition-all duration-200"
+              className="inline-flex items-center gap-2 border border-gray-200 hover:border-gray-300 text-gray-700 text-sm font-bold px-6 py-3 transition-all duration-200"
             >
               {isAr ? 'منتجاتنا' : 'Our Products'}
             </Link>
@@ -153,16 +146,16 @@ export default function AboutUsPage({ params: { lang } }: AboutUsPageProps) {
       </section>
 
       {/* ══════════════════════════════════════════
-          STATS ROW
+          STATS ROW — White background
       ══════════════════════════════════════════ */}
-      <section className="bg-[#0066b2]">
+      <section className="bg-white border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/20 rtl:divide-x-reverse">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100 rtl:divide-x-reverse">
             {stats.map(({ value, label, icon: Icon }) => (
               <div key={label} className="flex flex-col items-center gap-2 py-8 px-4">
-                <Icon className="w-5 h-5 text-white/60" />
-                <span className="text-2xl md:text-3xl font-extrabold text-white">{value}</span>
-                <span className="text-[11px] text-white/70 font-medium uppercase tracking-wider text-center">{label}</span>
+                <Icon className="w-5 h-5 text-[#0066b2]" />
+                <span className="text-2xl md:text-3xl font-extrabold text-gray-950">{value}</span>
+                <span className="text-[11px] text-gray-500 font-bold uppercase tracking-wider text-center">{label}</span>
               </div>
             ))}
           </div>
@@ -172,7 +165,7 @@ export default function AboutUsPage({ params: { lang } }: AboutUsPageProps) {
       {/* ══════════════════════════════════════════
           ABOUT + PRODUCTS
       ══════════════════════════════════════════ */}
-      <section className="bg-white py-20 md:py-28">
+      <section className="bg-white py-20 md:py-24">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left: text */}
@@ -209,11 +202,11 @@ export default function AboutUsPage({ params: { lang } }: AboutUsPageProps) {
 
             {/* Right: visual card */}
             <div className="relative">
-              <div className="bg-[#0f1923] rounded-2xl p-8 md:p-10 space-y-6">
-                <div className="w-12 h-12 bg-[#0066b2]/20 rounded-xl flex items-center justify-center">
+              <div className="bg-white border border-gray-200 rounded-2xl p-8 md:p-10 space-y-6">
+                <div className="w-12 h-12 bg-[#0066b2]/10 rounded-xl flex items-center justify-center">
                   <Microscope className="w-6 h-6 text-[#0066b2]" />
                 </div>
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-xl font-bold text-gray-950">
                   {isAr ? 'معتمدون دولياً' : 'Internationally Certified'}
                 </h3>
                 <div className="space-y-4">
@@ -226,24 +219,22 @@ export default function AboutUsPage({ params: { lang } }: AboutUsPageProps) {
                     <div key={cert} className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-[#0066b2] rounded-full mt-1.5 shrink-0" />
                       <div>
-                        <p className="text-white text-sm font-bold">{cert}</p>
-                        <p className="text-gray-400 text-xs">{desc}</p>
+                        <p className="text-gray-900 text-sm font-bold">{cert}</p>
+                        <p className="text-gray-500 text-xs">{desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-              {/* Decorative accent */}
-              <div className="absolute -bottom-4 -end-4 w-24 h-24 bg-[#0066b2]/10 rounded-2xl -z-10" />
             </div>
           </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════
-          QUALITY POLICY — Light gray bg
+          QUALITY POLICY — White background
       ══════════════════════════════════════════ */}
-      <section className="bg-gray-50 py-20 md:py-28 border-y border-gray-100">
+      <section className="bg-white py-20 md:py-24 border-y border-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-14">
             <span className="text-[#0066b2] text-[11px] font-bold uppercase tracking-[0.2em]">
@@ -257,7 +248,7 @@ export default function AboutUsPage({ params: { lang } }: AboutUsPageProps) {
             {qualityPoints.map((point, i) => (
               <div
                 key={i}
-                className="bg-white border border-gray-100 rounded-xl p-6 shadow-xs hover:shadow-md hover:border-[#0066b2]/20 transition-all duration-200 group"
+                className="bg-white border border-gray-200 rounded-xl p-6 hover:border-[#0066b2]/20 transition-all duration-200 group"
               >
                 <div className="w-8 h-8 bg-[#0066b2]/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-[#0066b2] transition-colors">
                   <ShieldCheck className="w-4 h-4 text-[#0066b2] group-hover:text-white transition-colors" />
@@ -272,7 +263,7 @@ export default function AboutUsPage({ params: { lang } }: AboutUsPageProps) {
       {/* ══════════════════════════════════════════
           GROWTH + GOALS — Two columns
       ══════════════════════════════════════════ */}
-      <section className="bg-white py-20 md:py-28">
+      <section className="bg-white py-20 md:py-24">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* Growth */}
@@ -358,29 +349,29 @@ export default function AboutUsPage({ params: { lang } }: AboutUsPageProps) {
       </section>
 
       {/* ══════════════════════════════════════════
-          CTA STRIP
+          CTA STRIP — White background
       ══════════════════════════════════════════ */}
-      <section className="bg-[#0066b2] py-14">
+      <section className="bg-white border-t border-gray-100 py-14">
         <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <h3 className="text-xl md:text-2xl font-extrabold text-white">
+            <h3 className="text-xl md:text-2xl font-extrabold text-gray-900">
               {isAr ? 'هل أنت مهتم بمنتجاتنا؟' : 'Interested in our products?'}
             </h3>
-            <p className="text-white/70 text-sm mt-1">
+            <p className="text-gray-500 text-sm mt-1">
               {isAr ? 'تواصل معنا اليوم للحصول على مزيد من المعلومات.' : 'Get in touch with us today for more information.'}
             </p>
           </div>
           <div className="flex items-center gap-3 shrink-0">
             <Link
               href={getLocalizedPath('/contact-us', lang)}
-              className="inline-flex items-center gap-2 bg-white text-[#0066b2] font-bold text-sm px-6 py-3 hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center gap-2 bg-[#0066b2] text-white font-bold text-sm px-6 py-3 hover:bg-[#005594] transition-colors"
             >
               {isAr ? 'اتصل بنا' : 'Contact Us'}
               <Arrow className="w-4 h-4" />
             </Link>
             <Link
               href={getLocalizedPath('/our-products', lang)}
-              className="inline-flex items-center gap-2 border border-white/40 text-white font-bold text-sm px-6 py-3 hover:border-white transition-colors"
+              className="inline-flex items-center gap-2 border border-gray-200 text-gray-700 font-bold text-sm px-6 py-3 hover:border-gray-300 transition-colors"
             >
               {isAr ? 'منتجاتنا' : 'Our Products'}
             </Link>

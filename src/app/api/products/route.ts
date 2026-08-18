@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/db/mongoose';
 import Product from '@/lib/models/Product';
-import { INITIAL_PRODUCTS } from '@/lib/data/products';
+import { INITIAL_PRODUCTS, INITIAL_CATEGORIES } from '@/lib/data/products';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
@@ -18,7 +18,13 @@ export async function GET(request: NextRequest) {
     let query: any = { isPaused: false };
 
     if (category) {
-      query.categorySlug = category;
+      const cat = INITIAL_CATEGORIES.find(c => c.slug === category);
+      if (cat) {
+        const subSlugs = cat.subcategories.map(sub => sub.slug);
+        query.categorySlug = { $in: [category, ...subSlugs] };
+      } else {
+        query.categorySlug = category;
+      }
     }
 
     if (tag === 'new') query.isNewArrival = true;

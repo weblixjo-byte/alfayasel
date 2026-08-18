@@ -26,7 +26,13 @@ export function ShopClient({ lang, initialProducts, initialCategory, initialQuer
   const filteredProducts = useMemo(() => {
     return initialProducts
       .filter((p) => {
-        if (selectedCategory && p.categorySlug !== selectedCategory) return false;
+        if (selectedCategory) {
+          const cat = INITIAL_CATEGORIES.find((c) => c.slug === selectedCategory);
+          const allowedSlugs = cat
+            ? [selectedCategory, ...cat.subcategories.map((sub) => sub.slug)]
+            : [selectedCategory];
+          if (!allowedSlugs.includes(p.categorySlug)) return false;
+        }
         if (searchQuery.trim()) {
           const q = searchQuery.toLowerCase();
           const matchName = p.name.en.toLowerCase().includes(q) || p.name.ar.includes(q);
