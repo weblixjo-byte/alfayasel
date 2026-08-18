@@ -48,6 +48,7 @@ export interface ProductData {
   isPaused?: boolean;
   rating: number;
   reviewCount: number;
+  reviews?: { name: string; rating: number; comment: string; createdAt?: string | Date; _id?: string }[];
   variations?: VariationData[];
 }
 
