@@ -12,7 +12,7 @@ interface OurProductsPageProps {
 }
 
 // Revalidate every 60s — fast ISR, no force-dynamic overhead
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: OurProductsPageProps): Promise<Metadata> {
   const isAr = params.lang === 'ar';

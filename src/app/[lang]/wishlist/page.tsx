@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: WishlistPageProps): Promise<M
   };
 }
 
-export const revalidate = 60; // ISR for performance
+export const revalidate = 3600; // ISR for performance
 
 export default async function WishlistPage({ params: { lang } }: WishlistPageProps) {
   let products: ProductData[] = [];

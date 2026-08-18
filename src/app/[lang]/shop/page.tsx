@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: ShopPageProps): Promise<Metad
   };
 }
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 async function getProducts(q?: string) {
   try {
