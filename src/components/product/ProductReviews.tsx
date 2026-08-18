@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { Star } from 'lucide-react';
@@ -9,7 +9,7 @@ interface Review {
   name: string;
   rating: number;
   comment: string;
-  createdAt: Date | string;
+  createdAt?: Date | string;
 }
 
 interface ProductReviewsProps {
