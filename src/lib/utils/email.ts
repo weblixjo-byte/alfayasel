@@ -23,133 +23,147 @@ export async function sendOrderConfirmationEmail(order: any) {
 
   const orderItemsHtml = order.items.map((item: any) => `
     <tr>
-      <td style="padding: 15px 0; border-bottom: 1px solid #e2e8f0; text-align: right;">
-        <p style="margin: 0; font-weight: bold; color: #0f172a; font-size: 15px;">${item.nameAr}</p>
-        <p style="margin: 4px 0 0; font-size: 12px; color: #64748b;">${item.nameEn}</p>
+      <td dir="rtl" style="padding: 15px 5px; border-bottom: 1px solid #eee; text-align: right; width: 60%;">
+        <div style="font-weight: bold; color: #222; font-size: 14px;">${item.nameAr}</div>
+        <div style="color: #888; font-size: 12px; margin-top: 4px;">${item.nameEn}</div>
       </td>
-      <td style="padding: 15px 10px; border-bottom: 1px solid #e2e8f0; text-align: center; color: #333; font-weight: bold;">
+      <td style="padding: 15px 5px; border-bottom: 1px solid #eee; text-align: center; color: #555; font-size: 14px; width: 15%;">
         x${item.quantity}
       </td>
-      <td style="padding: 15px 0; border-bottom: 1px solid #e2e8f0; text-align: left; font-weight: bold; color: #0066b2;">
+      <td dir="ltr" style="padding: 15px 5px; border-bottom: 1px solid #eee; text-align: right; font-weight: bold; color: #0066b2; font-size: 14px; width: 25%;">
         ${item.price.toFixed(2)} JOD
       </td>
     </tr>
   `).join('');
 
   const htmlContent = `
-    <!DOCTYPE html>
-    <html dir="rtl" lang="ar">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body style="margin: 0; padding: 0; background-color: #f4f7fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f7fa; padding: 40px 20px;">
-        <tr>
-          <td align="center">
-            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto;">
-              <!-- Header with Logo -->
-              <tr>
-                <td align="center" style="padding: 30px; background-color: #ffffff; border-bottom: 4px solid #0066b2;">
-                  <img src="https://alfayasel.com/images/alfayasel-logo-new-02.png" alt="Al Fayasel Laboratories" style="max-height: 80px; width: auto; display: block;">
-                </td>
-              </tr>
-              
-              <!-- Hero Section -->
-              <tr>
-                <td style="padding: 40px 30px 20px; text-align: center;">
-                  <h1 style="color: #0066b2; margin: 0 0 10px; font-size: 26px;">شكراً لتسوقك معنا! 🎉</h1>
-                  <p style="color: #555; font-size: 16px; line-height: 1.6; margin: 0;">
-                    أهلاً <strong>${order.customerName}</strong>،<br>
-                    لقد استلمنا طلبك بنجاح ونقوم الآن بتجهيزه بكل حب.<br>
-                    <span style="color: #888; font-size: 14px;">We have received your order and are preparing it.</span>
-                  </p>
-                </td>
-              </tr>
-
-              <!-- Order Details Card -->
-              <tr>
-                <td style="padding: 0 30px 20px;">
-                  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
-                    <tr>
-                      <td style="padding: 20px; text-align: right; border-left: 1px solid #e2e8f0;">
-                        <p style="margin: 0 0 5px; font-size: 13px; color: #64748b;">رقم الطلب / Order #</p>
-                        <p style="margin: 0; font-size: 18px; font-weight: bold; color: #0f172a;">${order.orderNumber}</p>
-                      </td>
-                      <td style="padding: 20px; text-align: left;">
-                        <p style="margin: 0 0 5px; font-size: 13px; color: #64748b;">طريقة الدفع / Payment</p>
-                        <p style="margin: 0; font-size: 16px; font-weight: bold; color: #0f172a;">الدفع عند الاستلام</p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-
-              <!-- Items Table -->
-              <tr>
-                <td style="padding: 20px 30px;">
-                  <h3 style="color: #0f172a; margin: 0 0 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; text-align: right;">ملخص الطلب / Order Summary</h3>
-                  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
-                    ${orderItemsHtml}
-                  </table>
-                </td>
-              </tr>
-
-              <!-- Totals -->
-              <tr>
-                <td style="padding: 0 30px 30px;">
-                  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; border-radius: 10px; padding: 20px;">
-                    <tr>
-                      <td style="padding: 8px 0; color: #64748b; text-align: right; font-size: 15px;">المجموع / Subtotal:</td>
-                      <td style="padding: 8px 0; text-align: left; font-weight: bold; color: #333; font-size: 15px;">${order.subtotal.toFixed(2)} JOD</td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 8px 0; color: #64748b; text-align: right; font-size: 15px;">رسوم التوصيل / Delivery:</td>
-                      <td style="padding: 8px 0; text-align: left; font-weight: bold; color: #333; font-size: 15px;">${order.deliveryFee.toFixed(2)} JOD</td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 15px 0 0; border-top: 2px solid #e2e8f0; font-size: 18px; color: #0066b2; font-weight: bold; text-align: right;">الإجمالي / Total:</td>
-                      <td style="padding: 15px 0 0; border-top: 2px solid #e2e8f0; text-align: left; font-size: 20px; color: #0066b2; font-weight: bold;">${order.total.toFixed(2)} JOD</td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-
-              <!-- Address -->
-              <tr>
-                <td style="padding: 0 30px 30px;">
-                  <h3 style="color: #0f172a; margin: 0 0 15px; text-align: right;">عنوان التوصيل / Delivery Address</h3>
-                  <p style="margin: 0; color: #475569; line-height: 1.8; background-color: #ffffff; border: 1px solid #e2e8f0; padding: 15px; border-radius: 10px; text-align: right;">
-                    <strong>المدينة:</strong> ${order.customerCity}<br>
-                    <strong>العنوان:</strong> ${order.customerAddress}<br>
-                    <strong>رقم الهاتف:</strong> <span dir="ltr">${order.customerPhone}</span>
-                  </p>
-                </td>
-              </tr>
-
-              <!-- Footer -->
-              <tr>
-                <td style="background-color: #0066b2; padding: 40px 30px; text-align: center; color: #ffffff;">
-                  <p style="margin: 0 0 10px; font-size: 18px; font-weight: bold;">مختبرات الفيصل - Al Fayasel Laboratories</p>
-                  <p style="margin: 0 0 25px; font-size: 15px; color: #bfdbfe; line-height: 1.6;">
-                    إذا كان لديك أي استفسار، فريقنا سعيد بخدمتك عبر الواتساب:<br>
-                    <span dir="ltr" style="font-size: 18px; font-weight: bold; color: #ffffff; display: inline-block; margin-top: 5px;">+962 776 755 550</span>
-                  </p>
-                  <a href="https://alfayasel.com" style="display: inline-block; padding: 12px 30px; background-color: #ffffff; color: #0066b2; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 15px;">زيارة متجرنا</a>
-                </td>
-              </tr>
-            </table>
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #f0f4f8; font-family: Arial, sans-serif; color: #333;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f0f4f8; padding: 20px 10px;">
+      <tr>
+        <td align="center">
+          <!-- Main Card -->
+          <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; border: 1px solid #ddd; max-width: 500px; margin: 0 auto; overflow: hidden;">
             
-            <!-- Safe Unsubscribe/Footer Note -->
-            <p style="text-align: center; color: #94a3b8; font-size: 12px; margin-top: 20px;">
-              تم إرسال هذه الرسالة لأنك قمت بالشراء من متجر الفيصل.<br>
-              © ${new Date().getFullYear()} Al Fayasel Laboratories. All rights reserved.
-            </p>
-          </td>
-        </tr>
-      </table>
-    </body>
-    </html>
+            <!-- Logo -->
+            <tr>
+              <td align="center" style="padding: 25px 20px; border-bottom: 4px solid #0066b2; background-color: #ffffff;">
+                <img src="https://alfayasel.netlify.app/images/alfayasel-logo-new-02.png" alt="Al Fayasel" width="160" style="display: block; max-width: 160px; height: auto;">
+              </td>
+            </tr>
+            
+            <!-- Greeting -->
+            <tr>
+              <td align="center" dir="rtl" style="padding: 30px 20px 20px;">
+                <h2 style="color: #0066b2; margin: 0 0 15px; font-size: 24px;">شكراً لتسوقك معنا!</h2>
+                <p style="font-size: 16px; color: #444; line-height: 1.6; margin: 0;">
+                  أهلاً <strong>${order.customerName}</strong>،<br>
+                  لقد استلمنا طلبك بنجاح ونعمل على تجهيزه الآن.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Order Info -->
+            <tr>
+              <td style="padding: 0 20px 25px;">
+                <table width="100%" dir="rtl" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; border-radius: 8px; padding: 20px; border: 1px solid #eee;">
+                  <tr>
+                    <td style="padding-bottom: 12px; border-bottom: 1px solid #eee;">
+                      <span style="color: #777; font-size: 13px; display: block; margin-bottom: 4px;">رقم الطلب:</span>
+                      <strong style="font-size: 16px; color: #222;">${order.orderNumber}</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding-top: 12px;">
+                      <span style="color: #777; font-size: 13px; display: block; margin-bottom: 4px;">طريقة الدفع:</span>
+                      <strong style="font-size: 15px; color: #222;">الدفع عند الاستلام (COD)</strong>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Items -->
+            <tr>
+              <td style="padding: 10px 20px;">
+                <h3 dir="rtl" style="margin: 0 0 10px; color: #222; font-size: 18px;">ملخص الطلب</h3>
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                  ${orderItemsHtml}
+                </table>
+              </td>
+            </tr>
+
+            <!-- Totals -->
+            <tr>
+              <td style="padding: 10px 20px 30px;">
+                <table width="100%" dir="rtl" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding: 10px; color: #555; font-size: 14px; width: 60%;">المجموع:</td>
+                    <td dir="ltr" style="padding: 10px; text-align: right; color: #222; font-weight: bold; font-size: 14px;">${order.subtotal.toFixed(2)} JOD</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 10px; color: #555; font-size: 14px;">رسوم التوصيل:</td>
+                    <td dir="ltr" style="padding: 10px; text-align: right; color: #222; font-weight: bold; font-size: 14px;">${order.deliveryFee.toFixed(2)} JOD</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 15px 10px 0; color: #0066b2; font-weight: bold; font-size: 16px; border-top: 2px solid #eee;">الإجمالي:</td>
+                    <td dir="ltr" style="padding: 15px 10px 0; text-align: right; color: #0066b2; font-weight: bold; font-size: 18px; border-top: 2px solid #eee;">${order.total.toFixed(2)} JOD</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Address -->
+            <tr>
+              <td style="padding: 0 20px 30px;">
+                <table width="100%" dir="rtl" cellpadding="0" cellspacing="0" style="border: 1px solid #eee; border-radius: 8px; padding: 20px;">
+                  <tr>
+                    <td colspan="2" style="padding-bottom: 15px; font-weight: bold; color: #222; font-size: 16px; border-bottom: 1px solid #eee;">عنوان التوصيل</td>
+                  </tr>
+                  <tr>
+                    <td style="padding-top: 15px; color: #777; font-size: 14px; width: 30%;">المدينة:</td>
+                    <td style="padding-top: 15px; color: #222; font-size: 15px; font-weight: bold;">${order.customerCity}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding-top: 10px; color: #777; font-size: 14px;">العنوان:</td>
+                    <td style="padding-top: 10px; color: #222; font-size: 15px; font-weight: bold;">${order.customerAddress}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding-top: 10px; color: #777; font-size: 14px;">رقم الهاتف:</td>
+                    <td dir="ltr" style="padding-top: 10px; color: #222; font-size: 15px; font-weight: bold; text-align: right;">${order.customerPhone}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td align="center" style="background-color: #0066b2; padding: 35px 20px; color: #fff;">
+                <h3 style="margin: 0 0 10px; font-size: 18px; color: #ffffff;">مختبرات الفيصل</h3>
+                <p style="margin: 0 0 25px; font-size: 14px; color: #dbeafe; line-height: 1.6;">
+                  فريقنا متاح دائماً لخدمتك عبر الواتساب<br>
+                  <strong dir="ltr" style="display: inline-block; margin-top: 5px; font-size: 16px; color: #ffffff;">+962 776 755 550</strong>
+                </p>
+                <a href="https://alfayasel.netlify.app" style="background-color: #fff; color: #0066b2; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 15px; display: inline-block;">زيارة المتجر</a>
+              </td>
+            </tr>
+
+          </table>
+          
+          <p style="text-align: center; color: #999; font-size: 12px; margin-top: 20px;">
+            © ${new Date().getFullYear()} Al Fayasel Laboratories. All rights reserved.
+          </p>
+
+        </td>
+      </tr>
+    </table>
+  </body>
+  </html>
   `;
 
   try {
@@ -159,7 +173,7 @@ export async function sendOrderConfirmationEmail(order: any) {
       subject: `تأكيد طلبك من الفيصل | رقم الطلب: ${order.orderNumber}`,
       html: htmlContent,
     });
-    console.log('Order confirmation premium email sent to:', order.customerEmail);
+    console.log('Order confirmation minimal premium email sent to:', order.customerEmail);
   } catch (error) {
     console.error('Failed to send premium order email:', error);
   }
