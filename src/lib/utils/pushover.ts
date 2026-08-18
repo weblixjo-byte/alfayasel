@@ -16,20 +16,20 @@ export async function sendOrderNotification(order: IOrder | any): Promise<boolea
     )
     .join('\n');
 
-  const message = `🛍️ طلب جديد من متجر مختبرات الفياصل!
+  const message = `🎊 طلب جديد من متجر الفيصل!
 
-📋 رقم الطلب: ${order.orderNumber}
+📦 رقم الطلب: ${order.orderNumber}
 👤 العميل: ${order.customerName}
 📱 الهاتف: ${order.customerPhone}
-📍 المدينة: ${order.customerCity}
-🏠 العنوان: ${order.customerAddress}
+🏙️ المدينة: ${order.customerCity}
+📍 العنوان: ${order.customerAddress}
 ${order.notes ? `📝 ملاحظات: ${order.notes}\n` : ''}
-📦 المنتجات المطلوبة:
+🛍️ المنتجات المطلوبة:
 ${itemsFormatted}
 
-💰 المجموع: ${Number(order.subtotal || 0).toFixed(2)} JOD
+💵 المجموع: ${Number(order.subtotal || 0).toFixed(2)} JOD
 🚚 التوصيل: ${Number(order.deliveryFee || 0).toFixed(2)} JOD
-💵 الإجمالي النهائي: ${Number(order.total || 0).toFixed(2)} JOD`;
+💰 الإجمالي النهائي: ${Number(order.total || 0).toFixed(2)} JOD`;
 
   try {
     const response = await fetch('https://api.pushover.net/1/messages.json', {
@@ -41,10 +41,10 @@ ${itemsFormatted}
         token,
         user,
         message,
-        title: `🛒 طلب جديد: ${order.orderNumber} (${Number(order.total || 0).toFixed(2)} JOD)`,
+        title: `✅ طلب جديد: ${order.orderNumber} (${Number(order.total || 0).toFixed(2)} JOD)`,
         sound: 'cashregister',
         priority: 1,
-        url: 'https://alfayasel.netlify.app/admin/orders',
+        url: 'https://alfayasel.com/admin/orders',
         url_title: 'عرض الطلبات في لوحة التحكم',
       }),
     });
