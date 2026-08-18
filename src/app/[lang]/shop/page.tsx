@@ -96,7 +96,8 @@ export default async function ShopPage({ params: { lang }, searchParams }: ShopP
   const dict = getDictionary(lang);
 
   // Fetch products server-side with optional filters from URL
-  const products = await getProducts(searchParams.category, searchParams.q);
+  const selectedCat = searchParams.sub || searchParams.category;
+  const products = await getProducts(selectedCat, searchParams.q);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
@@ -125,7 +126,7 @@ export default async function ShopPage({ params: { lang }, searchParams }: ShopP
       <ShopClient
         lang={lang}
         initialProducts={products}
-        initialCategory={searchParams.category || ''}
+        initialCategory={selectedCat || ''}
         initialQuery={searchParams.q || ''}
       />
     </div>

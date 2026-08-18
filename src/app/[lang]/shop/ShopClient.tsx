@@ -52,32 +52,33 @@ export function ShopClient({ lang, initialProducts, initialCategory, initialQuer
   return (
     <div className="space-y-6">
       {/* Filter + Sort Bar */}
-      <div className="flex flex-wrap items-center gap-3">
-        {/* Category pills */}
-        <div className="flex flex-wrap gap-2 flex-1">
-          <button
-            onClick={() => setSelectedCategory('')}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-              selectedCategory === ''
-                ? 'bg-[#0066b2] text-white border-[#0066b2]'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-[#0066b2] hover:text-[#0066b2]'
-            }`}
-          >
-            {isAr ? 'الكل' : 'All'}
-          </button>
-          {INITIAL_CATEGORIES.map((cat) => (
-            <button
-              key={cat.slug}
-              onClick={() => setSelectedCategory(cat.slug === selectedCategory ? '' : cat.slug)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                selectedCategory === cat.slug
-                  ? 'bg-[#0066b2] text-white border-[#0066b2]'
-                  : 'bg-white text-gray-600 border-gray-200 hover:border-[#0066b2] hover:text-[#0066b2]'
-              }`}
-            >
-              {cat.name[lang]}
-            </button>
-          ))}
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          {selectedCategory && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 font-medium">
+                {isAr ? 'التصنيف المختار:' : 'Selected Category:'}
+              </span>
+              <span className="bg-[#0066b2]/10 text-[#0066b2] px-2.5 py-1 text-xs font-bold rounded-md capitalize">
+                {INITIAL_CATEGORIES.find(c => c.slug === selectedCategory)?.name[lang] || 
+                 INITIAL_CATEGORIES.flatMap(c => c.subcategories).find(s => s.slug === selectedCategory)?.name[lang] || 
+                 selectedCategory}
+              </span>
+              <button 
+                onClick={() => {
+                  setSelectedCategory('');
+                  // Clear query param as well
+                  const url = new URL(window.location.href);
+                  url.searchParams.delete('category');
+                  url.searchParams.delete('sub');
+                  window.history.pushState({}, '', url.toString());
+                }}
+                className="text-xs text-rose-600 hover:underline font-bold"
+              >
+                {isAr ? 'إلغاء' : 'Clear'}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Search + Sort */}
