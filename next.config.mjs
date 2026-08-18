@@ -5,16 +5,11 @@ const nextConfig = {
   // Compress all responses with gzip
   compress: true,
 
-  // Aggressive image optimization
+  // Disable Next.js server-side image optimization.
+  // Since all images are already highly optimized WebP files, serving them directly
+  // from Netlify's static CDN is MUCH faster than routing them through serverless functions.
   images: {
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [320, 420, 640, 768, 1024, 1200, 1920],
-    imageSizes: [16, 32, 64, 96, 128, 256],
-    minimumCacheTTL: 31536000, // 1 year for optimized images
-    remotePatterns: [
-      { protocol: 'https', hostname: '**' },
-      { protocol: 'http', hostname: '**' },
-    ],
+    unoptimized: true,
   },
 
   async redirects() {
