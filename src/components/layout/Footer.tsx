@@ -39,7 +39,7 @@ export const Footer: React.FC<FooterProps> = ({ locale }) => {
     { href: '/privacy-policy-3', label: isAr ? 'سياسة الخصوصية' : 'Privacy Policy' },
     { href: '/return-policy', label: isAr ? 'سياسة المرتجعات' : 'Return Policy' },
     { href: '/cancellation-policy', label: isAr ? 'سياسة الإلغاء' : 'Cancellation Policy' },
-    { href: '/trems-and-conditions', label: isAr ? 'الشروط والأحكام' : 'Terms & Conditions' },
+    { href: '/terms-and-conditions', label: isAr ? 'الشروط والأحكام' : 'Terms & Conditions' },
   ];
 
   const Arrow = isAr ? ArrowLeft : ArrowRight;
