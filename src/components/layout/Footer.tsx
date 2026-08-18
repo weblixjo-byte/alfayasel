@@ -24,10 +24,6 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({ locale }) => {
   const isAr = locale === 'ar';
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   const usefulLinks = [
     { href: '/our-products', label: isAr ? 'منتجاتنا' : 'Our Products' },
     { href: '/about-us', label: isAr ? 'من نحن' : 'About Us' },
@@ -198,15 +194,6 @@ export const Footer: React.FC<FooterProps> = ({ locale }) => {
           </div>
         </div>
       </div>
-
-      {/* Scroll-to-top */}
-      <button
-        onClick={scrollToTop}
-        className="fixed bottom-6 end-6 bg-[#0066b2] w-11 h-11 rounded-full shadow-lg flex items-center justify-center hover:bg-[#005594] text-white transition-all duration-200 z-50 cursor-pointer hover:scale-110"
-        aria-label="Scroll to top"
-      >
-        <ChevronUp className="w-5 h-5" />
-      </button>
     </footer>
   );
 };
