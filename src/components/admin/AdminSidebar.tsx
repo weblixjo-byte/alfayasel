@@ -14,7 +14,6 @@ export const AdminSidebar: React.FC = () => {
     { label: 'المنتجات (Products)', href: '/admin/products', icon: Package },
     { label: 'الأقسام (Categories)', href: '/admin/categories', icon: FolderKanban },
     { label: 'الطلبيات (Orders)', href: '/admin/orders', icon: ShoppingCart },
-    { label: 'الإعدادات (Settings)', href: '/admin/settings', icon: Settings },
   ];
 
   return (
