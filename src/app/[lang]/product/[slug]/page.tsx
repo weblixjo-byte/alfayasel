@@ -6,6 +6,7 @@ import { Locale, getDictionary } from '@/lib/i18n/config';
 import { ProductData } from '@/lib/data/products';
 import { ProductJsonLd, BreadcrumbJsonLd } from '@/components/seo/JsonLd';
 import { ProductCard } from '@/components/store/ProductCard';
+import { ProductReviews } from '@/components/product/ProductReviews';
 import ProductShowcaseClient from './ProductShowcaseClient';
 import { dbConnect } from '@/lib/db/mongoose';
 import Product from '@/lib/models/Product';
@@ -58,6 +59,7 @@ async function getDbProduct(slug: string): Promise<ProductData | null> {
       isTopSeller: p.isTopSeller,
       rating: p.rating || 5.0,
       reviewCount: p.reviewCount || 12,
+      reviews: p.reviews || [],
       variations: p.variations
         ? p.variations.map((v: any) => ({
             sku: v.sku,
@@ -106,6 +108,7 @@ async function getRelatedDbProducts(categorySlug: string, currentSlug: string): 
       isTopSeller: p.isTopSeller,
       rating: p.rating || 5.0,
       reviewCount: p.reviewCount || 12,
+      reviews: p.reviews || [],
     }));
   } catch (err) {
     console.error('Failed to get related products from DB:', err);
@@ -216,7 +219,7 @@ export default async function ProductDetailPage({ params: { lang, slug }, search
         initialVariationSku={searchParams?.sku}
       />
 
-      {/* Tabs Section (Description / Usage / Reviews) */}
+      {/* Tabs Section (Description / Usage) */}
       <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-200 shadow-xs space-y-6">
         <h3 className="text-lg font-bold text-gray-900 border-b border-gray-200 pb-3">
           {dict.product.usage}
@@ -226,6 +229,13 @@ export default async function ProductDetailPage({ params: { lang, slug }, search
           dangerouslySetInnerHTML={{ __html: product.usage[lang] }}
         />
       </div>
+
+      {/* Reviews Section */}
+      <ProductReviews 
+        productId={product.id} 
+        initialReviews={product.reviews || []} 
+        locale={lang} 
+      />
 
       {/* Related Products Section */}
       {relatedProducts.length > 0 && (

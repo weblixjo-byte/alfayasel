@@ -7,6 +7,7 @@ import { StickyHeader } from '@/components/layout/StickyHeader';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/store/CartDrawer';
 import { OrganizationJsonLd } from '@/components/seo/JsonLd';
+import { FloatingWhatsApp } from '@/components/layout/FloatingWhatsApp';
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -38,6 +39,7 @@ export default function LocaleLayout({ children, params: { lang } }: LocaleLayou
 
       <Footer locale={lang} />
       <CartDrawer locale={lang} />
+      <FloatingWhatsApp />
     </div>
   );
 }

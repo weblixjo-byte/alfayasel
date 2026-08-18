@@ -18,6 +18,13 @@ export interface IVariation {
   };
 }
 
+export interface IReview {
+  name: string;
+  rating: number;
+  comment: string;
+  createdAt: Date;
+}
+
 export interface IProduct extends Document {
   sku: string;
   name: {
@@ -49,12 +56,20 @@ export interface IProduct extends Document {
   isPaused: boolean;
   rating: number;
   reviewCount: number;
+  reviews?: IReview[];
   variations?: IVariation[];
   saleStartDate?: Date;
   saleEndDate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
+
+const ReviewSchema = new Schema<IReview>({
+  name: { type: String, required: true },
+  rating: { type: Number, required: true, min: 1, max: 5 },
+  comment: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
 
 const ProductSchema: Schema<IProduct> = new Schema(
   {
@@ -88,6 +103,7 @@ const ProductSchema: Schema<IProduct> = new Schema(
     isPaused: { type: Boolean, default: false },
     rating: { type: Number, default: 5.0 },
     reviewCount: { type: Number, default: 12 },
+    reviews: [ReviewSchema],
     variations: [
       {
         sku: { type: String, required: true },

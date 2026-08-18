@@ -4,12 +4,14 @@ import Order from '@/lib/models/Order';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { sendOrderNotification } from '@/lib/utils/pushover';
+import { sendOrderConfirmationEmail } from '@/lib/utils/email';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const {
       customerName,
+      customerEmail,
       customerPhone,
       customerCity,
       customerAddress,
@@ -30,6 +32,7 @@ export async function POST(request: NextRequest) {
     const order = await Order.create({
       orderNumber,
       customerName,
+      customerEmail,
       customerPhone,
       customerCity,
       customerAddress,
@@ -41,11 +44,20 @@ export async function POST(request: NextRequest) {
       status: 'pending',
     });
 
-    // Send Pushover alert (await it to prevent serverless function premature exit)
+    // Send Pushover alert
     try {
       await sendOrderNotification(order);
     } catch (err) {
       console.error('Pushover notification error:', err);
+    }
+
+    // Send Customer Email
+    try {
+      if (customerEmail) {
+        await sendOrderConfirmationEmail(order);
+      }
+    } catch (err) {
+      console.error('Email confirmation error:', err);
     }
 
     return NextResponse.json({ success: true, orderNumber: order.orderNumber, order }, { status: 201 });

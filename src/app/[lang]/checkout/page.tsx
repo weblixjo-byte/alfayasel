@@ -17,6 +17,7 @@ export default function CheckoutPage({ params: { lang } }: CheckoutPageProps) {
 
   const [formData, setFormData] = useState({
     fullName: '',
+    email: '',
     phone: '',
     city: 'Amman',
     address: '',
@@ -47,6 +48,7 @@ export default function CheckoutPage({ params: { lang } }: CheckoutPageProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customerName: formData.fullName,
+          customerEmail: formData.email,
           customerPhone: formData.phone,
           customerCity: formData.city,
           customerAddress: formData.address,
@@ -156,6 +158,19 @@ export default function CheckoutPage({ params: { lang } }: CheckoutPageProps) {
                   value={formData.fullName}
                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                   placeholder="e.g. Ahmad Al-Mansoor"
+                  className="w-full px-3.5 py-2.5 border border-gray-300 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-brand-500"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-gray-700 block">
+                  {lang === 'ar' ? 'البريد الإلكتروني (اختياري)' : 'Email Address (Optional)'}
+                </label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="e.g. ahmad@example.com"
                   className="w-full px-3.5 py-2.5 border border-gray-300 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
