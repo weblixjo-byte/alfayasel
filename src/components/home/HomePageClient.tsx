@@ -30,22 +30,6 @@ export const HomePageClient: React.FC<HomePageClientProps> = ({ lang, initialTab
         <HeroSection locale={lang} />
       </Suspense>
 
-      {/* 2. Free Delivery Banner */}
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="bg-white py-6 text-center space-y-1.5">
-          <h2 className="text-lg md:text-xl font-bold text-gray-900">
-            {lang === 'ar'
-              ? 'أي طلبية تقل عن ١٠ دنانير عليها دينارين توصيل'
-              : 'Any order under 10 JOD is subject to a 2 JOD delivery fee.'}
-          </h2>
-          <p className="text-xs text-gray-500 font-medium">
-            {lang === 'ar'
-              ? 'احصل على توصيل مجاني عند التسوق بقيمة 10 دنانير أو أكثر في جميع أنحاء المملكة!'
-              : 'Enjoy FREE shipping on all orders over 10 JOD delivered right to your doorstep!'}
-          </p>
-        </div>
-      </div>
-
       {/* 3. Tabbed Products Grid */}
       <section className="max-w-7xl mx-auto px-4 space-y-6">
         {/* Tab Headers */}

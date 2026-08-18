@@ -82,8 +82,8 @@ export const useCartStore = create<CartStore>()(
       getDeliveryFee: () => {
         const subtotal = get().getSubtotal();
         if (subtotal <= 0) return 0;
-        // Al Fayasel business rule: Any order under 10 JOD has 2 JOD delivery fee
-        return subtotal < 10 ? 2 : 0;
+        // Shipping is always 2 JOD flat rate
+        return 2;
       },
 
       getTotal: () => {

@@ -4,7 +4,7 @@
     "newsletter": "NEWSLETTER",
     "contact": "CONTACT US",
     "faqs": "FAQS",
-    "deliveryNotice": "Any order under 10 JOD is subject to a 2 JOD delivery fee."
+    "deliveryNotice": "Flat rate 2 JOD delivery fee for all orders across the Kingdom."
   },
   "nav": {
     "home": "HOME",
@@ -65,7 +65,7 @@
     "continueShopping": "Continue Shopping",
     "subtotal": "Subtotal",
     "deliveryFee": "Delivery Fee",
-    "freeDelivery": "Free Delivery (Orders 10 JOD+)",
+    "freeDelivery": "Flat Rate",
     "total": "Total",
     "checkout": "Proceed to Checkout",
     "remove": "Remove item"
