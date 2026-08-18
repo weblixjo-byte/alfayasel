@@ -72,10 +72,10 @@ export const TopBar: React.FC<TopBarProps> = ({ locale }) => {
 
           {/* FAQs - hidden on mobile */}
           <Link
-            href={getLocalizedPath('/about-us', locale)}
+            href={getLocalizedPath('/faqs', locale)}
             className="hidden md:flex items-center px-3 h-9 border-s border-white/20 hover:bg-white/10 uppercase transition-colors"
           >
-            <span>FAQS</span>
+            <span>{isAr ? 'الأسئلة الشائعة' : 'FAQS'}</span>
           </Link>
         </div>
       </div>
