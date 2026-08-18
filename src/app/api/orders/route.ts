@@ -41,10 +41,12 @@ export async function POST(request: NextRequest) {
       status: 'pending',
     });
 
-    // Send Pushover alert asynchronously (non-blocking for customer response)
-    sendOrderNotification(order).catch((err) => {
-      console.error('Pushover notification background error:', err);
-    });
+    // Send Pushover alert (await it to prevent serverless function premature exit)
+    try {
+      await sendOrderNotification(order);
+    } catch (err) {
+      console.error('Pushover notification error:', err);
+    }
 
     return NextResponse.json({ success: true, orderNumber: order.orderNumber, order }, { status: 201 });
   } catch (error: any) {
