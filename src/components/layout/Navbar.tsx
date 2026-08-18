@@ -111,7 +111,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
                       className="group/sub relative hover:bg-gray-50 px-4 py-3.5 transition-colors flex items-center justify-between cursor-pointer"
                     >
                       <Link
-                        href={getLocalizedPath(`/shop?category=${cat.slug}`, locale)}
+                        href={getLocalizedPath(`/shop/${cat.slug}`, locale)}
                         className="flex-1 font-semibold text-gray-700 hover:text-[#0066b2] transition-colors capitalize"
                       >
                         {cat.name[locale]}
@@ -127,7 +127,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
                             {cat.subcategories.map((sub) => (
                               <Link
                                 key={sub.slug}
-                                href={getLocalizedPath(`/shop?category=${cat.slug}&sub=${sub.slug}`, locale)}
+                                href={getLocalizedPath(`/shop/${cat.slug}/${sub.slug}`, locale)}
                                 className="block text-xs font-medium text-gray-600 hover:text-[#0066b2] transition-colors py-1 capitalize"
                               >
                                 {sub.name[locale]}

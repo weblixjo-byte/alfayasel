@@ -2,32 +2,70 @@ import React from 'react';
 import { Locale, getDictionary } from '@/lib/i18n/config';
 import { dbConnect } from '@/lib/db/mongoose';
 import Product from '@/lib/models/Product';
-import { ProductData } from '@/lib/data/products';
+import { ProductData, INITIAL_CATEGORIES } from '@/lib/data/products';
 import { BreadcrumbJsonLd } from '@/components/seo/JsonLd';
-import { ShopClient } from './ShopClient';
+import { ShopClient } from '../ShopClient';
 import { Metadata } from 'next';
 
 interface ShopPageProps {
-  params: { lang: Locale };
+  params: { lang: Locale; categoryPath: string[] };
   searchParams: { q?: string };
+}
+
+export async function generateStaticParams() {
+  const paths: any[] = [];
+  const langs = ['en', 'ar'];
+  
+  for (const lang of langs) {
+    for (const cat of INITIAL_CATEGORIES) {
+      // Parent category paths
+      paths.push({ lang, categoryPath: [cat.slug] });
+      
+      for (const sub of cat.subcategories) {
+        // Subcategory paths
+        paths.push({ lang, categoryPath: [cat.slug, sub.slug] });
+      }
+    }
+  }
+  return paths;
 }
 
 export async function generateMetadata({ params }: ShopPageProps): Promise<Metadata> {
   const isAr = params.lang === 'ar';
-  const canonicalUrl = params.lang === 'en' 
-    ? 'https://alfayasel.com/shop' 
-    : `https://alfayasel.com/ar/shop`;
+  const categoryPath = params.categoryPath || [];
+  
+  let pageTitle = isAr ? 'تسوق الآن | مختبرات الفياصل' : 'Shop | Al Fayasel Laboratories';
+  let pageDesc = isAr
+    ? 'تصفح جميع منتجات مختبرات الفياصل الدوائية من عناية بالبشرة والشعر والمعقمات.'
+    : 'Browse all Al Fayasel Laboratories products including skincare, haircare, and sanitizers.';
+
+  if (categoryPath.length > 0) {
+    const activeSlug = categoryPath[categoryPath.length - 1];
+    
+    // Find category details
+    const cat = INITIAL_CATEGORIES.find(c => c.slug === activeSlug);
+    const sub = INITIAL_CATEGORIES.flatMap(c => c.subcategories).find(s => s.slug === activeSlug);
+    
+    if (cat) {
+      pageTitle = isAr ? `${cat.name.ar} | مختبرات الفياصل` : `${cat.name.en} | Al Fayasel Laboratories`;
+    } else if (sub) {
+      pageTitle = isAr ? `${sub.name.ar} | مختبرات الفياصل` : `${sub.name.en} | Al Fayasel Laboratories`;
+    }
+  }
+
+  const pathStr = categoryPath.join('/');
+  const canonicalUrl = params.lang === 'en'
+    ? `https://alfayasel.com/shop/${pathStr}`
+    : `https://alfayasel.com/ar/shop/${pathStr}`;
 
   return {
-    title: isAr ? 'تسوق الآن | مختبرات الفياصل' : 'Shop | Al Fayasel Laboratories',
-    description: isAr
-      ? 'تصفح جميع منتجات مختبرات الفياصل الدوائية من عناية بالبشرة والشعر والمعقمات.'
-      : 'Browse all Al Fayasel Laboratories products including skincare, haircare, and sanitizers.',
+    title: pageTitle,
+    description: pageDesc,
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        en: 'https://alfayasel.com/shop',
-        ar: 'https://alfayasel.com/ar/shop',
+        en: `https://alfayasel.com/shop/${pathStr}`,
+        ar: `https://alfayasel.com/ar/shop/${pathStr}`,
       },
     },
   };
@@ -35,10 +73,20 @@ export async function generateMetadata({ params }: ShopPageProps): Promise<Metad
 
 export const revalidate = 60;
 
-async function getProducts(q?: string) {
+async function getProducts(category?: string, q?: string) {
   try {
     await dbConnect();
     const query: any = { isPaused: false };
+    
+    if (category) {
+      const cat = INITIAL_CATEGORIES.find(c => c.slug === category);
+      if (cat) {
+        const subSlugs = cat.subcategories.map(sub => sub.slug);
+        query.categorySlug = { $in: [category, ...subSlugs] };
+      } else {
+        query.categorySlug = category;
+      }
+    }
     
     if (q) {
       query.$or = [
@@ -83,11 +131,14 @@ async function getProducts(q?: string) {
   }
 }
 
-export default async function ShopPage({ params: { lang }, searchParams }: ShopPageProps) {
+export default async function ShopPage({ params: { lang, categoryPath }, searchParams }: ShopPageProps) {
   const isAr = lang === 'ar';
   const dict = getDictionary(lang);
   
-  const products = await getProducts(searchParams.q);
+  const pathArr = categoryPath || [];
+  const selectedCat = pathArr.length > 0 ? pathArr[pathArr.length - 1] : undefined;
+  
+  const products = await getProducts(selectedCat, searchParams.q);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
@@ -116,7 +167,7 @@ export default async function ShopPage({ params: { lang }, searchParams }: ShopP
       <ShopClient
         lang={lang}
         initialProducts={products}
-        initialCategory=""
+        initialCategory={selectedCat || ''}
         initialQuery={searchParams.q || ''}
       />
     </div>

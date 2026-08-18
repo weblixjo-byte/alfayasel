@@ -75,11 +75,7 @@ export function ShopClient({ lang, initialProducts, initialCategory, initialQuer
               <button 
                 onClick={() => {
                   setSelectedCategory('');
-                  // Clear query param as well
-                  const url = new URL(window.location.href);
-                  url.searchParams.delete('category');
-                  url.searchParams.delete('sub');
-                  window.history.pushState({}, '', url.toString());
+                  window.location.href = lang === 'en' ? '/shop' : `/${lang}/shop`;
                 }}
                 className="text-xs text-rose-600 hover:underline font-bold"
               >

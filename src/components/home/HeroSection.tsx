@@ -167,7 +167,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
                   }`}
                 >
                   <Link
-                    href={getLocalizedPath(`/shop?category=${cat.slug}`, locale)}
+                    href={getLocalizedPath(`/shop/${cat.slug}`, locale)}
                     className="flex-1 capitalize font-medium text-gray-700 group-hover:text-brand-600"
                   >
                     {cat.name[locale]}
@@ -179,7 +179,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
                         {cat.subcategories.map((sub) => (
                           <Link
                             key={sub.slug}
-                            href={getLocalizedPath(`/shop?category=${cat.slug}&sub=${sub.slug}`, locale)}
+                            href={getLocalizedPath(`/shop/${cat.slug}/${sub.slug}`, locale)}
                             className="block text-xs font-medium text-gray-600 hover:text-brand-600 transition-colors py-1 capitalize"
                           >
                             {sub.name[locale]}
@@ -244,7 +244,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
               {INITIAL_CATEGORIES.map((cat) => (
                 <Link
                   key={cat.slug}
-                  href={getLocalizedPath(`/shop?category=${cat.slug}`, locale)}
+                  href={getLocalizedPath(`/shop/${cat.slug}`, locale)}
                   onClick={() => setCategoriesOpen(false)}
                   className="flex items-center justify-between px-4 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-50 hover:text-[#0066b2] border-b border-gray-100 last:border-0 transition-colors"
                 >
