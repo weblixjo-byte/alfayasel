@@ -1,4 +1,4 @@
-﻿import nodemailer from 'nodemailer';
+import nodemailer from 'nodemailer';
 
 export async function sendOrderConfirmationEmail(order: any) {
   if (!order.customerEmail) return;
@@ -53,7 +53,7 @@ export async function sendOrderConfirmationEmail(order: any) {
             <!-- Logo -->
             <tr>
               <td align="center" style="padding: 25px 20px; border-bottom: 4px solid #0066b2; background-color: #ffffff;">
-                <img src="https://alfayasel.netlify.app/images/alfayasel-logo-new-02.png" alt="Al Fayasel" width="160" style="display: block; max-width: 160px; height: auto;">
+                <img src="https://alfayasel.com/images/alfayasel-logo-new-02.png" alt="Al Fayasel" width="160" style="display: block; max-width: 160px; height: auto;">
               </td>
             </tr>
             
@@ -149,7 +149,7 @@ export async function sendOrderConfirmationEmail(order: any) {
                   فريقنا متاح دائماً لخدمتك عبر الواتساب<br>
                   <strong dir="ltr" style="display: inline-block; margin-top: 5px; font-size: 16px; color: #ffffff;">+962 776 755 550</strong>
                 </p>
-                <a href="https://alfayasel.netlify.app" style="background-color: #fff; color: #0066b2; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 15px; display: inline-block;">زيارة المتجر</a>
+                <a href="https://alfayasel.com" style="background-color: #fff; color: #0066b2; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 15px; display: inline-block;">زيارة المتجر</a>
               </td>
             </tr>
 
