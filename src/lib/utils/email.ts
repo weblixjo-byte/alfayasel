@@ -144,7 +144,7 @@ export async function sendOrderConfirmationEmail(order: any) {
             <!-- Footer -->
             <tr>
               <td align="center" style="background-color: #0066b2; padding: 35px 20px; color: #fff;">
-                <h3 style="margin: 0 0 10px; font-size: 18px; color: #ffffff;">مختبرات الفيصل</h3>
+                <h3 style="margin: 0 0 10px; font-size: 18px; color: #ffffff;">مختبرات الفياصل</h3>
                 <p style="margin: 0 0 25px; font-size: 14px; color: #dbeafe; line-height: 1.6;">
                   فريقنا متاح دائماً لخدمتك عبر الواتساب<br>
                   <strong dir="ltr" style="display: inline-block; margin-top: 5px; font-size: 16px; color: #ffffff;">+962 776 755 550</strong>
@@ -170,7 +170,7 @@ export async function sendOrderConfirmationEmail(order: any) {
     await transporter.sendMail({
       from: `"Al Fayasel Laboratories" <${SMTP_USER}>`,
       to: order.customerEmail,
-      subject: `تأكيد طلبك من الفيصل | رقم الطلب: ${order.orderNumber}`,
+      subject: `تأكيد طلبك من الفياصل | رقم الطلب: ${order.orderNumber}`,
       html: htmlContent,
     });
     console.log('Order confirmation minimal premium email sent to:', order.customerEmail);

@@ -16,7 +16,7 @@ export async function sendOrderNotification(order: IOrder | any): Promise<boolea
     )
     .join('\n');
 
-  const message = `🎊 طلب جديد من متجر الفيصل!
+  const message = `🎊 طلب جديد من متجر الفياصل!
 
 📦 رقم الطلب: ${order.orderNumber}
 👤 العميل: ${order.customerName}
