@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Clock, CheckCircle2, Truck, AlertCircle, Package } from 'lucide-react';
@@ -51,45 +51,80 @@ export default function AdminOrdersPage() {
     fetchOrders();
   }, []);
 
-  const getStatusBadge = (status: string) => {
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    try {
+      const res = await fetch(`/api/orders/${orderId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        setOrders(orders.map(o => o._id === orderId ? { ...o, status: newStatus as any } : o));
+      } else {
+        alert('حدث خطأ أثناء تحديث حالة الطلب');
+      }
+    } catch (err) {
+      console.error('Error updating status', err);
+      alert('حدث خطأ أثناء تحديث حالة الطلب');
+    }
+  };
+
+  const getStatusBadge = (order: OrderData) => {
+    const status = order.status;
+    let badgeClass = '';
+    let Icon = Clock;
+    let label = '';
+
     switch (status) {
       case 'pending':
-        return (
-          <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-full text-[10px] font-bold">
-            <Clock className="w-3 h-3" /> قيد الانتظار (Pending)
-          </span>
-        );
+        badgeClass = 'bg-amber-50 text-amber-700 border-amber-200';
+        Icon = Clock;
+        label = 'قيد الانتظار';
+        break;
       case 'processing':
-        return (
-          <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-full text-[10px] font-bold">
-            <Package className="w-3 h-3" /> جاري التجهيز (Processing)
-          </span>
-        );
+        badgeClass = 'bg-blue-50 text-blue-700 border-blue-200';
+        Icon = Package;
+        label = 'جاري التجهيز';
+        break;
       case 'shipped':
-        return (
-          <span className="inline-flex items-center gap-1 bg-purple-50 text-purple-700 border border-purple-200 px-2.5 py-1 rounded-full text-[10px] font-bold">
-            <Truck className="w-3 h-3" /> تم الشحن (Shipped)
-          </span>
-        );
+        badgeClass = 'bg-purple-50 text-purple-700 border-purple-200';
+        Icon = Truck;
+        label = 'تم الشحن';
+        break;
       case 'delivered':
-        return (
-          <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full text-[10px] font-bold">
-            <CheckCircle2 className="w-3 h-3" /> تم التوصيل (Delivered)
-          </span>
-        );
+        badgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        Icon = CheckCircle2;
+        label = 'مكتمل / تم التوصيل';
+        break;
       case 'cancelled':
-        return (
-          <span className="inline-flex items-center gap-1 bg-rose-50 text-rose-700 border border-rose-200 px-2.5 py-1 rounded-full text-[10px] font-bold">
-            <AlertCircle className="w-3 h-3" /> ملغي (Cancelled)
-          </span>
-        );
+        badgeClass = 'bg-rose-50 text-rose-700 border-rose-200';
+        Icon = AlertCircle;
+        label = 'ملغي';
+        break;
       default:
-        return (
-          <span className="bg-gray-100 text-gray-700 px-2.5 py-1 rounded-full text-[10px] font-bold">
-            {status}
-          </span>
-        );
+        badgeClass = 'bg-gray-100 text-gray-700 border-gray-200';
+        Icon = Clock;
+        label = status;
     }
+
+    return (
+      <div className="flex flex-col gap-2">
+        <span className={`inline-flex items-center gap-1 border px-2.5 py-1 rounded-full text-[10px] font-bold w-fit ${badgeClass}`}>
+          <Icon className="w-3 h-3" /> {label}
+        </span>
+        <select 
+          className="text-xs border border-gray-300 rounded px-2 py-1 bg-white outline-none focus:border-brand-500 cursor-pointer"
+          value={status}
+          onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+        >
+          <option value="pending">قيد الانتظار (Pending)</option>
+          <option value="processing">جاري التجهيز (Processing)</option>
+          <option value="shipped">تم الشحن (Shipped)</option>
+          <option value="delivered">مكتمل (Delivered)</option>
+          <option value="cancelled">ملغي (Cancelled)</option>
+        </select>
+      </div>
+    );
   };
 
   return (
@@ -109,9 +144,9 @@ export default function AdminOrdersPage() {
             <div className="w-12 h-12 rounded-2xl bg-gray-50 text-gray-400 flex items-center justify-center mx-auto">
               <ShoppingCart className="w-6 h-6" />
             </div>
-            <h3 className="font-bold text-sm text-gray-800">لا توجد أي طلبات حالياً</h3>
+            <h3 className="font-bold text-sm text-gray-800">لا يوجد أي طلبات حالياً</h3>
             <p className="text-xs text-gray-400 max-w-sm mx-auto">
-              عندما يقوم أي زبون بعمل طلب جديد من الموقع والدفع عند الاستلام، سيظهر الطلب هنا مباشرة بكافة تفاصيله.
+              عندما يقوم أي زبون بعمل طلب جديد من الموقع، سيظهر هنا مباشرة مع كافة التفاصيل.
             </p>
           </div>
         ) : (
@@ -143,7 +178,7 @@ export default function AdminOrdersPage() {
                       <span className="font-bold text-gray-900">{ord.items?.length || 0} منتجات</span>
                     </td>
                     <td className="p-4 font-extrabold text-gray-900">{ord.total.toFixed(2)} د.أ</td>
-                    <td className="p-4">{getStatusBadge(ord.status)}</td>
+                    <td className="p-4">{getStatusBadge(ord)}</td>
                     <td className="p-4 text-end text-gray-400 text-[11px]">
                       {new Date(ord.createdAt).toLocaleDateString('ar-JO')}
                     </td>
