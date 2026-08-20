@@ -169,7 +169,13 @@ export async function generateMetadata({ params, searchParams }: ProductPageProp
       description: description,
       url: canonicalUrl,
       siteName: 'Al Fayasel Laboratories',
-      images: [{ url: ogImageUrl, width: 800, height: 800, type: 'image/webp', alt: product.name[params.lang] }],
+      images: [
+        {
+          url: canonicalUrl + '/opengraph-image',
+          width: 1200,
+          height: 630,
+          type: 'image/png',
+          alt: product.name[params.lang],
         },
       ],
       locale: params.lang === 'ar' ? 'ar_JO' : 'en_US',
@@ -179,7 +185,7 @@ export async function generateMetadata({ params, searchParams }: ProductPageProp
       card: 'summary_large_image',
       title: titleText,
       description: description,
-      images: [{ url: ogImageUrl, width: 800, height: 800, type: 'image/webp', alt: product.name[params.lang] }],
+      images: [canonicalUrl + '/opengraph-image'],
     },
   };
 }
