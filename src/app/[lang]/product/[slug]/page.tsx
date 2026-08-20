@@ -151,7 +151,8 @@ export async function generateMetadata({ params, searchParams }: ProductPageProp
     : `https://alfayasel.com/${params.lang}/product/${product.slug}`;
 
   const rawImagePath = selectedVariation?.images?.[0] || product.images?.[0] || '/images/placeholder.jpg';
-  const ogImageUrl = 'https://alfayasel.com/api/og-image?img=' + encodeURIComponent(rawImagePath);
+  const cleanImgPath = rawImagePath.startsWith('http') ? rawImagePath : (rawImagePath.startsWith('/') ? rawImagePath : '/' + rawImagePath);
+  const ogImageUrl = 'https://alfayasel.com/.netlify/images?url=' + encodeURIComponent(cleanImgPath) + '&w=800&q=80&fm=jpg';
 
   return {
     title: titleText,

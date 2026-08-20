@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: 'Al Fayasel Laboratories',
     images: [
       {
-        url: 'https://alfayasel.com/api/og-image?img=/images/alfayasel-logo-new-02.png',
+        url: 'https://alfayasel.com/.netlify/images?url=/images/alfayasel-logo-new-02.png&w=1200&h=630&fit=contain&fm=png',
         width: 800,
         height: 800,
         alt: 'Al Fayasel Laboratories',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Al Fayasel Laboratories | Premium Medical & Cosmetic Products',
     description: 'Browse high-quality medical cosmetics, skin care, hair care, and sanitizers developed by Al Fayasel Laboratories.',
-    images: ['https://alfayasel.com/api/og-image?img=/images/alfayasel-logo-new-02.png'],
+    images: ['https://alfayasel.com/.netlify/images?url=/images/alfayasel-logo-new-02.png&w=1200&h=630&fit=contain&fm=png'],
   },
 };
 
