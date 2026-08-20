@@ -151,8 +151,7 @@ export async function generateMetadata({ params, searchParams }: ProductPageProp
     : `https://alfayasel.com/${params.lang}/product/${product.slug}`;
 
   const rawImagePath = selectedVariation?.images?.[0] || product.images?.[0] || '/images/placeholder.jpg';
-  const cleanImgPath = rawImagePath.startsWith('http') ? rawImagePath : (rawImagePath.startsWith('/') ? rawImagePath : '/' + rawImagePath);
-  const ogImageUrl = 'https://alfayasel.com/.netlify/images?url=' + encodeURIComponent(cleanImgPath) + '&w=800&q=80&fm=jpg';
+  const ogImageUrl = 'https://alfayasel.com/api/og?title=' + encodeURIComponent(product.name[params.lang]) + '&img=' + encodeURIComponent(rawImagePath);
 
   return {
     title: titleText,
@@ -172,8 +171,10 @@ export async function generateMetadata({ params, searchParams }: ProductPageProp
       images: [
         {
           url: ogImageUrl,
-          width: 800,
-          height: 800,
+          width: 1200,
+          height: 630,
+          type: 'image/png',
+          
           alt: product.name[params.lang],
         },
       ],
