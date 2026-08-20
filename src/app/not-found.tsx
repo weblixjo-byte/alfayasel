@@ -87,12 +87,12 @@ export default function NotFound() {
         
         <div className="space-y-4 mb-10" dir={isEnglish ? 'ltr' : 'rtl'}>
           <h2 className="text-3xl font-extrabold text-gray-900">
-            {isEnglish ? "Formula Not Found!" : "عذراً، التركيبة مفقودة!"}
+            {isEnglish ? "Page Not Found!" : "عذراً، الصفحة مفقودة!"}
           </h2>
           <p className="text-gray-500 text-sm md:text-base max-w-md mx-auto leading-relaxed">
             {isEnglish 
-              ? "It seems the page or formula you are looking for has evaporated or does not exist in our laboratories."
-              : "يبدو أن الصفحة أو التركيبة التي تبحث عنها قد تبخرت أو لا وجود لها في مختبراتنا."}
+              ? "It seems the page you are looking for does not exist in our laboratories."
+              : "يبدو أن الصفحة التي تبحث عنها لا وجود لها في مختبراتنا."}
           </p>
         </div>
 
