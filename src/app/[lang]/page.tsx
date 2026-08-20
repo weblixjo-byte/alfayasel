@@ -33,7 +33,7 @@ export async function generateMetadata({ params: { lang } }: PageProps): Promise
       siteName: 'Al Fayasel Laboratories',
       images: [
         {
-          url: 'https://alfayasel.com/images/alfayasel-logo-new-02.png',
+          url: 'https://alfayasel.com/api/og-image?img=/images/alfayasel-logo-new-02.png',
           width: 800,
           height: 800,
           alt: 'Al Fayasel Laboratories',
@@ -46,7 +46,7 @@ export async function generateMetadata({ params: { lang } }: PageProps): Promise
       card: 'summary_large_image',
       title,
       description,
-      images: ['https://alfayasel.com/images/alfayasel-logo-new-02.png'],
+      images: ['https://alfayasel.com/api/og-image?img=/images/alfayasel-logo-new-02.png'],
     },
   };
 }

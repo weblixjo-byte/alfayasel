@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import path from 'path';
-import fs from 'fs';
 import sharp from 'sharp';
 
 export async function GET(request: NextRequest) {
@@ -12,32 +10,43 @@ export async function GET(request: NextRequest) {
       return new NextResponse('Missing img parameter', { status: 400 });
     }
 
-    let imageBuffer: Buffer | null = null;
-
-    // Check if the image path is a URL or local file path
-    if (imgPathParam.startsWith('http://') || imgPathParam.startsWith('https://')) {
-      const res = await fetch(imgPathParam);
-      if (!res.ok) {
-        return new NextResponse('Failed to fetch remote image', { status: 404 });
-      }
-      const arrayBuffer = await res.arrayBuffer();
-      imageBuffer = Buffer.from(arrayBuffer);
-    } else {
-      // Clean leading slashes
-      const cleanPath = imgPathParam.replace(/^\/+/, '');
-      const absolutePath = path.join(process.cwd(), 'public', cleanPath);
-
-      if (!fs.existsSync(absolutePath)) {
-        return new NextResponse('Local image not found', { status: 404 });
-      }
-
-      imageBuffer = fs.readFileSync(absolutePath);
+    // Construct full URL so it works seamlessly on Netlify CDN serverless functions
+    let fullUrl = imgPathParam;
+    if (!fullUrl.startsWith('http://') && !fullUrl.startsWith('https://')) {
+      const cleanPath = imgPathParam.startsWith('/') ? imgPathParam : `/${imgPathParam}`;
+      fullUrl = `https://alfayasel.com${cleanPath}`;
     }
 
-    // Convert any image (webp, png, etc.) into a high-quality JPEG for social crawlers (WhatsApp/FB/Twitter)
+    // Fetch the image from CDN edge
+    const res = await fetch(fullUrl, { cache: 'no-store' });
+    
+    // If fetching product image failed, fallback to main logo
+    if (!res.ok) {
+      const logoRes = await fetch('https://alfayasel.com/images/alfayasel-logo-new-02.png');
+      if (!logoRes.ok) {
+        return new NextResponse('Fallback image not found', { status: 404 });
+      }
+      const logoBuffer = Buffer.from(await logoRes.arrayBuffer());
+      const logoJpeg = await sharp(logoBuffer)
+        .resize(1200, 630, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
+        .toFormat('jpeg', { quality: 90 })
+        .toBuffer();
+
+      return new NextResponse(logoJpeg, {
+        headers: {
+          'Content-Type': 'image/jpeg',
+          'Cache-Control': 'public, max-age=31536000, immutable',
+        },
+      });
+    }
+
+    const arrayBuffer = await res.arrayBuffer();
+    const imageBuffer = Buffer.from(arrayBuffer);
+
+    // Convert WEBP/PNG to a 800x800 high-quality JPEG for social previews
     const jpegBuffer = await sharp(imageBuffer)
       .resize(800, 800, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
-      .toFormat('jpeg', { quality: 85 })
+      .toFormat('jpeg', { quality: 88 })
       .toBuffer();
 
     return new NextResponse(jpegBuffer, {

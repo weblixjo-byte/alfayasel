@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: 'Al Fayasel Laboratories',
     images: [
       {
-        url: 'https://alfayasel.com/images/alfayasel-logo-new-02.png',
+        url: 'https://alfayasel.com/api/og-image?img=/images/alfayasel-logo-new-02.png',
         width: 1200,
         height: 630,
         alt: 'Al Fayasel Laboratories',
