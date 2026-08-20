@@ -252,10 +252,10 @@ export default function CategoriesPage() {
                     className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black"
                     placeholder="مثال: العناية بالبشرة"
                   />
-                  <p className="text-[10px] text-gray-400 font-normal">الاسم الذي سيظهر للزبائن في الموقع العربي</p>
+                  
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-700">الاسم بالإنجليزية (English Name) *</label>
+                  <label className="text-xs font-bold text-gray-700">الاسم بالإنجليزي (English Name) *</label>
                   <input
                     type="text"
                     required
@@ -273,12 +273,12 @@ export default function CategoriesPage() {
                     className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black"
                     placeholder="Example: Skin Care"
                   />
-                  <p className="text-[10px] text-gray-400 font-normal">الاسم بالإنجليزية للموقع والروابط</p>
+                  
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-gray-700">الرابط الفريد (Unique URL Link - Slug) *</label>
+                <label className="text-xs font-bold text-gray-700">الرابط الفريد (Slug) *</label>
                 <input
                   type="text"
                   required
@@ -288,20 +288,18 @@ export default function CategoriesPage() {
                   placeholder="skin-care-product"
                   disabled={!!editingCategory}
                 />
-                <p className="text-[10px] text-brand-600 font-normal">
-                  💡 يتم إنشاؤه تلقائياً من الاسم الإنجليزي لتسهيل العمل (مثال: `skin-care`). لا داعي لتعديله.
-                </p>
+                
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-700">القسم الرئيسي التابع له (Parent Category)</label>
+                  <label className="text-xs font-bold text-gray-700">القسم الرئيسي (Parent Category)</label>
                   <select
                     value={formData.parentSlug}
                     onChange={(e) => setFormData({ ...formData, parentSlug: e.target.value })}
                     className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black bg-white"
                   >
-                    <option value="">-- بدون (هذا قسم رئيسي عريض) --</option>
+                    <option value="">-- بدون (هذا قسم رئيسي) --</option>
                     {categories
                       .filter((c) => c._id !== editingCategory?._id && !c.parentSlug)
                       .map((c) => (
@@ -310,7 +308,7 @@ export default function CategoriesPage() {
                         </option>
                       ))}
                   </select>
-                  <p className="text-[10px] text-gray-400 font-normal">اختر القسم الأب لتجعله قسماً فرعياً، أو اتركه بدون ليكون رئيساً</p>
+                  
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-gray-700">ترتيب الظهور (Sort Order)</label>
@@ -320,7 +318,7 @@ export default function CategoriesPage() {
                     onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
                     className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black"
                   />
-                  <p className="text-[10px] text-gray-400 font-normal">الرقم الأصغر يظهر أولاً بالموقع (مثال: 1 يظهر قبل 2)</p>
+                  
                 </div>
               </div>
 
@@ -335,7 +333,7 @@ export default function CategoriesPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-700">شرح القسم بالإنجليزية (English Description)</label>
+                  <label className="text-xs font-bold text-gray-700">شرح القسم بالإنجليزي (English Description)</label>
                   <textarea
                     value={formData.descEn}
                     onChange={(e) => setFormData({ ...formData, descEn: e.target.value })}
