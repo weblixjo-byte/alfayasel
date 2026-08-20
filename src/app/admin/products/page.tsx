@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
@@ -105,7 +105,7 @@ export default function AdminProductsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm('هل أنت متأكد من رغبتك في حذف هذا المنتج نهائياً؟')) {
+    if (confirm('Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø±ØºØ¨ØªÙƒ ÙÙŠ Ø­Ø°Ù Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ¬ Ù†Ù‡Ø§Ø¦ÙŠØ§Ù‹ØŸ')) {
       const res = await deleteProduct(id);
       if (res.success) {
         setProducts((prev) => prev.filter((p) => p.id !== id));
@@ -275,8 +275,8 @@ export default function AdminProductsPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-gray-900 tracking-tight">إدارة المنتجات (Products)</h1>
-          <p className="text-xs text-gray-500 mt-1">إضافة، تعديل، حذف، وإدارة أحجام وخيارات المنتجات والـ SEO</p>
+          <h1 className="text-xl font-bold text-gray-900 tracking-tight">Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª (Products)</h1>
+          <p className="text-xs text-gray-500 mt-1">Ø¥Ø¶Ø§ÙØ©ØŒ ØªØ¹Ø¯ÙŠÙ„ØŒ Ø­Ø°ÙØŒ ÙˆØ¥Ø¯Ø§Ø±Ø© Ø£Ø­Ø¬Ø§Ù… ÙˆØ®ÙŠØ§Ø±Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª ÙˆØ§Ù„Ù€ SEO</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -285,7 +285,7 @@ export default function AdminProductsPage() {
             className="bg-[#0066b2] hover:bg-[#005594] text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm flex items-center gap-1.5 transition-all"
           >
             <Plus className="w-4 h-4" />
-            <span>إضافة منتج جديد (Add Product)</span>
+            <span>Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬ Ø¬Ø¯ÙŠØ¯ (Add Product)</span>
           </button>
         </div>
       </div>
@@ -297,46 +297,33 @@ export default function AdminProductsPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="البحث باسم المنتج أو رمز SKU..."
+            placeholder="Ø§Ù„Ø¨Ø­Ø« Ø¨Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬ Ø£Ùˆ Ø±Ù…Ø² SKU..."
             className="w-full px-3.5 py-2 ps-9 border border-gray-300 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-black"
           />
           <Search className="w-4 h-4 text-gray-400 absolute start-3 top-1/2 -translate-y-1/2" />
         </div>
-
-        <select
-          value={selectedCat}
-          onChange={(e) => setSelectedCat(e.target.value)}
-          className="bg-gray-50 border border-gray-300 text-xs font-medium rounded-xl px-3 py-2 focus:outline-none"
-        >
-          <option value="">جميع الأقسام ({products.length})</option>
-          {categories.map((c) => (
-            <option key={c.slug} value={c.slug}>
-              {c.name.ar} ({c.name.en})
-            </option>
-          ))}
-        </select>
       </div>
 
       {/* Products Table */}
       <div className="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden">
         {loading ? (
-          <div className="p-12 text-center text-xs text-gray-400 font-medium">جاري تحميل المنتجات...</div>
+          <div className="p-12 text-center text-xs text-gray-400 font-medium">Ø¬Ø§Ø±ÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª...</div>
         ) : filteredProducts.length === 0 ? (
           <div className="p-12 text-center text-xs text-gray-400 font-medium">
-            لا توجد منتجات مسجلة حالياً. اضغط على زر إضافة منتج جديد للبدء!
+            Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù†ØªØ¬Ø§Øª Ù…Ø³Ø¬Ù„Ø© Ø­Ø§Ù„ÙŠØ§Ù‹. Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ Ø²Ø± Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬ Ø¬Ø¯ÙŠØ¯ Ù„Ù„Ø¨Ø¯Ø¡!
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-start border-collapse text-xs">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200 text-gray-500 font-bold uppercase tracking-wider text-[10px]">
-                  <th className="p-4">المنتج (Product)</th>
-                  <th className="p-4">الرمز (SKU)</th>
-                  <th className="p-4">القسم (Category)</th>
-                  <th className="p-4">الأحجام (Variations)</th>
-                  <th className="p-4">السعر (JOD)</th>
-                  <th className="p-4">الحالة</th>
-                  <th className="p-4 text-end">إجراءات</th>
+                  <th className="p-4">Ø§Ù„Ù…Ù†ØªØ¬ (Product)</th>
+                  <th className="p-4">Ø§Ù„Ø±Ù…Ø² (SKU)</th>
+                  <th className="p-4">Ø§Ù„Ù‚Ø³Ù… (Category)</th>
+                  <th className="p-4">Ø§Ù„Ø£Ø­Ø¬Ø§Ù… (Variations)</th>
+                  <th className="p-4">Ø§Ù„Ø³Ø¹Ø± (JOD)</th>
+                  <th className="p-4">Ø§Ù„Ø­Ø§Ù„Ø©</th>
+                  <th className="p-4 text-end">Ø¥Ø¬Ø±Ø§Ø¡Ø§Øª</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 font-medium">
@@ -364,14 +351,14 @@ export default function AdminProductsPage() {
                       {product.variations && product.variations.length > 0 ? (
                         <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full text-[10px] font-bold">
                           <Layers className="w-3 h-3" />
-                          {product.variations.length} أحجام / خيارات
+                          {product.variations.length} Ø£Ø­Ø¬Ø§Ù… / Ø®ÙŠØ§Ø±Ø§Øª
                         </span>
                       ) : (
-                        <span className="text-gray-400 text-[11px]">حجم رئيسي واحد</span>
+                        <span className="text-gray-400 text-[11px]">Ø­Ø¬Ù… Ø±Ø¦ÙŠØ³ÙŠ ÙˆØ§Ø­Ø¯</span>
                       )}
                     </td>
 
-                    <td className="p-4 font-bold text-brand-600">{product.price.toFixed(2)} د.أ</td>
+                    <td className="p-4 font-bold text-brand-600">{product.price.toFixed(2)} Ø¯.Ø£</td>
 
                     <td className="p-4">
                       <button
@@ -385,12 +372,12 @@ export default function AdminProductsPage() {
                         {product.isPaused ? (
                           <>
                             <PauseCircle className="w-3 h-3" />
-                            <span>موقف (Paused)</span>
+                            <span>Ù…ÙˆÙ‚Ù (Paused)</span>
                           </>
                         ) : (
                           <>
                             <PlayCircle className="w-3 h-3" />
-                            <span>نشط (Active)</span>
+                            <span>Ù†Ø´Ø· (Active)</span>
                           </>
                         )}
                       </button>
@@ -400,14 +387,14 @@ export default function AdminProductsPage() {
                       <button
                         onClick={() => handleOpenEditModal(product)}
                         className="p-1.5 text-gray-600 hover:text-brand-600 hover:bg-gray-100 rounded-lg transition-colors"
-                        title="تعديل المنتج"
+                        title="ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„Ù…Ù†ØªØ¬"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(product.id)}
                         className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                        title="حذف المنتج"
+                        title="Ø­Ø°Ù Ø§Ù„Ù…Ù†ØªØ¬"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -427,9 +414,9 @@ export default function AdminProductsPage() {
             <div className="flex items-center justify-between border-b border-gray-200 pb-3">
               <div>
                 <h3 className="font-extrabold text-base text-gray-900">
-                  {editingProduct ? 'تعديل بيانات المنتج والأحجام' : 'إضافة منتج جديد مع الأحجام'}
+                  {editingProduct ? 'ØªØ¹Ø¯ÙŠÙ„ Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬ ÙˆØ§Ù„Ø£Ø­Ø¬Ø§Ù…' : 'Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬ Ø¬Ø¯ÙŠØ¯ Ù…Ø¹ Ø§Ù„Ø£Ø­Ø¬Ø§Ù…'}
                 </h3>
-                <p className="text-[11px] text-gray-400 mt-0.5">أدخل البيانات الأساسية والأحجام المتوفرة والأسعار</p>
+                <p className="text-[11px] text-gray-400 mt-0.5">Ø£Ø¯Ø®Ù„ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø£Ø³Ø§Ø³ÙŠØ© ÙˆØ§Ù„Ø£Ø­Ø¬Ø§Ù… Ø§Ù„Ù…ØªÙˆÙØ±Ø© ÙˆØ§Ù„Ø£Ø³Ø¹Ø§Ø±</p>
               </div>
               <button onClick={() => setIsModalOpen(false)} className="p-1 text-gray-400 hover:text-gray-700">
                 <X className="w-5 h-5" />
@@ -440,7 +427,7 @@ export default function AdminProductsPage() {
               {/* Row 1: SKU & Price */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">رمز المنتج الفريد (SKU) *</label>
+                  <label className="font-bold text-gray-700 block mb-1">Ø±Ù…Ø² Ø§Ù„Ù…Ù†ØªØ¬ Ø§Ù„ÙØ±ÙŠØ¯ (SKU) *</label>
                   <input
                     type="text"
                     required
@@ -448,10 +435,10 @@ export default function AdminProductsPage() {
                     onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
                     className="w-full px-3 py-2 border rounded-xl bg-gray-50 focus:outline-none focus:ring-1 focus:ring-black font-mono"
                   />
-                  <p className="text-[9px] text-gray-400 mt-0.5">رمز فريد لكل منتج لربطه بالـ SEO والطلبات</p>
+                  <p className="text-[9px] text-gray-400 mt-0.5">Ø±Ù…Ø² ÙØ±ÙŠØ¯ Ù„ÙƒÙ„ Ù…Ù†ØªØ¬ Ù„Ø±Ø¨Ø·Ù‡ Ø¨Ø§Ù„Ù€ SEO ÙˆØ§Ù„Ø·Ù„Ø¨Ø§Øª</p>
                 </div>
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">السعر الرئيسي بالدينار الأردني (Price JOD) *</label>
+                  <label className="font-bold text-gray-700 block mb-1">Ø§Ù„Ø³Ø¹Ø± Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠ Ø¨Ø§Ù„Ø¯ÙŠÙ†Ø§Ø± Ø§Ù„Ø£Ø±Ø¯Ù†ÙŠ (Price JOD) *</label>
                   <input
                     type="number"
                     step="0.05"
@@ -459,27 +446,27 @@ export default function AdminProductsPage() {
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     className="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-1 focus:ring-black"
-                    placeholder="مثال: 5.50"
+                    placeholder="Ù…Ø«Ø§Ù„: 5.50"
                   />
-                  <p className="text-[9px] text-gray-400 mt-0.5">السعر الافتراضي للمنتج بالدينار الأردني</p>
+                  <p className="text-[9px] text-gray-400 mt-0.5">Ø§Ù„Ø³Ø¹Ø± Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠ Ù„Ù„Ù…Ù†ØªØ¬ Ø¨Ø§Ù„Ø¯ÙŠÙ†Ø§Ø± Ø§Ù„Ø£Ø±Ø¯Ù†ÙŠ</p>
                 </div>
               </div>
 
               {/* Row 2: Names AR & EN */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">اسم المنتج بالعربية (Arabic Name) *</label>
+                  <label className="font-bold text-gray-700 block mb-1">Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬ Ø¨Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© (Arabic Name) *</label>
                   <input
                     type="text"
                     required
                     value={formData.nameAr}
                     onChange={(e) => setFormData({ ...formData, nameAr: e.target.value })}
                     className="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-1 focus:ring-black font-arabic"
-                    placeholder="مثال: بي كلين جل معقم"
+                    placeholder="Ù…Ø«Ø§Ù„: Ø¨ÙŠ ÙƒÙ„ÙŠÙ† Ø¬Ù„ Ù…Ø¹Ù‚Ù…"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">اسم المنتج بالإنجليزية (English Name) *</label>
+                  <label className="font-bold text-gray-700 block mb-1">Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬ Ø¨Ø§Ù„Ø¥Ù†Ø¬Ù„ÙŠØ²ÙŠØ© (English Name) *</label>
                   <input
                     type="text"
                     required
@@ -494,7 +481,7 @@ export default function AdminProductsPage() {
               {/* Row 3: Category & Image */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">القسم التابع له المنتج (Category) *</label>
+                  <label className="font-bold text-gray-700 block mb-1">Ø§Ù„Ù‚Ø³Ù… Ø§Ù„ØªØ§Ø¨Ø¹ Ù„Ù‡ Ø§Ù„Ù…Ù†ØªØ¬ (Category) *</label>
                   <select
                     value={formData.categorySlug}
                     onChange={(e) => setFormData({ ...formData, categorySlug: e.target.value })}
@@ -512,8 +499,8 @@ export default function AdminProductsPage() {
                   <ImageUploader
                     value={formData.imageUrl}
                     onChange={(url) => setFormData({ ...formData, imageUrl: url })}
-                    label="صورة المنتج الرئيسية (Main Image)"
-                    helperText="اختر صورة المنتج من جهازك أو موبايلك (JPG, PNG, WebP)"
+                    label="ØµÙˆØ±Ø© Ø§Ù„Ù…Ù†ØªØ¬ Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ© (Main Image)"
+                    helperText="Ø§Ø®ØªØ± ØµÙˆØ±Ø© Ø§Ù„Ù…Ù†ØªØ¬ Ù…Ù† Ø¬Ù‡Ø§Ø²Ùƒ Ø£Ùˆ Ù…ÙˆØ¨Ø§ÙŠÙ„Ùƒ (JPG, PNG, WebP)"
                     aspectRatio="square"
                     required
                   />
@@ -523,17 +510,17 @@ export default function AdminProductsPage() {
               {/* Row 4: Descriptions AR & EN */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">الوصف العام بالعربية (Main Description AR)</label>
+                  <label className="font-bold text-gray-700 block mb-1">Ø§Ù„ÙˆØµÙ Ø§Ù„Ø¹Ø§Ù… Ø¨Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© (Main Description AR)</label>
                   <textarea
                     rows={3}
                     value={formData.descriptionAr}
                     onChange={(e) => setFormData({ ...formData, descriptionAr: e.target.value })}
                     className="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-1 focus:ring-black font-arabic leading-relaxed"
-                    placeholder="تفاصيل وشرح المنتج العام بالعربية للزبائن..."
+                    placeholder="ØªÙØ§ØµÙŠÙ„ ÙˆØ´Ø±Ø­ Ø§Ù„Ù…Ù†ØªØ¬ Ø§Ù„Ø¹Ø§Ù… Ø¨Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© Ù„Ù„Ø²Ø¨Ø§Ø¦Ù†..."
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">الوصف العام بالإنجليزية (Main Description EN)</label>
+                  <label className="font-bold text-gray-700 block mb-1">Ø§Ù„ÙˆØµÙ Ø§Ù„Ø¹Ø§Ù… Ø¨Ø§Ù„Ø¥Ù†Ø¬Ù„ÙŠØ²ÙŠØ© (Main Description EN)</label>
                   <textarea
                     rows={3}
                     value={formData.descriptionEn}
@@ -551,10 +538,10 @@ export default function AdminProductsPage() {
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
                     <h4 className="font-extrabold text-gray-900 text-xs flex items-center gap-1.5">
-                      <span>🧴</span> خيارات وأحجام المنتج (Product Variations & Sizes)
+                      <span>ðŸ§´</span> Ø®ÙŠØ§Ø±Ø§Øª ÙˆØ£Ø­Ø¬Ø§Ù… Ø§Ù„Ù…Ù†ØªØ¬ (Product Variations & Sizes)
                     </h4>
                     <p className="text-[10px] text-gray-500 mt-0.5">
-                      أضف أحجام مختلفة لنفس المنتج (مثال: 500 مل، 1 لتر، 5 لتر) مع سعر مخصص ووصف مستقل لكل حجم
+                      Ø£Ø¶Ù Ø£Ø­Ø¬Ø§Ù… Ù…Ø®ØªÙ„ÙØ© Ù„Ù†ÙØ³ Ø§Ù„Ù…Ù†ØªØ¬ (Ù…Ø«Ø§Ù„: 500 Ù…Ù„ØŒ 1 Ù„ØªØ±ØŒ 5 Ù„ØªØ±) Ù…Ø¹ Ø³Ø¹Ø± Ù…Ø®ØµØµ ÙˆÙˆØµÙ Ù…Ø³ØªÙ‚Ù„ Ù„ÙƒÙ„ Ø­Ø¬Ù…
                     </p>
                   </div>
                   <button
@@ -562,13 +549,13 @@ export default function AdminProductsPage() {
                     onClick={handleAddVariation}
                     className="bg-[#0066b2] hover:bg-[#005594] text-white text-xs font-bold px-3.5 py-1.5 rounded-xl flex items-center gap-1 shadow-xs transition-all"
                   >
-                    <Plus className="w-3.5 h-3.5" /> إضافة حجم / خيار جديد
+                    <Plus className="w-3.5 h-3.5" /> Ø¥Ø¶Ø§ÙØ© Ø­Ø¬Ù… / Ø®ÙŠØ§Ø± Ø¬Ø¯ÙŠØ¯
                   </button>
                 </div>
 
                 {variationsList.length === 0 ? (
                   <div className="text-center py-4 bg-white/70 rounded-xl border border-dashed border-gray-300 text-gray-500 text-[11px]">
-                    المنتج حالياً بحجم وسعر واحد فقط. اضغط على زر <strong className="text-blue-700">&quot;إضافة حجم / خيار جديد&quot;</strong> إذا كان للمنتج أحجام متعددة.
+                    Ø§Ù„Ù…Ù†ØªØ¬ Ø­Ø§Ù„ÙŠØ§Ù‹ Ø¨Ø­Ø¬Ù… ÙˆØ³Ø¹Ø± ÙˆØ§Ø­Ø¯ ÙÙ‚Ø·. Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ Ø²Ø± <strong className="text-blue-700">&quot;Ø¥Ø¶Ø§ÙØ© Ø­Ø¬Ù… / Ø®ÙŠØ§Ø± Ø¬Ø¯ÙŠØ¯&quot;</strong> Ø¥Ø°Ø§ ÙƒØ§Ù† Ù„Ù„Ù…Ù†ØªØ¬ Ø£Ø­Ø¬Ø§Ù… Ù…ØªØ¹Ø¯Ø¯Ø©.
                   </div>
                 ) : (
                   <div className="space-y-3">
@@ -576,32 +563,32 @@ export default function AdminProductsPage() {
                       <div key={variant.id} className="bg-white border border-blue-200/80 rounded-2xl p-3.5 shadow-xs space-y-3">
                         <div className="flex items-center justify-between border-b border-gray-100 pb-2">
                           <span className="font-extrabold text-xs text-[#0066b2] flex items-center gap-1">
-                            <span>📦</span> الخيار #{vIdx + 1}: {variant.nameAr || variant.nameEn || 'حجم جديد'}
+                            <span>ðŸ“¦</span> Ø§Ù„Ø®ÙŠØ§Ø± #{vIdx + 1}: {variant.nameAr || variant.nameEn || 'Ø­Ø¬Ù… Ø¬Ø¯ÙŠØ¯'}
                           </span>
                           <button
                             type="button"
                             onClick={() => handleRemoveVariation(vIdx)}
                             className="text-red-500 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded-lg text-[10px] font-bold flex items-center gap-1 transition-colors"
                           >
-                            <Trash2 className="w-3.5 h-3.5" /> حذف الخيار
+                            <Trash2 className="w-3.5 h-3.5" /> Ø­Ø°Ù Ø§Ù„Ø®ÙŠØ§Ø±
                           </button>
                         </div>
 
                         {/* Variant Row 1: Names & SKU */}
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                           <div>
-                            <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">الاسم / الحجم بالعربية *</label>
+                            <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">Ø§Ù„Ø§Ø³Ù… / Ø§Ù„Ø­Ø¬Ù… Ø¨Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© *</label>
                             <input
                               type="text"
                               required
                               value={variant.nameAr}
                               onChange={(e) => handleUpdateVariation(vIdx, 'nameAr', e.target.value)}
-                              placeholder="مثال: 500 مل أو 1 لتر أو جالون 5 لتر"
+                              placeholder="Ù…Ø«Ø§Ù„: 500 Ù…Ù„ Ø£Ùˆ 1 Ù„ØªØ± Ø£Ùˆ Ø¬Ø§Ù„ÙˆÙ† 5 Ù„ØªØ±"
                               className="w-full px-2.5 py-1.5 border rounded-lg text-xs font-arabic"
                             />
                           </div>
                           <div>
-                            <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">الاسم / الحجم بالإنجليزية *</label>
+                            <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">Ø§Ù„Ø§Ø³Ù… / Ø§Ù„Ø­Ø¬Ù… Ø¨Ø§Ù„Ø¥Ù†Ø¬Ù„ÙŠØ²ÙŠØ© *</label>
                             <input
                               type="text"
                               required
@@ -612,14 +599,14 @@ export default function AdminProductsPage() {
                             />
                           </div>
                           <div>
-                            <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">رمز الخيار الفريد (SKU) *</label>
+                            <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">Ø±Ù…Ø² Ø§Ù„Ø®ÙŠØ§Ø± Ø§Ù„ÙØ±ÙŠØ¯ (SKU) *</label>
                             <input
                               type="text"
                               required
                               value={variant.sku}
                               onChange={(e) => handleUpdateVariation(vIdx, 'sku', e.target.value)}
                               className="w-full px-2.5 py-1.5 border rounded-lg font-mono text-xs bg-gray-50"
-                              placeholder="مثال: ALF-101-500ML"
+                              placeholder="Ù…Ø«Ø§Ù„: ALF-101-500ML"
                             />
                           </div>
                         </div>
@@ -627,7 +614,7 @@ export default function AdminProductsPage() {
                         {/* Variant Row 2: Prices & Image */}
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                           <div>
-                            <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">سعر هذا الحجم (JOD) *</label>
+                            <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">Ø³Ø¹Ø± Ù‡Ø°Ø§ Ø§Ù„Ø­Ø¬Ù… (JOD) *</label>
                             <input
                               type="number"
                               step="0.05"
@@ -639,7 +626,7 @@ export default function AdminProductsPage() {
                             />
                           </div>
                           <div>
-                            <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">السعر قبل الخصم (اختياري)</label>
+                            <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">Ø§Ù„Ø³Ø¹Ø± Ù‚Ø¨Ù„ Ø§Ù„Ø®ØµÙ… (Ø§Ø®ØªÙŠØ§Ø±ÙŠ)</label>
                             <input
                               type="number"
                               step="0.05"
@@ -653,8 +640,8 @@ export default function AdminProductsPage() {
                             <ImageUploader
                               value={variant.imageUrl}
                               onChange={(url) => handleUpdateVariation(vIdx, 'imageUrl', url)}
-                              label="صورة خاصة بالحجم (اختياري)"
-                              helperText="اتركها فارغة لاستخدام الصورة الرئيسية"
+                              label="ØµÙˆØ±Ø© Ø®Ø§ØµØ© Ø¨Ø§Ù„Ø­Ø¬Ù… (Ø§Ø®ØªÙŠØ§Ø±ÙŠ)"
+                              helperText="Ø§ØªØ±ÙƒÙ‡Ø§ ÙØ§Ø±ØºØ© Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„ØµÙˆØ±Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©"
                               aspectRatio="square"
                             />
                           </div>
@@ -664,19 +651,19 @@ export default function AdminProductsPage() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                           <div>
                             <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">
-                              وصف خاص بهذا الحجم بالعربية (اختياري)
+                              ÙˆØµÙ Ø®Ø§Øµ Ø¨Ù‡Ø°Ø§ Ø§Ù„Ø­Ø¬Ù… Ø¨Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© (Ø§Ø®ØªÙŠØ§Ø±ÙŠ)
                             </label>
                             <textarea
                               rows={2}
                               value={variant.descriptionAr}
                               onChange={(e) => handleUpdateVariation(vIdx, 'descriptionAr', e.target.value)}
-                              placeholder="وصف تفصيلي خاص بهذا الحجم... (إذا تركته فارغاً سيتم استخدام الوصف العام)"
+                              placeholder="ÙˆØµÙ ØªÙØµÙŠÙ„ÙŠ Ø®Ø§Øµ Ø¨Ù‡Ø°Ø§ Ø§Ù„Ø­Ø¬Ù…... (Ø¥Ø°Ø§ ØªØ±ÙƒØªÙ‡ ÙØ§Ø±ØºØ§Ù‹ Ø³ÙŠØªÙ… Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„ÙˆØµÙ Ø§Ù„Ø¹Ø§Ù…)"
                               className="w-full px-2.5 py-1.5 border rounded-lg text-xs font-arabic leading-relaxed"
                             />
                           </div>
                           <div>
                             <label className="font-bold text-gray-700 block mb-0.5 text-[10px]">
-                              وصف خاص بهذا الحجم بالإنجليزية (اختياري)
+                              ÙˆØµÙ Ø®Ø§Øµ Ø¨Ù‡Ø°Ø§ Ø§Ù„Ø­Ø¬Ù… Ø¨Ø§Ù„Ø¥Ù†Ø¬Ù„ÙŠØ²ÙŠØ© (Ø§Ø®ØªÙŠØ§Ø±ÙŠ)
                             </label>
                             <textarea
                               rows={2}
@@ -696,7 +683,7 @@ export default function AdminProductsPage() {
               {/* Tab Visibility Flags */}
               <div className="bg-gray-50 p-3.5 rounded-2xl border border-gray-200 space-y-2 my-2">
                 <span className="font-bold text-gray-700 block mb-1 text-[10px] uppercase tracking-wider">
-                  عرض المنتج في الصفحة الرئيسية (Home Showcase):
+                  Ø¹Ø±Ø¶ Ø§Ù„Ù…Ù†ØªØ¬ ÙÙŠ Ø§Ù„ØµÙØ­Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ© (Home Showcase):
                 </span>
                 <div className="flex flex-wrap gap-5">
                   <label className="flex items-center gap-2 cursor-pointer font-semibold text-gray-700">
@@ -706,7 +693,7 @@ export default function AdminProductsPage() {
                       onChange={(e) => setFormData({ ...formData, isNewArrival: e.target.checked })}
                       className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
                     />
-                    <span>جديدنا (New Arrivals)</span>
+                    <span>Ø¬Ø¯ÙŠØ¯Ù†Ø§ (New Arrivals)</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer font-semibold text-gray-700">
                     <input
@@ -715,7 +702,7 @@ export default function AdminProductsPage() {
                       onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
                       className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
                     />
-                    <span>مميز (Featured)</span>
+                    <span>Ù…Ù…ÙŠØ² (Featured)</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer font-semibold text-gray-700">
                     <input
@@ -724,7 +711,7 @@ export default function AdminProductsPage() {
                       onChange={(e) => setFormData({ ...formData, isTopSeller: e.target.checked })}
                       className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
                     />
-                    <span>الاكثر مبيعاً (Top Sellers)</span>
+                    <span>Ø§Ù„Ø§ÙƒØ«Ø± Ù…Ø¨ÙŠØ¹Ø§Ù‹ (Top Sellers)</span>
                   </label>
                 </div>
               </div>
@@ -735,13 +722,13 @@ export default function AdminProductsPage() {
                   onClick={() => setIsModalOpen(false)}
                   className="px-4 py-2.5 text-gray-600 hover:bg-gray-100 rounded-xl font-bold transition-colors"
                 >
-                  إلغاء (Cancel)
+                  Ø¥Ù„ØºØ§Ø¡ (Cancel)
                 </button>
                 <button
                   type="submit"
                   className="bg-[#0066b2] hover:bg-[#005594] text-white font-extrabold px-6 py-2.5 rounded-xl transition-all shadow-md"
                 >
-                  {editingProduct ? 'حفظ التعديلات (Save Product)' : 'إنشاء المنتج (Create Product)'}
+                  {editingProduct ? 'Ø­ÙØ¸ Ø§Ù„ØªØ¹Ø¯ÙŠÙ„Ø§Øª (Save Product)' : 'Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„Ù…Ù†ØªØ¬ (Create Product)'}
                 </button>
               </div>
             </form>
@@ -751,3 +738,4 @@ export default function AdminProductsPage() {
     </div>
   );
 }
+
