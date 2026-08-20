@@ -26,13 +26,22 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://alfayasel.com',
     siteName: 'Al Fayasel Laboratories',
-    images: [{ url: 'https://alfayasel.com/images/alfayasel-logo-new-02.png', width: 800, height: 800, type: 'image/png', alt: 'Al Fayasel Laboratories' }],
+    images: [
+      {
+        url: 'https://alfayasel.com/opengraph-image.png',
+        secureUrl: 'https://alfayasel.com/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        type: 'image/png',
+        alt: 'Al Fayasel Laboratories',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Al Fayasel Laboratories',
     description: 'High-quality pharmaceutical, hair, and skincare solutions in Jordan.',
-    images: ['https://alfayasel.com/images/alfayasel-logo-new-02.png'],
+    images: ['https://alfayasel.com/opengraph-image.png'],
   },
   verification: { google: 'Zf3o6bfH8aOHt4Km2nZgXFFO9h0_SNPgS5tUGTHNvZQ' },
   icons: {
