@@ -7,6 +7,10 @@ const LOCALES = ['en', 'ar'];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (pathname.includes('opengraph-image') || pathname.includes('twitter-image')) {
+    return NextResponse.next();
+  }
+
   // 1. Admin Authentication Guard (Run only on admin dashboard routes)
   if (pathname.startsWith('/admin')) {
     if (pathname === '/admin/login') {
