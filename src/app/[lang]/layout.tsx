@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import { notFound } from 'next/navigation';
 import { Locale, locales } from '@/lib/i18n/config';
 import { TopBar } from '@/components/layout/TopBar';
 import { Header } from '@/components/layout/Header';
@@ -19,6 +20,8 @@ interface LocaleLayoutProps {
 }
 
 export default function LocaleLayout({ children, params: { lang } }: LocaleLayoutProps) {
+  if (!locales.includes(lang)) notFound();
+
   const dir = lang === 'ar' ? 'rtl' : 'ltr';
 
   return (
