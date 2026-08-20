@@ -26,11 +26,11 @@ export async function middleware(request: NextRequest) {
 
   // 2. Redirect /en to / and /en/path to /path (clean URLs for browser/SEO)
   if (pathname === '/en') {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL('/', request.url), 308);
   }
   if (pathname.startsWith('/en/')) {
     const cleanPath = pathname.substring(3);
-    return NextResponse.redirect(new URL(cleanPath, request.url));
+    return NextResponse.redirect(new URL(cleanPath, request.url), 308);
   }
 
   // 3. Allow root '/' to proceed directly
