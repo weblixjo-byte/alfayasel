@@ -41,6 +41,7 @@ export const metadata: Metadata = {
     description: 'High-quality pharmaceutical, hair, and skincare solutions in Jordan.',
     images: ['https://alfayasel.com/images/alfayasel-logo-new-02.png'],
   },
+  verification: { google: 'Zf3o6bfH8aOHt4Km2nZgXFFO9h0_SNPgS5tUGTHNvZQ' },
   icons: {
     icon: '/images/alfayasel-logo-new-02.png',
     apple: '/images/alfayasel-logo-new-02.png',
