@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://alfayasel.com',
     siteName: 'Al Fayasel Laboratories',
-    images: [{ url: 'https://alfayasel.com/api/og?title=Al%20Fayasel%20Laboratories%20%7C%20%D9%85%D8%AE%D8%AA%D8%A8%D8%B1%D8%A7%D8%AA%20%D8%A7%D9%84%D9%81%D9%8A%D8%A7%D8%B5%D9%84&img=%2Fimages%2Falfayasel-logo-new-02.png', width: 1200, height: 630, type: 'image/png', alt: 'Al Fayasel Laboratories' }],
+    images: [{ url: 'https://alfayasel.com/images/alfayasel-logo-new-02.png', width: 800, height: 800, type: 'image/png', alt: 'Al Fayasel Laboratories' }],
   },
   twitter: {
     card: 'summary_large_image',

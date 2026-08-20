@@ -151,7 +151,8 @@ export async function generateMetadata({ params, searchParams }: ProductPageProp
     : `https://alfayasel.com/${params.lang}/product/${product.slug}`;
 
   const rawImagePath = selectedVariation?.images?.[0] || product.images?.[0] || '/images/placeholder.jpg';
-  const ogImageUrl = 'https://alfayasel.com/api/og?title=' + encodeURIComponent(product.name[params.lang]) + '&img=' + encodeURIComponent(rawImagePath);
+  const cleanImgPath = rawImagePath.startsWith('http') ? rawImagePath : (rawImagePath.startsWith('/') ? rawImagePath : '/' + rawImagePath);
+  const ogImageUrl = 'https://alfayasel.com' + cleanImgPath;
 
   return {
     title: titleText,
@@ -168,14 +169,7 @@ export async function generateMetadata({ params, searchParams }: ProductPageProp
       description: description,
       url: canonicalUrl,
       siteName: 'Al Fayasel Laboratories',
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          type: 'image/png',
-          
-          alt: product.name[params.lang],
+      images: [{ url: ogImageUrl, width: 800, height: 800, type: 'image/webp', alt: product.name[params.lang] }],
         },
       ],
       locale: params.lang === 'ar' ? 'ar_JO' : 'en_US',
@@ -185,7 +179,7 @@ export async function generateMetadata({ params, searchParams }: ProductPageProp
       card: 'summary_large_image',
       title: titleText,
       description: description,
-      images: [ogImageUrl],
+      images: [{ url: ogImageUrl, width: 800, height: 800, type: 'image/webp', alt: product.name[params.lang] }],
     },
   };
 }
