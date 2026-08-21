@@ -31,6 +31,10 @@ export default function CategoriesPage() {
 
   const [error, setError] = useState('');
   const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({});
+  
+  const toggleExpand = (id: string) => {
+    setExpandedCats((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
   const [success, setSuccess] = useState('');
 
   // Fetch categories on mount
@@ -181,43 +185,111 @@ export default function CategoriesPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 font-medium text-gray-700">
-                {categories.map((cat) => {
-                  const parent = categories.find((c) => c.slug === cat.parentSlug);
+                {categories.filter((c) => !c.parentSlug).map((mainCat) => {
+                  const subs = categories.filter((c) => c.parentSlug === mainCat.slug);
+                  const isExpanded = !!expandedCats[mainCat._id];
+                  const hasSubs = subs.length > 0;
+
                   return (
-                    <tr key={cat._id} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="p-4">
-                        <div className="space-y-0.5">
-                          <div className="font-bold text-gray-900">{cat.name.ar}</div>
-                          <div className="text-gray-400">{cat.name.en}</div>
-                        </div>
-                      </td>
-                      <td className="p-4 font-mono text-gray-500">{cat.slug}</td>
-                      <td className="p-4">
-                        {parent ? (
-                          <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[10px] font-bold">
-                            {parent.name.ar} ({parent.slug})
+                    <React.Fragment key={mainCat._id}>
+                      {/* Main Parent Category Row */}
+                      <tr className="hover:bg-gray-50/80 transition-colors bg-white font-semibold border-b border-gray-100">
+                        <td className="p-4">
+                          <div className="flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() => toggleExpand(mainCat._id)}
+                              className={`p-1.5 rounded-lg transition-colors ${
+                                hasSubs
+                                  ? 'hover:bg-gray-200 text-gray-700 cursor-pointer bg-gray-100'
+                                  : 'text-gray-300 cursor-default'
+                              }`}
+                            >
+                              {hasSubs ? (
+                                isExpanded ? (
+                                  <ChevronDown className="w-4 h-4 text-gray-900" />
+                                ) : (
+                                  <ChevronRight className="w-4 h-4" />
+                                )
+                              ) : (
+                                <span className="w-4 h-4 block text-center text-xs">•</span>
+                              )}
+                            </button>
+                            <div>
+                              <div className="font-bold text-gray-900 text-sm flex items-center gap-2">
+                                <span>{mainCat.name.ar}</span>
+                                {hasSubs && (
+                                  <span className="bg-gray-100 text-gray-700 border border-gray-200 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                    {subs.length} أقسام فرعية
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-gray-400 text-xs font-normal">{mainCat.name.en}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="p-4 font-mono text-gray-500">{mainCat.slug}</td>
+                        <td className="p-4">
+                          <span className="text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded text-[10px] font-bold">
+                            قسم رئيسي (Primary Parent)
                           </span>
-                        ) : (
-                          <span className="text-gray-300 font-normal">— Primary Parent</span>
-                        )}
-                      </td>
-                                            <td className="p-4 text-right space-x-2 whitespace-nowrap">
-                        <button
-                          onClick={() => handleEdit(cat)}
-                          className="p-1.5 text-gray-400 hover:text-gray-900 transition-colors"
-                          title="Edit"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(cat._id)}
-                          className="p-1.5 text-gray-400 hover:text-red-600 transition-colors"
-                          title="Delete"
-                        >
-                          <Trash className="w-4 h-4" />
-                        </button>
-                      </td>
-                    </tr>
+                        </td>
+                        <td className="p-4 text-right space-x-2 whitespace-nowrap">
+                          <button
+                            onClick={() => handleEdit(mainCat)}
+                            className="p-1.5 text-gray-500 hover:text-gray-900 transition-colors"
+                            title="تعديل"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(mainCat._id)}
+                            className="p-1.5 text-gray-500 hover:text-red-600 transition-colors"
+                            title="حذف"
+                          >
+                            <Trash className="w-4 h-4" />
+                          </button>
+                        </td>
+                      </tr>
+
+                      {/* Subcategories Accordion Rows */}
+                      {isExpanded &&
+                        subs.map((subCat) => (
+                          <tr key={subCat._id} className="bg-gray-50/80 border-b border-gray-100 hover:bg-gray-100/60 transition-colors">
+                            <td className="p-3 pl-12 pr-10">
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-400 font-mono text-xs">└─</span>
+                                <div>
+                                  <div className="font-bold text-gray-800 text-xs">{subCat.name.ar}</div>
+                                  <div className="text-gray-400 text-[11px] font-normal">{subCat.name.en}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="p-3 font-mono text-gray-500 text-xs">{subCat.slug}</td>
+                            <td className="p-3">
+                              <span className="bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded text-[10px] font-bold">
+                                فرعي من: {mainCat.name.ar}
+                              </span>
+                            </td>
+                            <td className="p-3 text-right space-x-2 whitespace-nowrap">
+                              <button
+                                onClick={() => handleEdit(subCat)}
+                                className="p-1.5 text-gray-400 hover:text-gray-900 transition-colors"
+                                title="تعديل"
+                              >
+                                <Pencil className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(subCat._id)}
+                                className="p-1.5 text-gray-400 hover:text-red-600 transition-colors"
+                                title="حذف"
+                              >
+                                <Trash className="w-3.5 h-3.5" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                    </React.Fragment>
                   );
                 })}
               </tbody>
