@@ -42,6 +42,9 @@ export default function AdminProductsPage() {
     descriptionEn: '',
     descriptionAr: '',
     imageUrl: '',
+    isNewArrival: false,
+    isFeatured: false,
+    isTopSeller: false,
   });
 
   const [variationsList, setVariationsList] = useState<AdminVariationForm[]>([]);
@@ -93,6 +96,9 @@ export default function AdminProductsPage() {
       descriptionEn: '',
       descriptionAr: '',
       imageUrl: '',
+      isNewArrival: false,
+      isFeatured: false,
+      isTopSeller: false,
     });
     setVariationsList([]);
     setIsModalOpen(true);
@@ -120,6 +126,9 @@ export default function AdminProductsPage() {
       descriptionEn: product.description?.en || '',
       descriptionAr: product.description?.ar || '',
       imageUrl: product.images && product.images[0] ? product.images[0] : '',
+      isNewArrival: !!product.isNewArrival,
+      isFeatured: !!product.isFeatured,
+      isTopSeller: !!product.isTopSeller,
     });
 
     if (product.variations && product.variations.length > 0) {
@@ -189,7 +198,7 @@ export default function AdminProductsPage() {
     if (!confirm('هل أنت تأكد من رغبتك في حذف هذا المنتج بشكل نهائي؟')) return;
     const res = await deleteProduct(id);
     if (res.success) {
-      setProducts(products.filter((p) => p.id !== id));
+      setProducts(products.filter((p) => ((p as any)._id || p.id) !== id));
     } else {
       alert('حدث خطأ أثناء حذف المنتج');
     }
