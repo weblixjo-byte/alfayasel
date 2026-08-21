@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash, X, ArrowLeft } from 'lucide-react';
+import { Plus, Pencil, Trash, X, ArrowLeft, ChevronDown, ChevronRight } from 'lucide-react';
 import { createCategory, updateCategory, deleteCategory } from '@/lib/actions/categories';
 
 interface CategoryData {
@@ -30,6 +30,7 @@ export default function CategoriesPage() {
   });
 
   const [error, setError] = useState('');
+  const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({});
   const [success, setSuccess] = useState('');
 
   // Fetch categories on mount
