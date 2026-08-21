@@ -25,8 +25,8 @@ const nextConfig = {
       { source: '/ar/returns', destination: '/ar/return-policy', permanent: true },
       { source: '/cancellation', destination: '/cancellation-policy', permanent: true },
       { source: '/ar/cancellation', destination: '/ar/cancellation-policy', permanent: true },
-      { source: '/terms-and-conditions', destination: '/trems-and-conditions', permanent: true },
-      { source: '/ar/terms-and-conditions', destination: '/ar/trems-and-conditions', permanent: true },
+      // Removed faulty terms-and-conditions redirect
+      // Removed faulty ar/terms-and-conditions redirect
     ];
   },
 
@@ -46,26 +46,8 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, max-age=31536000, s-maxage=31536000, immutable' },
         ],
       },
-      // HTML Pages: Cache on CDN with ISR stale-while-revalidate
-      {
-        source: '/((?!admin|api).*)',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400' },
-        ],
-      },
-      // API routes: allow short-term caching
-      {
-        source: '/api/products',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=60, s-maxage=300, stale-while-revalidate=600' },
-        ],
-      },
-      {
-        source: '/api/categories',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=300, s-maxage=600, stale-while-revalidate=1200' },
-        ],
-      },
+      
+      
     ];
   },
 };
