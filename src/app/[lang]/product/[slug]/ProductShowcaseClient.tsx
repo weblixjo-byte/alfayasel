@@ -7,7 +7,7 @@ import { Locale, getDictionary } from '@/lib/i18n/config';
 import { ProductData } from '@/lib/data/products';
 import { useCartStore } from '@/lib/store/useCartStore';
 import { useWishlistStore } from '@/lib/store/useWishlistStore';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+
 
 interface ProductShowcaseClientProps {
   product: ProductData;
@@ -21,9 +21,7 @@ export default function ProductShowcaseClient({ product, locale, initialVariatio
   
   const addItem = useCartStore((state) => state.addItem);
   const { toggleWishlist, isInWishlist } = useWishlistStore();
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  
   
   const [quantity, setQuantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -90,9 +88,6 @@ export default function ProductShowcaseClient({ product, locale, initialVariatio
 
   const handleVariationChange = (sku: string) => {
     setSelectedVariationSku(sku);
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('sku', sku);
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const handleAddToCart = () => {

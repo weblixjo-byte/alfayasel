@@ -37,6 +37,8 @@ export default function AdminProductsPage() {
     nameAr: '',
     price: '',
     categorySlug: '',
+    mainCategorySlug: '',
+    subCategorySlug: '',
     descriptionEn: '',
     descriptionAr: '',
     imageUrl: '',
@@ -87,7 +89,7 @@ export default function AdminProductsPage() {
       nameEn: '',
       nameAr: '',
       price: '',
-      categorySlug: categories[0]?.slug || 'medical-cosmetics',
+      categorySlug: '', mainCategorySlug: categories.find(c => !c.parentSlug)?.slug || '', subCategorySlug: '',
       descriptionEn: '',
       descriptionAr: '',
       imageUrl: '',
@@ -104,7 +106,17 @@ export default function AdminProductsPage() {
       nameEn: product.name.en || '',
       nameAr: product.name.ar || '',
       price: product.price ? product.price.toString() : '',
-      categorySlug: product.categorySlug || categories[0]?.slug || 'medical-cosmetics',
+      categorySlug: product.categorySlug || '',
+        mainCategorySlug: (() => {
+          const cat = categories.find(c => c.slug === product.categorySlug);
+          if (cat && cat.parentSlug) return cat.parentSlug;
+          return product.categorySlug || categories.find(c => !c.parentSlug)?.slug || '';
+        })(),
+        subCategorySlug: (() => {
+          const cat = categories.find(c => c.slug === product.categorySlug);
+          if (cat && cat.parentSlug) return product.categorySlug;
+          return '';
+        })(),
       descriptionEn: product.description?.en || '',
       descriptionAr: product.description?.ar || '',
       imageUrl: product.images && product.images[0] ? product.images[0] : '',
@@ -207,10 +219,10 @@ export default function AdminProductsPage() {
       description: { en: formData.descriptionEn, ar: formData.descriptionAr },
       usage: { en: '', ar: '' },
       price: parseFloat(formData.price) || 0,
-      categorySlug: formData.categorySlug,
+      categorySlug: formData.subCategorySlug || formData.mainCategorySlug || formData.categorySlug,
       categoryName: {
-        en: categories.find((c) => c.slug === formData.categorySlug)?.name?.en || formData.categorySlug,
-        ar: categories.find((c) => c.slug === formData.categorySlug)?.name?.ar || formData.categorySlug,
+        en: categories.find((c) => c.slug === (formData.subCategorySlug || formData.mainCategorySlug))?.name?.en || formData.subCategorySlug || formData.mainCategorySlug,
+        ar: categories.find((c) => c.slug === (formData.subCategorySlug || formData.mainCategorySlug))?.name?.ar || formData.subCategorySlug || formData.mainCategorySlug,
       },
       images: formData.imageUrl ? [formData.imageUrl] : [],
       inStock: true,
@@ -460,18 +472,36 @@ export default function AdminProductsPage() {
               {/* Row 3: Category & Image */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-gray-700 block mb-1">القسم التابع له المنتج (Category) *</label>
-                  <select
-                    value={formData.categorySlug}
-                    onChange={(e) => setFormData({ ...formData, categorySlug: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-xl bg-white focus:outline-none focus:ring-1 focus:ring-black"
-                  >
-                    {categories.map((c) => (
-                      <option key={c.slug} value={c.slug}>
-                        {c.name.ar} ({c.name.en})
-                      </option>
-                    ))}
-                  </select>
+                  <label className="font-bold text-gray-700 block mb-1">القسم الرئيسي للمنتج (Category) *</label>
+                    <div className="flex flex-col gap-3">
+                      <select
+                        value={formData.mainCategorySlug || ''}
+                        onChange={(e) => setFormData({ ...formData, mainCategorySlug: e.target.value, subCategorySlug: '' })}
+                        className="w-full px-3 py-2 border rounded-xl bg-white focus:outline-none focus:ring-1 focus:ring-black"
+                      >
+                        <option value="">-- اختر القسم الرئيسي --</option>
+                        {categories.filter(c => !c.parentSlug).map((c) => (
+                          <option key={c.slug} value={c.slug}>
+                            {c.name.ar} ({c.name.en})
+                          </option>
+                        ))}
+                      </select>
+                      
+                      {categories.filter(c => c.parentSlug === formData.mainCategorySlug).length > 0 && (
+                        <select
+                          value={formData.subCategorySlug || ''}
+                          onChange={(e) => setFormData({ ...formData, subCategorySlug: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl bg-white focus:outline-none focus:ring-1 focus:ring-black"
+                        >
+                          <option value="">-- بدون قسم فرعي (منتج رئيسي) --</option>
+                          {categories.filter(c => c.parentSlug === formData.mainCategorySlug).map((c) => (
+                            <option key={c.slug} value={c.slug}>
+                              └ {c.name.ar} ({c.name.en})
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    </div>
                 </div>
 
                 <div>

@@ -119,8 +119,8 @@ export default function CategoriesPage() {
         ar: formData.descAr.trim(),
       },
       parentSlug: formData.parentSlug || undefined,
-      order: editingCategory ? editingCategory.order : categories.length + 1,
-    };
+      order: 0,
+      };
 
     if (editingCategory) {
       const res = await updateCategory(editingCategory._id, payload);
@@ -176,8 +176,7 @@ export default function CategoriesPage() {
                   <th className="p-4">Category Name (AR / EN)</th>
                   <th className="p-4">Slug</th>
                   <th className="p-4">Parent Category</th>
-                  <th className="p-4 text-center">Sort Order</th>
-                  <th className="p-4 text-right">Actions</th>
+                                    <th className="p-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 font-medium text-gray-700">
@@ -201,8 +200,7 @@ export default function CategoriesPage() {
                           <span className="text-gray-300 font-normal">— Primary Parent</span>
                         )}
                       </td>
-                      <td className="p-4 text-center font-mono text-gray-600">{cat.order || 0}</td>
-                      <td className="p-4 text-right space-x-2 whitespace-nowrap">
+                                            <td className="p-4 text-right space-x-2 whitespace-nowrap">
                         <button
                           onClick={() => handleEdit(cat)}
                           className="p-1.5 text-gray-400 hover:text-gray-900 transition-colors"
