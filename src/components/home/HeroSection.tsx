@@ -13,6 +13,38 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
+  const [categoriesList, setCategoriesList] = useState<CategoryData[]>(INITIAL_CATEGORIES);
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.categories && data.categories.length > 0) {
+          const raw = data.categories;
+          const parents = raw.filter((c: any) => !c.parentSlug);
+          const subcats = raw.filter((c: any) => c.parentSlug);
+
+          const formatted: CategoryData[] = parents.map((p: any) => ({
+            id: p._id,
+            name: p.name,
+            slug: p.slug,
+            description: p.description || { en: '', ar: '' },
+            icon: p.icon || 'Package',
+            image: p.image || '/images/categories/default.png',
+            subcategories: subcats
+              .filter((s: any) => s.parentSlug === p.slug)
+              .map((s: any) => ({
+                id: s._id,
+                name: s.name,
+                slug: s.slug,
+                description: s.description || { en: '', ar: '' },
+              })),
+          }));
+          setCategoriesList(formatted);
+        }
+      })
+      .catch((err) => console.error('Failed to load dynamic categories:', err));
+  }, []);
   const dict = getDictionary(locale);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -156,7 +188,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
           onMouseLeave={() => setActiveCategory(null)}
         >
           <ul className="divide-y divide-gray-100 text-xs text-gray-700">
-            {INITIAL_CATEGORIES.map((cat) => {
+            {categoriesList.map((cat) => {
               const isHovered = activeCategory?.slug === cat.slug;
               return (
                 <li
@@ -241,7 +273,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
 
           {categoriesOpen && (
             <div className="mt-1 bg-white border border-gray-200 rounded-xl shadow-xl w-52 max-h-72 overflow-y-auto">
-              {INITIAL_CATEGORIES.map((cat) => (
+              {categoriesList.map((cat) => (
                 <Link
                   key={cat.slug}
                   href={getLocalizedPath(`/shop/${cat.slug}`, locale)}

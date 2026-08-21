@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Filter } from 'lucide-react';
 import { Locale, getDictionary } from '@/lib/i18n/config';
-import { INITIAL_CATEGORIES, ProductData } from '@/lib/data/products';
+import { INITIAL_CATEGORIES, CategoryData, ProductData } from '@/lib/data/products';
 import { ProductCard } from '@/components/store/ProductCard';
 import { QuickViewModal } from '@/components/store/QuickViewModal';
 
@@ -22,6 +22,38 @@ export function ShopClient({ lang, initialProducts, initialCategory, initialQuer
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [sortBy, setSortBy] = useState<'featured' | 'priceAsc' | 'priceDesc' | 'newest'>('featured');
   const [selectedQuickView, setSelectedQuickView] = useState<ProductData | null>(null);
+  const [categoriesList, setCategoriesList] = useState<CategoryData[]>(INITIAL_CATEGORIES);
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.categories && data.categories.length > 0) {
+          const raw = data.categories;
+          const parents = raw.filter((c: any) => !c.parentSlug);
+          const subcats = raw.filter((c: any) => c.parentSlug);
+
+          const formatted: CategoryData[] = parents.map((p: any) => ({
+            id: p._id,
+            name: p.name,
+            slug: p.slug,
+            description: p.description || { en: '', ar: '' },
+            icon: p.icon || 'Package',
+            image: p.image || '/images/categories/default.png',
+            subcategories: subcats
+              .filter((s: any) => s.parentSlug === p.slug)
+              .map((s: any) => ({
+                id: s._id,
+                name: s.name,
+                slug: s.slug,
+                description: s.description || { en: '', ar: '' },
+              })),
+          }));
+          setCategoriesList(formatted);
+        }
+      })
+      .catch((err) => console.error('Failed to load dynamic categories:', err));
+  }, []);
 
   useEffect(() => {
     setSelectedCategory(initialCategory);
@@ -35,7 +67,7 @@ export function ShopClient({ lang, initialProducts, initialCategory, initialQuer
     return initialProducts
       .filter((p) => {
         if (selectedCategory) {
-          const cat = INITIAL_CATEGORIES.find((c) => c.slug === selectedCategory);
+          const cat = categoriesList.find((c) => c.slug === selectedCategory);
           const allowedSlugs = cat
             ? [selectedCategory, ...cat.subcategories.map((sub) => sub.slug)]
             : [selectedCategory];
@@ -55,7 +87,7 @@ export function ShopClient({ lang, initialProducts, initialCategory, initialQuer
         if (sortBy === 'newest') return (b.isNewArrival ? 1 : 0) - (a.isNewArrival ? 1 : 0);
         return 0;
       });
-  }, [initialProducts, selectedCategory, searchQuery, sortBy]);
+  }, [initialProducts, selectedCategory, searchQuery, sortBy, categoriesList]);
 
   return (
     <div className="space-y-6">
@@ -68,8 +100,8 @@ export function ShopClient({ lang, initialProducts, initialCategory, initialQuer
                 {isAr ? 'التصنيف المختار:' : 'Selected Category:'}
               </span>
               <span className="bg-[#0066b2]/10 text-[#0066b2] px-2.5 py-1 text-xs font-bold rounded-md capitalize">
-                {INITIAL_CATEGORIES.find(c => c.slug === selectedCategory)?.name[lang] || 
-                 INITIAL_CATEGORIES.flatMap(c => c.subcategories).find(s => s.slug === selectedCategory)?.name[lang] || 
+                {categoriesList.find(c => c.slug === selectedCategory)?.name[lang] || 
+                 categoriesList.flatMap(c => c.subcategories).find(s => s.slug === selectedCategory)?.name[lang] || 
                  selectedCategory}
               </span>
               <button 

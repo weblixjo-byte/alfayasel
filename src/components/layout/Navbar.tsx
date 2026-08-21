@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Menu, ChevronDown, ChevronRight } from 'lucide-react';
 import { Locale, getLocalizedPath } from '@/lib/i18n/config';
-import { INITIAL_CATEGORIES } from '@/lib/data/products';
+import { INITIAL_CATEGORIES, CategoryData } from '@/lib/data/products';
+
 
 interface NavbarProps {
   locale: Locale;
@@ -17,6 +18,39 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
   const isAr = locale === 'ar';
   const homePath = getLocalizedPath('/', locale);
   const isHomePage = pathname === homePath || pathname === `${homePath}/`;
+
+  const [categoriesList, setCategoriesList] = useState<CategoryData[]>(INITIAL_CATEGORIES);
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.categories && data.categories.length > 0) {
+          const raw = data.categories;
+          const parents = raw.filter((c: any) => !c.parentSlug);
+          const subcats = raw.filter((c: any) => c.parentSlug);
+
+          const formatted: CategoryData[] = parents.map((p: any) => ({
+            id: p._id,
+            name: p.name,
+            slug: p.slug,
+            description: p.description || { en: '', ar: '' },
+            icon: p.icon || 'Package',
+            image: p.image || '/images/categories/default.png',
+            subcategories: subcats
+              .filter((s: any) => s.parentSlug === p.slug)
+              .map((s: any) => ({
+                id: s._id,
+                name: s.name,
+                slug: s.slug,
+                description: s.description || { en: '', ar: '' },
+              })),
+          }));
+          setCategoriesList(formatted);
+        }
+      })
+      .catch((err) => console.error('Failed to load dynamic categories:', err));
+  }, []);
 
   // Hide standalone Navbar on home page because HeroSection contains the exact Woodmart header nav bar
   if (isHomePage) {
@@ -103,7 +137,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
             {/* Hover Menu with nested subcategories */}
             <div className="absolute top-full start-0 w-64 bg-white border border-gray-200 shadow-lg hidden group-hover:block z-50 animate-in fade-in slide-in-from-top-1 duration-150">
               <ul className="divide-y divide-gray-100 text-xs text-gray-700">
-                {INITIAL_CATEGORIES.map((cat) => {
+                {categoriesList.map((cat) => {
                   const hasSub = cat.subcategories && cat.subcategories.length > 0;
                   return (
                     <li

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -8,7 +8,8 @@ import { Search, Heart, ShoppingBag, ChevronDown, X, Menu } from 'lucide-react';
 import { Locale, getLocalizedPath } from '@/lib/i18n/config';
 import { useCartStore } from '@/lib/store/useCartStore';
 import { useWishlistStore } from '@/lib/store/useWishlistStore';
-import { INITIAL_CATEGORIES } from '@/lib/data/products';
+import { INITIAL_CATEGORIES, CategoryData } from '@/lib/data/products';
+
 import { usePathname, useSearchParams } from 'next/navigation';
 
 interface HeaderProps {
@@ -24,6 +25,39 @@ export const Header: React.FC<HeaderProps> = ({ locale }) => {
   const wishlistCount = useWishlistStore((state) => state.items.length);
 
   const [searchQuery, setSearchQuery] = useState('');
+
+  const [categoriesList, setCategoriesList] = useState<CategoryData[]>(INITIAL_CATEGORIES);
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.categories && data.categories.length > 0) {
+          const raw = data.categories;
+          const parents = raw.filter((c: any) => !c.parentSlug);
+          const subcats = raw.filter((c: any) => c.parentSlug);
+
+          const formatted: CategoryData[] = parents.map((p: any) => ({
+            id: p._id,
+            name: p.name,
+            slug: p.slug,
+            description: p.description || { en: '', ar: '' },
+            icon: p.icon || 'Package',
+            image: p.image || '/images/categories/default.png',
+            subcategories: subcats
+              .filter((s: any) => s.parentSlug === p.slug)
+              .map((s: any) => ({
+                id: s._id,
+                name: s.name,
+                slug: s.slug,
+                description: s.description || { en: '', ar: '' },
+              })),
+          }));
+          setCategoriesList(formatted);
+        }
+      })
+      .catch((err) => console.error('Failed to load dynamic categories:', err));
+  }, []);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -95,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({ locale }) => {
               className="appearance-none bg-transparent text-[10px] font-bold text-gray-500 pe-6 focus:outline-none cursor-pointer uppercase tracking-wider border-0"
             >
               <option value="">SELECT CATEGORY</option>
-              {INITIAL_CATEGORIES.map((cat) => (
+              {categoriesList.map((cat) => (
                 <option key={cat.slug} value={cat.slug}>
                   {cat.name[locale]}
                 </option>

@@ -119,7 +119,7 @@ export default function CategoriesPage() {
         ar: formData.descAr.trim(),
       },
       parentSlug: formData.parentSlug || undefined,
-      order: Number(formData.order) || 0,
+      order: editingCategory ? editingCategory.order : categories.length + 1,
     };
 
     if (editingCategory) {
@@ -291,8 +291,7 @@ export default function CategoriesPage() {
                 
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
+              <div className="space-y-1">
                   <label className="text-xs font-bold text-gray-700">القسم الرئيسي (Parent Category)</label>
                   <select
                     value={formData.parentSlug}
@@ -308,19 +307,7 @@ export default function CategoriesPage() {
                         </option>
                       ))}
                   </select>
-                  
                 </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-gray-700">ترتيب الظهور (Sort Order)</label>
-                  <input
-                    type="number"
-                    value={formData.order}
-                    onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-black"
-                  />
-                  
-                </div>
-              </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">

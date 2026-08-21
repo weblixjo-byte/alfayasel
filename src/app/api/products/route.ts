@@ -15,7 +15,8 @@ export async function GET(request: NextRequest) {
     const tag = searchParams.get('tag'); // new, featured, topSeller
 
     await dbConnect();
-    let query: any = { isPaused: false };
+    const isAdmin = searchParams.get('admin') === 'true';
+    let query: any = isAdmin ? {} : { isPaused: false };
 
     if (category) {
       const cat = INITIAL_CATEGORIES.find(c => c.slug === category);

@@ -24,15 +24,38 @@ export default function ProductShowcaseClient({ product, locale, initialVariatio
   const [quantity, setQuantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  const variations = product.variations || [];
+  const rawVariations = product.variations || [];
+  
+  // Check if rawVariations already includes base SKU/price
+  const hasBaseInVariations = rawVariations.some(
+    (v) => v.sku === product.sku || (v.price === product.price && (!v.sku || v.sku === product.sku))
+  );
+
+  const baseOption = {
+    sku: product.sku || 'main-sku',
+    name: { ar: 'الحجم الأساسي', en: 'Standard Size' },
+    price: product.price,
+    originalPrice: product.originalPrice,
+    inStock: product.inStock,
+    stockQuantity: product.stockQuantity,
+    images: product.images,
+    description: product.description,
+  };
+
+  const variations = (rawVariations.length > 0 && !hasBaseInVariations)
+    ? [baseOption, ...rawVariations]
+    : rawVariations;
+
   const hasVariations = variations.length > 0;
 
-  // State for selected variation SKU (checks initialVariationSku from URL searchParams first)
+  // State for selected variation SKU (defaults to base product or URL param or first variation)
   const [selectedVariationSku, setSelectedVariationSku] = useState<string>(() => {
     if (initialVariationSku && variations.some(v => v.sku === initialVariationSku)) {
       return initialVariationSku;
     }
-    return variations[0]?.sku || '';
+    // Default to main product SKU if present, or first variation
+    const baseMatch = variations.find(v => v.sku === product.sku || v.price === product.price);
+    return baseMatch ? baseMatch.sku : (variations[0]?.sku || product.sku);
   });
 
   // Find matching variation based on selected SKU
