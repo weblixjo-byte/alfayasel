@@ -11,6 +11,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // 0. Mohammad Admin Route Direct Pass
+  if (pathname.startsWith('/mohammad-admin')) {
+    return NextResponse.next();
+  }
+
   // 1. Admin Authentication Guard (Run only on admin dashboard routes)
   if (pathname.startsWith('/admin')) {
     if (pathname === '/admin/login') {
