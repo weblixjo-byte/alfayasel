@@ -20,9 +20,7 @@ export async function createCategory(data: CategoryInput) {
     const newCategory = new Category(data);
     await newCategory.save();
 
-    revalidatePath('/');
-    revalidatePath('/shop');
-    revalidatePath('/admin/categories');
+    revalidatePath('/', 'layout');
     return { success: true, category: JSON.parse(JSON.stringify(newCategory)) };
   } catch (error: any) {
     console.error('Failed to create category:', error);
@@ -42,9 +40,7 @@ export async function updateCategory(id: string, data: Partial<CategoryInput>) {
       return { success: false, error: 'Category not found' };
     }
 
-    revalidatePath('/');
-    revalidatePath('/shop');
-    revalidatePath('/admin/categories');
+    revalidatePath('/', 'layout');
     return { success: true, category: JSON.parse(JSON.stringify(updatedCategory)) };
   } catch (error: any) {
     console.error('Failed to update category:', error);
@@ -60,9 +56,7 @@ export async function deleteCategory(id: string) {
       return { success: false, error: 'Category not found' };
     }
 
-    revalidatePath('/');
-    revalidatePath('/shop');
-    revalidatePath('/admin/categories');
+    revalidatePath('/', 'layout');
     return { success: true };
   } catch (error: any) {
     console.error('Failed to delete category:', error);

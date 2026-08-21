@@ -59,10 +59,7 @@ export async function createProduct(data: ProductInput) {
 
     await newProduct.save();
 
-    revalidatePath('/');
-    revalidatePath('/shop');
-    revalidatePath('/admin/products');
-    revalidatePath('/admin/dashboard');
+    revalidatePath('/', 'layout');
     return { success: true, product: JSON.parse(JSON.stringify(newProduct)) };
   } catch (error: any) {
     console.error('Failed to create product:', error);
@@ -103,11 +100,7 @@ export async function updateProduct(id: string, data: Partial<ProductInput>) {
       return { success: false, error: 'Product not found' };
     }
 
-    revalidatePath('/');
-    revalidatePath('/shop');
-    revalidatePath(`/product/${updatedProduct.slug}`);
-    revalidatePath('/admin/products');
-    revalidatePath('/admin/dashboard');
+    revalidatePath('/', 'layout');
     return { success: true, product: JSON.parse(JSON.stringify(updatedProduct)) };
   } catch (error: any) {
     console.error('Failed to update product:', error);
@@ -124,10 +117,7 @@ export async function deleteProduct(id: string) {
       return { success: false, error: 'Product not found' };
     }
 
-    revalidatePath('/');
-    revalidatePath('/shop');
-    revalidatePath('/admin/products');
-    revalidatePath('/admin/dashboard');
+    revalidatePath('/', 'layout');
     return { success: true };
   } catch (error: any) {
     console.error('Failed to delete product:', error);
@@ -147,11 +137,7 @@ export async function toggleProductStatus(id: string) {
     product.isPaused = !product.isPaused;
     await product.save();
 
-    revalidatePath('/');
-    revalidatePath('/shop');
-    revalidatePath(`/product/${product.slug}`);
-    revalidatePath('/admin/products');
-    revalidatePath('/admin/dashboard');
+    revalidatePath('/', 'layout');
     return { success: true, isPaused: product.isPaused };
   } catch (error: any) {
     console.error('Failed to toggle product status:', error);
