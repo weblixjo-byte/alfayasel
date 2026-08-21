@@ -146,9 +146,10 @@ export async function generateMetadata({ params, searchParams }: ProductPageProp
   const rawDescription = variationDesc || product.description[params.lang] || product.usage[params.lang];
   const description = cleanDescription(rawDescription);
 
+  const localePrefix = params.lang === 'en' ? '' : '/ar';
   const canonicalUrl = searchParams?.sku
-    ? `https://alfayasel.com/${params.lang}/product/${product.slug}?sku=${searchParams.sku}`
-    : `https://alfayasel.com/${params.lang}/product/${product.slug}`;
+    ? `https://alfayasel.com${localePrefix}/product/${product.slug}?sku=${searchParams.sku}`
+    : `https://alfayasel.com${localePrefix}/product/${product.slug}`;
 
   const rawImagePath = selectedVariation?.images?.[0] || product.images?.[0] || '/images/placeholder.jpg';
   

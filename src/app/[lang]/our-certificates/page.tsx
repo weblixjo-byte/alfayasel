@@ -8,6 +8,7 @@ interface CertificatesPageProps {
   params: { lang: Locale };
 }
 
+
 export default function CertificatesPage({ params: { lang } }: CertificatesPageProps) {
   const isAr = lang === 'ar';
 

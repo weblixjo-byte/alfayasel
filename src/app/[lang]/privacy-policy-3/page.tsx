@@ -5,6 +5,24 @@ interface PrivacyPolicyPageProps {
   params: { lang: Locale };
 }
 
+
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: { lang: 'en' | 'ar' } }): Promise<Metadata> {
+  const isAr = params.lang === 'ar';
+  return {
+    title: isAr ? 'سياسة الخصوصية | مختبرات الفيصل' : 'Privacy Policy | Al Fayasel Laboratories',
+    description: isAr ? 'سياسة الخصوصية لموقع مختبرات الفيصل توضح كيفية حماية بياناتك ومعلوماتك الشخصية.' : 'Privacy Policy for Al Fayasel Laboratories website.',
+    alternates: {
+      canonical: params.lang === 'en' ? 'https://alfayasel.com/privacy-policy-3' : 'https://alfayasel.com/ar/privacy-policy-3',
+      languages: {
+        en: 'https://alfayasel.com/privacy-policy-3',
+        ar: 'https://alfayasel.com/ar/privacy-policy-3',
+      },
+    },
+  };
+}
+
 export default function PrivacyPolicyPage({ params: { lang } }: PrivacyPolicyPageProps) {
   const isAr = lang === 'ar';
 

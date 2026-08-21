@@ -24,13 +24,18 @@ interface AboutUsPageProps {
   params: { lang: Locale };
 }
 
-export async function generateMetadata({ params }: AboutUsPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: 'en' | 'ar' } }): Promise<Metadata> {
   const isAr = params.lang === 'ar';
   return {
-    title: isAr ? 'من نحن | مختبرات الفياصل الدوائية' : 'About Us | Al Fayasel Laboratories',
-    description: isAr
-      ? 'تعرف على مختبرات الفياصل الدوائية — شركة أردنية رائدة في مجال المستحضرات الطبية والتجميلية منذ عام ١٩٨٩.'
-      : 'Learn about Al Fayasel Laboratories — a leading Jordanian company in pharmaceutical and cosmetic products since 1989.',
+    title: isAr ? 'من نحن | مختبرات الفيصل' : 'About Us | Al Fayasel Laboratories',
+    description: isAr ? 'تعرف على تاريخ مختبرات الفيصل الطبية والتزامنا بتقديم أفضل المنتجات التجميلية والطبية.' : 'Learn about Al Fayasel Laboratories history and commitment to quality.',
+    alternates: {
+      canonical: params.lang === 'en' ? 'https://alfayasel.com/about-us' : 'https://alfayasel.com/ar/about-us',
+      languages: {
+        en: 'https://alfayasel.com/about-us',
+        ar: 'https://alfayasel.com/ar/about-us',
+      },
+    },
   };
 }
 

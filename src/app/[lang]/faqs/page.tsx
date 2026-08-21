@@ -8,6 +8,7 @@ interface FAQsPageProps {
   params: { lang: Locale };
 }
 
+
 export default function FAQsPage({ params: { lang } }: FAQsPageProps) {
   const isAr = lang === 'ar';
   const [openIndex, setOpenIndex] = useState<number | null>(0);

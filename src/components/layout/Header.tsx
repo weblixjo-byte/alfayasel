@@ -101,7 +101,7 @@ export const Header: React.FC<HeaderProps> = ({ locale }) => {
           <div className="relative h-12 w-36 md:h-14 md:w-48">
             <Image
               src="/images/alfayasel-logo-new-02.png"
-              alt="AL Fayasel | مختبرات الفياصل"
+              alt="Al Fayasel Laboratories Logo"
               fill
               priority
               className={`object-contain ${isAr ? 'object-right' : 'object-left'}`}

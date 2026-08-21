@@ -7,6 +7,24 @@ interface ContactUsPageProps {
   params: { lang: Locale };
 }
 
+
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: { lang: 'en' | 'ar' } }): Promise<Metadata> {
+  const isAr = params.lang === 'ar';
+  return {
+    title: isAr ? 'اتصل بنا | مختبرات الفيصل' : 'Contact Us | Al Fayasel Laboratories',
+    description: isAr ? 'تواصل معنا لأي استفسار حول منتجات مختبرات الفيصل. نحن هنا لخدمتك.' : 'Contact Al Fayasel Laboratories for any inquiries about our products.',
+    alternates: {
+      canonical: params.lang === 'en' ? 'https://alfayasel.com/contact-us' : 'https://alfayasel.com/ar/contact-us',
+      languages: {
+        en: 'https://alfayasel.com/contact-us',
+        ar: 'https://alfayasel.com/ar/contact-us',
+      },
+    },
+  };
+}
+
 export default function ContactUsPage({ params: { lang } }: ContactUsPageProps) {
   const isAr = lang === 'ar';
 

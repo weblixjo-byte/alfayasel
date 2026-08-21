@@ -110,7 +110,7 @@ export const StickyHeader: React.FC<StickyHeaderProps> = ({ locale }) => {
           <div className="relative h-10 w-36">
             <Image
               src="/images/alfayasel-logo-new-02.png"
-              alt="AL Fayasel | مختبرات الفياصل"
+              alt="Al Fayasel Laboratories Logo"
               fill
               className={`object-contain ${isAr ? 'object-right' : 'object-left'}`}
             />

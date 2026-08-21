@@ -5,6 +5,24 @@ interface TermsPageProps {
   params: { lang: Locale };
 }
 
+
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: { lang: 'en' | 'ar' } }): Promise<Metadata> {
+  const isAr = params.lang === 'ar';
+  return {
+    title: isAr ? 'الشروط والأحكام | مختبرات الفيصل' : 'Terms & Conditions | Al Fayasel Laboratories',
+    description: isAr ? 'الشروط والأحكام الخاصة باستخدام موقع مختبرات الفيصل وشراء المنتجات.' : 'Terms and Conditions for using Al Fayasel Laboratories website and purchasing products.',
+    alternates: {
+      canonical: params.lang === 'en' ? 'https://alfayasel.com/terms-and-conditions' : 'https://alfayasel.com/ar/terms-and-conditions',
+      languages: {
+        en: 'https://alfayasel.com/terms-and-conditions',
+        ar: 'https://alfayasel.com/ar/terms-and-conditions',
+      },
+    },
+  };
+}
+
 export default function TermsPage({ params: { lang } }: TermsPageProps) {
   const isAr = lang === 'ar';
 

@@ -20,9 +20,9 @@ export async function generateMetadata({ params: { lang } }: PageProps): Promise
     title,
     description,
     alternates: {
-      canonical: `https://alfayasel.com/${lang}`,
+      canonical: lang === 'en' ? 'https://alfayasel.com' : 'https://alfayasel.com/ar',
       languages: {
-        en: 'https://alfayasel.com/en',
+        en: 'https://alfayasel.com',
         ar: 'https://alfayasel.com/ar',
       },
     },

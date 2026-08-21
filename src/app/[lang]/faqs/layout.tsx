@@ -1,25 +1,21 @@
-﻿import { Metadata } from 'next';
-import { Locale } from '@/lib/i18n/config';
+import { Metadata } from 'next';
 
-type Props = { params: { lang: Locale } };
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: 'en' | 'ar' } }): Promise<Metadata> {
   const isAr = params.lang === 'ar';
   return {
-    title: isAr ? 'الأسئلة الشائعة | مختبرات الفياصل' : 'FAQs | Al Fayasel Laboratories',
-    description: isAr 
-      ? 'إجابات على الأسئلة الشائعة حول منتجات مختبرات الفياصل، التوصيل، الدفع، والمزيد.' 
-      : 'Answers to frequently asked questions about Al Fayasel Laboratories products, delivery, payment, and more.',
+    title: isAr ? 'الأسئلة الشائعة | مختبرات الفيصل' : 'FAQs | Al Fayasel Laboratories',
+    description: isAr ? 'الأسئلة الشائعة حول منتجات مختبرات الفيصل والشحن والتوصيل.' : 'Frequently Asked Questions about Al Fayasel Laboratories products and shipping.',
     alternates: {
-      canonical: isAr ? 'https://alfayasel.com/ar/faqs' : 'https://alfayasel.com/en/faqs',
+      canonical: params.lang === 'en' ? 'https://alfayasel.com/faqs' : 'https://alfayasel.com/ar/faqs',
       languages: {
-        en: 'https://alfayasel.com/en/faqs',
+        en: 'https://alfayasel.com/faqs',
         ar: 'https://alfayasel.com/ar/faqs',
       },
     },
   };
 }
 
-export default function FAQsLayout({ children, params }: { children: React.ReactNode, params: { lang: Locale } }) {
-  return <>{children}</>;
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return children;
 }

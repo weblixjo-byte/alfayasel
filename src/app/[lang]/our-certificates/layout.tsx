@@ -1,25 +1,21 @@
-﻿import { Metadata } from 'next';
-import { Locale } from '@/lib/i18n/config';
+import { Metadata } from 'next';
 
-type Props = { params: { lang: Locale } };
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: 'en' | 'ar' } }): Promise<Metadata> {
   const isAr = params.lang === 'ar';
   return {
-    title: isAr ? 'شهاداتنا | مختبرات الفياصل' : 'Our Certificates | Al Fayasel Laboratories',
-    description: isAr 
-      ? 'اطلع على شهادات التصنيع الجيد (GMP) الخاصة بمختبرات الفياصل الأردنية، والموثقة من الغذاء والدواء.' 
-      : 'View the Good Manufacturing Practice (GMP) certificates for Al Fayasel Laboratories, approved by JFDA.',
+    title: isAr ? 'شهاداتنا | مختبرات الفيصل' : 'Our Certificates | Al Fayasel Laboratories',
+    description: isAr ? 'اطلع على شهادات الجودة والاعتمادات التي حصلت عليها مختبرات الفيصل محلياً ودولياً.' : 'View Al Fayasel Laboratories quality certificates and accreditations.',
     alternates: {
-      canonical: isAr ? 'https://alfayasel.com/ar/our-certificates' : 'https://alfayasel.com/en/our-certificates',
+      canonical: params.lang === 'en' ? 'https://alfayasel.com/our-certificates' : 'https://alfayasel.com/ar/our-certificates',
       languages: {
-        en: 'https://alfayasel.com/en/our-certificates',
+        en: 'https://alfayasel.com/our-certificates',
         ar: 'https://alfayasel.com/ar/our-certificates',
       },
     },
   };
 }
 
-export default function CertificatesLayout({ children, params }: { children: React.ReactNode, params: { lang: Locale } }) {
-  return <>{children}</>;
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return children;
 }
