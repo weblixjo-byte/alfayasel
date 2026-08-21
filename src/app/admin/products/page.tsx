@@ -135,7 +135,7 @@ export default function AdminProductsPage() {
       setVariationsList(
         product.variations.map((v, idx) => ({
           id: 'var_' + Date.now() + '_' + idx,
-          sku: v.sku || (product.sku + '-' + (idx + 1)),
+          sku: v.sku || '',
           nameAr: v.name?.ar || '',
           nameEn: v.name?.en || '',
           price: v.price ? v.price.toString() : '',
@@ -161,7 +161,7 @@ export default function AdminProductsPage() {
       ...variationsList,
       {
         id: 'var_' + Date.now(),
-        sku: (formData.sku || 'SKU') + '-' + nextIdx,
+        sku: '', // Auto-generate or manual pure numbers
         nameAr: '',
         nameEn: '',
         price: formData.price || '0',
