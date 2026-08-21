@@ -92,7 +92,8 @@ export async function updateProduct(id: string, data: Partial<ProductInput>) {
       updateFields.saleEndDate = data.saleEndDate ? new Date(data.saleEndDate) : null;
     }
 
-    const updatedProduct = await Product.findByIdAndUpdate(id, updateFields, {
+    const targetId = id || (data as any)._id || (data as any).id;
+    const updatedProduct = await Product.findByIdAndUpdate(targetId, updateFields, {
       new: true,
       runValidators: true,
     });
@@ -115,7 +116,8 @@ export async function updateProduct(id: string, data: Partial<ProductInput>) {
 export async function deleteProduct(id: string) {
   try {
     await dbConnect();
-    const deletedProduct = await Product.findByIdAndDelete(id);
+    const targetId = id || '';
+    const deletedProduct = await Product.findByIdAndDelete(targetId);
     if (!deletedProduct) {
       return { success: false, error: 'Product not found' };
     }
@@ -133,7 +135,8 @@ export async function deleteProduct(id: string) {
 export async function toggleProductStatus(id: string) {
   try {
     await dbConnect();
-    const product = await Product.findById(id);
+    const targetId = id || '';
+    const product = await Product.findById(targetId);
     if (!product) {
       return { success: false, error: 'Product not found' };
     }

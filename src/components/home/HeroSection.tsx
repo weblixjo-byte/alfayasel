@@ -184,7 +184,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ locale }) => {
       <div className="flex items-start gap-6 pt-0 relative">
         {/* Left Column: Vertical Category List - Desktop only */}
         <div
-          className="hidden md:block w-64 bg-white border-x border-b border-gray-200 shrink-0 relative z-30 shadow-xs h-[470px]"
+          className="hidden md:block w-64 bg-white border-x border-b border-gray-200 shrink-0 relative z-30 shadow-xs max-h-[470px] overflow-y-auto scrollbar-thin"
           onMouseLeave={() => setActiveCategory(null)}
         >
           <ul className="divide-y divide-gray-100 text-xs text-gray-700">

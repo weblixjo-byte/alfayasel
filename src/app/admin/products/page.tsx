@@ -83,7 +83,7 @@ export default function AdminProductsPage() {
   const handleOpenCreateModal = () => {
     setEditingProduct(null);
     setFormData({
-      sku: 'ALF-' + Math.floor(10000 + Math.random() * 90000),
+      sku: '',
       nameEn: '',
       nameAr: '',
       price: '',
@@ -223,7 +223,8 @@ export default function AdminProductsPage() {
 
     let result;
     if (editingProduct) {
-      result = await updateProduct(editingProduct.id, payload);
+      const targetId = (editingProduct as any)._id || editingProduct.id;
+      result = await updateProduct(targetId, payload);
     } else {
       result = await createProduct(payload);
     }
@@ -306,7 +307,7 @@ export default function AdminProductsPage() {
               </thead>
               <tbody className="divide-y divide-gray-100 font-medium">
                 {filteredProducts.map((product) => (
-                  <tr key={product.id} className="hover:bg-gray-50/50 transition-colors">
+                  <tr key={(product as any)._id || product.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="p-4 flex items-center gap-3">
                       <div className="w-10 h-10 relative bg-gray-100 rounded-lg overflow-hidden border shrink-0">
                         {product.images && product.images[0] ? (
@@ -340,7 +341,7 @@ export default function AdminProductsPage() {
 
                     <td className="p-4">
                       <button
-                        onClick={() => handleToggleStatus(product.id)}
+                        onClick={() => handleToggleStatus((product as any)._id || product.id)}
                         className={'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer transition-colors ' + (
                           product.isPaused
                             ? 'bg-rose-50 text-rose-600 border border-rose-200'
@@ -370,7 +371,7 @@ export default function AdminProductsPage() {
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleDelete(product.id)}
+                        onClick={() => handleDelete((product as any)._id || product.id)}
                         className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
                         title="حذف المنتج"
                       >

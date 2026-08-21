@@ -27,7 +27,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const isAr = locale === 'ar';
   const isLiked = isInWishlist(product.id);
   const [isHovered, setIsHovered] = useState(false);
-  const [isNavigating, setIsNavigating] = useState(false);
+  
 
   // Calculate price range for variable products
   const variations = product.variations || [];
@@ -67,12 +67,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Dynamic Popover Container */}
       <div className="absolute top-0 left-0 w-full bg-white flex flex-col p-3 transition-all duration-200 z-10 group-hover:z-30 group-hover:shadow-2xl group-hover:border group-hover:border-gray-100 group-hover:rounded-b-lg">
         
-        {/* Loading Navigation Overlay */}
-        {isNavigating && (
-          <div className="absolute inset-0 bg-white/70 z-50 flex items-center justify-center rounded-lg backdrop-blur-3xs transition-opacity duration-200">
-            <div className="w-8 h-8 border-3 border-[#0066b2] border-t-transparent rounded-full animate-spin" />
-          </div>
-        )}
+
 
         {/* Badges */}
         <div className="absolute top-3 start-3 z-10 flex flex-col gap-1">
@@ -91,7 +86,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Product Image */}
         <Link
           href={getLocalizedPath(`/product/${product.slug}`, locale)}
-          onClick={() => setIsNavigating(true)}
+          
           className="block relative w-full aspect-square overflow-hidden bg-transparent mb-3 select-none"
         >
           {product.images && product.images.length > 1 ? (
@@ -130,7 +125,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Product Title */}
         <Link 
           href={getLocalizedPath(`/product/${product.slug}`, locale)} 
-          onClick={() => setIsNavigating(true)}
+          
           className="text-center block mb-1"
         >
           <h3 className="font-medium text-[13px] text-gray-800 hover:text-brand-600 transition-colors line-clamp-1 leading-snug px-1">

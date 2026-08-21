@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   try {
     await dbConnect();
-    const categories = await Category.find({}).sort({ order: 1 });
+    const categories = await Category.find({}).sort({ createdAt: 1 });
     return NextResponse.json({ success: true, count: categories.length, categories });
   } catch (error: any) {
     console.error('Failed to GET categories:', error);

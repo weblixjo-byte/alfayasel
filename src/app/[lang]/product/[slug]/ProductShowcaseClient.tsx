@@ -89,7 +89,7 @@ export default function ProductShowcaseClient({ product, locale, initialVariatio
     if (typeof window !== 'undefined') {
       const url = new URL(window.location.href);
       url.searchParams.set('sku', sku);
-      window.history.pushState({}, '', url.toString());
+      window.history.replaceState({}, '', url.toString());
     }
   };
 
