@@ -3,6 +3,7 @@ import { dbConnect } from '@/lib/db/mongoose';
 import Order from '@/lib/models/Order';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { sendOrderCancelledEmail, sendOrderShippedEmail } from '@/lib/utils/email';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -11,7 +12,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Unauthorized admin access' }, { status: 401 });
     }
 
-    const { status } = await request.json();
+    const { status, cancelReason } = await request.json();
     if (!status) {
       return NextResponse.json({ error: 'Status is required' }, { status: 400 });
     }
@@ -23,9 +24,17 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       { new: true }
     );
 
+    
     if (!updatedOrder) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
+
+    if (status === 'cancelled' && cancelReason) {
+      await sendOrderCancelledEmail(updatedOrder, cancelReason);
+    } else if (status === 'shipped') {
+      await sendOrderShippedEmail(updatedOrder);
+    }
+
 
     return NextResponse.json({ success: true, order: updatedOrder });
   } catch (error: any) {

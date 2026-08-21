@@ -51,12 +51,27 @@ export default function AdminOrdersPage() {
     fetchOrders();
   }, []);
 
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+  
+  const handleStatusChange = (orderId: string, newStatus: string) => {
+    let cancelReason = '';
+    if (newStatus === 'cancelled') {
+      const reason = window.prompt('يرجى كتابة سبب الإلغاء أو الرفض (سيتم إرساله للعميل عبر الإيميل):');
+      if (!reason || reason.trim() === '') {
+        alert('لا يمكن إلغاء الطلب بدون كتابة سبب.');
+        setOrders([...orders]); 
+        return;
+      }
+      cancelReason = reason.trim();
+    }
+    updateOrderStatus(orderId, newStatus, cancelReason);
+  };
+
+  const updateOrderStatus = async (orderId: string, newStatus: string, cancelReason: string = '') => {
     try {
       const res = await fetch(`/api/orders/${orderId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ status: newStatus, cancelReason }),
       });
       if (res.ok) {
         setOrders(orders.map(o => o._id === orderId ? { ...o, status: newStatus as any } : o));
@@ -69,7 +84,7 @@ export default function AdminOrdersPage() {
     }
   };
 
-  const getStatusBadge = (order: OrderData) => {
+const getStatusBadge = (order: OrderData) => {
     const status = order.status;
     let badgeClass = '';
     let Icon = Clock;
@@ -115,7 +130,7 @@ export default function AdminOrdersPage() {
         <select 
           className="text-xs border border-gray-300 rounded px-2 py-1 bg-white outline-none focus:border-brand-500 cursor-pointer"
           value={status}
-          onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+          onChange={(e) => handleStatusChange(order._id, e.target.value)}
         >
           <option value="pending">قيد الانتظار (Pending)</option>
           <option value="processing">جاري التجهيز (Processing)</option>

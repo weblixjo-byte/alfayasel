@@ -178,3 +178,93 @@ export async function sendOrderConfirmationEmail(order: any) {
     console.error('Failed to send premium order email:', error);
   }
 }
+
+
+export async function sendOrderCancelledEmail(order: any, reason: string) {
+  if (!order.customerEmail) return;
+  const SMTP_USER = process.env.SMTP_USER;
+  const SMTP_PASS = process.env.SMTP_PASS;
+  if (!SMTP_USER || !SMTP_PASS) return;
+
+  const nodemailer = require('nodemailer');
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: Number(process.env.SMTP_PORT) || 587,
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: { user: SMTP_USER, pass: SMTP_PASS },
+  });
+
+  const html = `
+    <div dir="rtl" style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 10px; overflow: hidden; background-color: #fff;">
+      <div style="background-color: #ef4444; padding: 25px; text-align: center;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 24px;">تم إلغاء طلبك ❌</h1>
+      </div>
+      <div style="padding: 30px 20px;">
+        <p style="font-size: 16px; color: #333; margin-bottom: 20px;">عزيزي/عزيزتي <strong>${order.customerName}</strong>،</p>
+        <p style="font-size: 16px; color: #555; line-height: 1.6;">نعتذر لإبلاغك بأنه قد تم إلغاء/رفض طلبك رقم <strong style="color: #ef4444;">${order.orderNumber}</strong>.</p>
+        <div style="background-color: #fee2e2; border-right: 4px solid #ef4444; padding: 15px; margin: 25px 0; border-radius: 4px;">
+          <h3 style="color: #991b1b; margin-top: 0; font-size: 16px;">سبب الإلغاء:</h3>
+          <p style="color: #7f1d1d; margin-bottom: 0; font-size: 15px; line-height: 1.5;">${reason}</p>
+        </div>
+        <p style="font-size: 15px; color: #777; line-height: 1.5; margin-top: 30px;">إذا كان لديك أي استفسار، يرجى عدم التردد في التواصل مع فريق الدعم الفني الخاص بنا.</p>
+      </div>
+      <div style="background-color: #f9f9f9; padding: 20px; text-align: center; border-top: 1px solid #eaeaea; color: #888; font-size: 12px;">
+        <p style="margin: 0;">© ${new Date().getFullYear()} مختبرات الفيصل. جميع الحقوق محفوظة.</p>
+      </div>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `"Al Fayasel Laboratories" <${SMTP_USER}>`,
+      to: order.customerEmail,
+      subject: `إلغاء الطلب #${order.orderNumber} - مختبرات الفيصل`,
+      html,
+    });
+  } catch (err) {
+    console.error('Failed to send cancellation email', err);
+  }
+}
+
+export async function sendOrderShippedEmail(order: any) {
+  if (!order.customerEmail) return;
+  const SMTP_USER = process.env.SMTP_USER;
+  const SMTP_PASS = process.env.SMTP_PASS;
+  if (!SMTP_USER || !SMTP_PASS) return;
+
+  const nodemailer = require('nodemailer');
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: Number(process.env.SMTP_PORT) || 587,
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: { user: SMTP_USER, pass: SMTP_PASS },
+  });
+
+  const html = `
+    <div dir="rtl" style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 10px; overflow: hidden; background-color: #fff;">
+      <div style="background-color: #3b82f6; padding: 25px; text-align: center;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 24px;">طلبك في طريقه إليك! 🚚</h1>
+      </div>
+      <div style="padding: 30px 20px;">
+        <p style="font-size: 16px; color: #333; margin-bottom: 20px;">عزيزي/عزيزتي <strong>${order.customerName}</strong>،</p>
+        <p style="font-size: 16px; color: #555; line-height: 1.6;">يسعدنا إبلاغك بأن طلبك رقم <strong>${order.orderNumber}</strong> قد تم تجهيزه وهو الآن في طريقه إليك!</p>
+        <p style="font-size: 15px; color: #555; line-height: 1.6;">سيتواصل معك مندوب التوصيل قريباً لتسليم شحنتك، نرجو إبقاء هاتفك قريباً منك.</p>
+        <p style="font-size: 15px; color: #777; line-height: 1.5; margin-top: 30px;">شكراً لاختيارك منتجاتنا. نتمنى لك تجربة رائعة!</p>
+      </div>
+      <div style="background-color: #f9f9f9; padding: 20px; text-align: center; border-top: 1px solid #eaeaea; color: #888; font-size: 12px;">
+        <p style="margin: 0;">© ${new Date().getFullYear()} مختبرات الفيصل. جميع الحقوق محفوظة.</p>
+      </div>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `"Al Fayasel Laboratories" <${SMTP_USER}>`,
+      to: order.customerEmail,
+      subject: `طلبك #${order.orderNumber} في الطريق! - مختبرات الفيصل`,
+      html,
+    });
+  } catch (err) {
+    console.error('Failed to send shipped email', err);
+  }
+}
