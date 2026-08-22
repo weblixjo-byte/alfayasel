@@ -5,7 +5,7 @@ import { INITIAL_PRODUCTS, INITIAL_CATEGORIES } from '@/lib/data/products';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // Cache for 60 seconds at edge
 
 export async function GET(request: NextRequest) {
   try {
@@ -41,7 +41,11 @@ export async function GET(request: NextRequest) {
     }
 
     let products = await Product.find(query).sort({ createdAt: -1 });
-    return NextResponse.json({ success: true, count: products.length, products });
+    const headers: Record<string, string> = {};
+    if (!isAdmin && !q) {
+      headers['Cache-Control'] = 'public, s-maxage=60, stale-while-revalidate=300';
+    }
+    return NextResponse.json({ success: true, count: products.length, products }, { headers });
   } catch (error: any) {
     console.error('Failed to GET products:', error);
     return NextResponse.json({ success: false, count: 0, products: [] }, { status: 500 });
