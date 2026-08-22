@@ -4,13 +4,18 @@ import React, { useState, useEffect } from 'react';
 import { 
   ShoppingCart, 
   Clock, 
-  CheckCircle2, 
+  Check, 
   Truck, 
-  XCircle, 
-  PackageCheck, 
-  Eye, 
   X, 
-  User, 
+  Package, 
+  Eye, 
+  RefreshCw,
+  MessageCircle,
+  MapPin,
+  Phone,
+  User,
+  Mail,
+  AlertCircle
 } from 'lucide-react';
 
 interface OrderItem {
@@ -44,11 +49,14 @@ interface OrderData {
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<OrderData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<OrderData | null>(null);
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
 
-  const fetchOrders = async () => {
-    setLoading(true);
+  const fetchOrders = async (showRefreshState = false) => {
+    if (showRefreshState) setRefreshing(true);
+    else setLoading(true);
+    
     try {
       const res = await fetch('/api/orders');
       const data = await res.json();
@@ -63,6 +71,7 @@ export default function AdminOrdersPage() {
       console.error('Failed to fetch orders:', err);
     }
     setLoading(false);
+    setRefreshing(false);
   };
 
   useEffect(() => {
@@ -99,16 +108,13 @@ export default function AdminOrdersPage() {
   };
 
   const handleRejectOrder = (orderId: string) => {
-    const reason = window.prompt('يرجى كتابة سبب الإلغاء أو الرفض (سيتم إرساله للعميل عبر الإيميل تلقائياً):');
-    if (!reason || reason.trim() === '') {
-      alert('لا يمكن إلغاء الطلب بدون كتابة سبب الرفض.');
-      return;
-    }
+    const reason = window.prompt('سبب الإلغاء/الرفض (سيتم إرساله للعميل عبر الإيميل):');
+    if (!reason || reason.trim() === '') return;
     updateOrderStatus(orderId, 'cancelled', reason.trim());
   };
 
   const handleShippedOrder = (orderId: string) => {
-    if (window.confirm('هل أنت تأكد من تحويل الطلب إلى "جاهز للتوصيل"؟ سيتم إرسال إيميل للزبون بأن الطلب في الطريق.')) {
+    if (window.confirm('تحويل الطلب إلى "جاهز للتوصيل" وإرسال إشعار للزبون؟')) {
       updateOrderStatus(orderId, 'shipped');
     }
   };
@@ -129,32 +135,37 @@ export default function AdminOrdersPage() {
     switch (status) {
       case 'pending':
         return (
-          <span className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold">
-            <Clock className="w-3.5 h-3.5" /> قيد الانتظار
+          <span className="inline-flex items-center gap-1.5 text-amber-700 bg-amber-50/80 border border-amber-200/60 px-2.5 py-1 rounded-md text-[11px] font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+            قيد الانتظار
           </span>
         );
       case 'processing':
         return (
-          <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1 rounded-full text-xs font-bold">
-            <PackageCheck className="w-3.5 h-3.5" /> قيد التجهيز
+          <span className="inline-flex items-center gap-1.5 text-blue-700 bg-blue-50/80 border border-blue-200/60 px-2.5 py-1 rounded-md text-[11px] font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+            جاري التجهيز
           </span>
         );
       case 'shipped':
         return (
-          <span className="inline-flex items-center gap-1.5 bg-purple-50 text-purple-700 border border-purple-200 px-3 py-1 rounded-full text-xs font-bold">
-            <Truck className="w-3.5 h-3.5" /> في الطريق للتوصيل
+          <span className="inline-flex items-center gap-1.5 text-indigo-700 bg-indigo-50/80 border border-indigo-200/60 px-2.5 py-1 rounded-md text-[11px] font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+            في الطريق للتوصيل
           </span>
         );
       case 'delivered':
         return (
-          <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold">
-            <CheckCircle2 className="w-3.5 h-3.5" /> تم التسليم
+          <span className="inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-50/80 border border-emerald-200/60 px-2.5 py-1 rounded-md text-[11px] font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            تم التسليم
           </span>
         );
       case 'cancelled':
         return (
-          <span className="inline-flex items-center gap-1.5 bg-rose-50 text-rose-700 border border-rose-200 px-3 py-1 rounded-full text-xs font-bold">
-            <XCircle className="w-3.5 h-3.5" /> مرفوض / ملغى
+          <span className="inline-flex items-center gap-1.5 text-gray-600 bg-gray-100 border border-gray-200 px-2.5 py-1 rounded-md text-[11px] font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
+            ملغى
           </span>
         );
     }
@@ -170,16 +181,16 @@ export default function AdminOrdersPage() {
             <button
               disabled={isBusy}
               onClick={() => handleAcceptOrder(order._id)}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow-2xs transition-colors flex items-center gap-1 disabled:opacity-50 cursor-pointer"
+              className="bg-black hover:bg-gray-800 text-white font-medium text-xs px-3.5 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-2xs"
             >
-              <CheckCircle2 className="w-3.5 h-3.5" /> قبول الطلب
+              <Check className="w-3.5 h-3.5" /> قبول الطلب
             </button>
             <button
               disabled={isBusy}
               onClick={() => handleRejectOrder(order._id)}
-              className="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 disabled:opacity-50 cursor-pointer"
+              className="text-gray-600 hover:text-red-600 hover:bg-red-50 border border-gray-200 hover:border-red-200 font-medium text-xs px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
             >
-              <XCircle className="w-3.5 h-3.5" /> رفض
+              رفض
             </button>
           </div>
         );
@@ -188,7 +199,7 @@ export default function AdminOrdersPage() {
           <button
             disabled={isBusy}
             onClick={() => handleShippedOrder(order._id)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg shadow-2xs transition-colors flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+            className="bg-[#0066b2] hover:bg-[#00528e] text-white font-medium text-xs px-3.5 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-2xs"
           >
             <Truck className="w-3.5 h-3.5" /> جاهز للتوصيل
           </button>
@@ -198,141 +209,139 @@ export default function AdminOrdersPage() {
           <button
             disabled={isBusy}
             onClick={() => handleDeliveredOrder(order._id)}
-            className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg shadow-2xs transition-colors flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+            className="bg-emerald-700 hover:bg-emerald-800 text-white font-medium text-xs px-3.5 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-2xs"
           >
-            <CheckCircle2 className="w-3.5 h-3.5" /> تم تسليم الطلب
+            <Check className="w-3.5 h-3.5" /> تأكيد التسليم
           </button>
         );
       case 'delivered':
         return (
-          <span className="text-xs text-emerald-700 font-semibold flex items-center gap-1">
-            <CheckCircle2 className="w-4 h-4" /> مكتمل
-          </span>
+          <span className="text-xs text-gray-500 font-medium">مكتمل</span>
         );
       case 'cancelled':
         return (
-          <span className="text-xs text-rose-600 font-semibold flex items-center gap-1">
-            <XCircle className="w-4 h-4" /> طلب ملغي
-          </span>
+          <span className="text-xs text-gray-400 font-medium">ملغى</span>
         );
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between bg-white p-5 rounded-2xl border border-gray-200 shadow-2xs">
+      <div className="flex items-center justify-between pb-4 border-b border-gray-200/80">
         <div>
-          <h1 className="text-xl font-bold text-gray-900 tracking-tight">طلبات الزبائن (Customer Orders)</h1>
-          <p className="text-xs text-gray-500 mt-1">متابعة إجراءات الطلبات وحالات التوصيل بخطوات مباشرة</p>
+          <h1 className="text-xl font-semibold text-gray-900">طلبات الزبائن</h1>
+          <p className="text-xs text-gray-500 mt-0.5">إدارة ومتابعة طلبات الشراء وحالات التسليم</p>
         </div>
         <button 
-          onClick={fetchOrders}
-          className="bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl transition-colors cursor-pointer"
+          onClick={() => fetchOrders(true)}
+          disabled={refreshing}
+          className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-medium px-3.5 py-2 rounded-lg transition-colors cursor-pointer shadow-2xs"
         >
-          تحديث القائمة 🔄
+          <RefreshCw className={`w-3.5 h-3.5 text-gray-500 ${refreshing ? 'animate-spin' : ''}`} />
+          <span>تحديث</span>
         </button>
       </div>
 
-      {/* Table Section */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-2xs overflow-hidden">
+      {/* Table Card */}
+      <div className="bg-white rounded-xl border border-gray-200/80 shadow-xs overflow-hidden">
         {loading ? (
-          <div className="p-12 text-center text-xs text-gray-400 font-medium">جاري تحميل الطلبات...</div>
+          <div className="p-16 text-center text-xs text-gray-400 font-medium">جاري تحميل الطلبات...</div>
         ) : orders.length === 0 ? (
           <div className="p-16 text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-gray-50 text-gray-400 flex items-center justify-center mx-auto">
-              <ShoppingCart className="w-6 h-6" />
+            <div className="w-10 h-10 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto">
+              <ShoppingCart className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-sm text-gray-800">لا يوجد أي طلبات حالياً</h3>
+            <h3 className="font-semibold text-sm text-gray-800">لا يوجد طلبات</h3>
             <p className="text-xs text-gray-400 max-w-sm mx-auto">
-              عندما يقوم أي زبون بعمل طلب جديد من الموقع، سيظهر هنا مباشرة مع كافة التفاصيل.
+              تظهر هنا جميع طلبات الشراء الجديدة من المتجر.
             </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-start border-collapse text-xs">
               <thead>
-                <tr className="bg-gray-50/80 border-b border-gray-200 text-gray-500 font-bold uppercase tracking-wider text-[10px]">
-                  <th className="p-4">رقم الطلب (# Order)</th>
-                  <th className="p-4">اسم الزبون</th>
-                  <th className="p-4">العنوان والتواصل</th>
-                  <th className="p-4">المنتجات التفصيلية</th>
-                  <th className="p-4">الإجمالي</th>
-                  <th className="p-4">حالة الطلب</th>
-                  <th className="p-4">الإجراء التالي (Actions)</th>
-                  <th className="p-4 text-end">التفاصيل</th>
+                <tr className="bg-gray-50/50 border-b border-gray-200/80 text-gray-500 font-medium text-[11px]">
+                  <th className="py-3.5 px-4 text-start font-medium">رقم الطلب والتاريخ</th>
+                  <th className="py-3.5 px-4 text-start font-medium">الزبون</th>
+                  <th className="py-3.5 px-4 text-start font-medium">العنوان والتواصل</th>
+                  <th className="py-3.5 px-4 text-start font-medium">المنتجات</th>
+                  <th className="py-3.5 px-4 text-start font-medium">الإجمالي</th>
+                  <th className="py-3.5 px-4 text-start font-medium">الحالة</th>
+                  <th className="py-3.5 px-4 text-start font-medium">الإجراء</th>
+                  <th className="py-3.5 px-4 text-end font-medium">التفاصيل</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 font-medium">
+              <tbody className="divide-y divide-gray-100 font-normal">
                 {orders.map((ord) => (
-                  <tr key={ord._id} className="hover:bg-gray-50/60 transition-colors">
+                  <tr key={ord._id} className="hover:bg-gray-50/40 transition-colors">
                     {/* Order # */}
-                    <td className="p-4">
-                      <div className="font-mono font-extrabold text-[#0066b2] text-xs">{ord.orderNumber}</div>
+                    <td className="py-3.5 px-4">
+                      <div className="font-mono font-medium text-gray-900 text-xs">{ord.orderNumber}</div>
                       <div className="text-[10px] text-gray-400 mt-0.5">
-                        {new Date(ord.createdAt).toLocaleDateString('ar-JO')} {new Date(ord.createdAt).toLocaleTimeString('ar-JO', { hour: '2-digit', minute: '2-digit' })}
+                        {new Date(ord.createdAt).toLocaleDateString('ar-JO')} • {new Date(ord.createdAt).toLocaleTimeString('ar-JO', { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </td>
 
                     {/* Customer */}
-                    <td className="p-4">
-                      <div className="font-bold text-gray-900">{ord.customerName}</div>
+                    <td className="py-3.5 px-4">
+                      <div className="font-medium text-gray-900">{ord.customerName}</div>
                       {ord.customerEmail && (
-                        <div className="text-[11px] text-gray-500 dir-ltr text-start">{ord.customerEmail}</div>
+                        <div className="text-[11px] text-gray-400 dir-ltr text-start mt-0.5">{ord.customerEmail}</div>
                       )}
                     </td>
 
-                    {/* Contact & Address */}
-                    <td className="p-4">
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-mono text-gray-800 font-bold" dir="ltr">{ord.customerPhone}</span>
+                    {/* Contact */}
+                    <td className="py-3.5 px-4">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-gray-800 text-xs" dir="ltr">{ord.customerPhone}</span>
                         <a
                           href={`https://wa.me/${formatPhoneForWhatsApp(ord.customerPhone)}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100 text-[10px] font-bold px-1.5 py-0.5 rounded transition-colors"
-                          title="تواصل عبر واتساب"
+                          className="inline-flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/60 text-emerald-700 text-[10px] font-medium px-2 py-0.5 rounded transition-colors"
                         >
-                          واتساب 💬
+                          <MessageCircle className="w-3 h-3 text-emerald-600" />
+                          واتساب
                         </a>
                       </div>
                       <div className="text-[11px] text-gray-500 mt-1">
-                        <strong className="text-gray-700">{ord.customerCity}:</strong> {ord.customerAddress}
+                        {ord.customerCity} - {ord.customerAddress}
                       </div>
                     </td>
 
-                    {/* Detailed Items Summary */}
-                    <td className="p-4">
+                    {/* Items Summary */}
+                    <td className="py-3.5 px-4">
                       <div className="space-y-1 max-w-xs">
                         {ord.items && ord.items.map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-1.5 text-[11px] text-gray-700 bg-gray-50 px-2 py-1 rounded border border-gray-100">
-                            <span className="font-bold text-[#0066b2]">x{item.quantity}</span>
-                            <span className="truncate font-semibold">{item.nameAr || item.nameEn}</span>
-                            <span className="ms-auto text-gray-500 text-[10px]" dir="ltr">{item.price.toFixed(2)} JOD</span>
+                          <div key={idx} className="flex items-center gap-1.5 text-[11px] text-gray-700">
+                            <span className="font-medium text-gray-400">{item.quantity}×</span>
+                            <span className="truncate font-medium">{item.nameAr || item.nameEn}</span>
+                            <span className="ms-auto text-gray-400 text-[10px]" dir="ltr">{item.price.toFixed(2)} JOD</span>
                           </div>
                         ))}
                       </div>
                     </td>
 
                     {/* Total */}
-                    <td className="p-4">
-                      <div className="font-extrabold text-[#0066b2] text-sm">{ord.total.toFixed(2)} د.أ</div>
-                      <div className="text-[10px] text-gray-400">(دفع عند الاستلام)</div>
+                    <td className="py-3.5 px-4">
+                      <div className="font-semibold text-gray-900 text-xs">{ord.total.toFixed(2)} JOD</div>
                     </td>
 
                     {/* Status Badge */}
-                    <td className="p-4">{renderStatusBadge(ord.status)}</td>
+                    <td className="py-3.5 px-4">{renderStatusBadge(ord.status)}</td>
 
                     {/* Action Step Buttons */}
-                    <td className="p-4">{renderActionButtons(ord)}</td>
+                    <td className="py-3.5 px-4">{renderActionButtons(ord)}</td>
 
                     {/* View Details Button */}
-                    <td className="p-4 text-end">
+                    <td className="py-3.5 px-4 text-end">
                       <button
                         onClick={() => setSelectedOrder(ord)}
-                        className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 ms-auto cursor-pointer"
+                        className="inline-flex items-center gap-1 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-medium px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer"
                       >
-                        <Eye className="w-3.5 h-3.5" /> التفاصيل
+                        <Eye className="w-3.5 h-3.5 text-gray-400" />
+                        عرض
                       </button>
                     </td>
                   </tr>
@@ -343,116 +352,114 @@ export default function AdminOrdersPage() {
         )}
       </div>
 
-      {/* ORDER DETAILS MODAL */}
+      {/* MINIMAL ULTRA-CLEAN MODAL */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-gray-100 my-8">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-150">
+          <div className="bg-white rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl border border-gray-200 my-8">
             
-            {/* Modal Header */}
-            <div className="bg-gray-900 text-white p-6 flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-3">
-                  <h2 className="text-lg font-bold">تفاصيل الطلب #{selectedOrder.orderNumber}</h2>
-                  {renderStatusBadge(selectedOrder.status)}
-                </div>
-                <p className="text-xs text-gray-400 mt-1">
-                  تاريخ الطلب: {new Date(selectedOrder.createdAt).toLocaleString('ar-JO')}
-                </p>
+            {/* Minimal Header */}
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <h2 className="text-base font-semibold text-gray-900">طلب #{selectedOrder.orderNumber}</h2>
+                {renderStatusBadge(selectedOrder.status)}
               </div>
               <button
                 onClick={() => setSelectedOrder(null)}
-                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
+                className="w-7 h-7 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 flex items-center justify-center transition-colors cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+            <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto text-xs">
               
-              {/* Customer Info Card */}
-              <div className="bg-gray-50 rounded-2xl p-4 border border-gray-200/80 space-y-3">
-                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <User className="w-4 h-4 text-[#0066b2]" /> معلومات الزبون والتوصيل
-                </h3>
+              {/* Customer Block */}
+              <div className="bg-gray-50/70 rounded-xl p-4 border border-gray-100 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">تفاصيل الزبون والتوصيل</span>
+                  <span className="text-[10px] text-gray-400">
+                    {new Date(selectedOrder.createdAt).toLocaleString('ar-JO')}
+                  </span>
+                </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <span className="text-gray-500 block text-[11px]">اسم الزبون:</span>
-                    <strong className="text-gray-900 text-sm">{selectedOrder.customerName}</strong>
+                    <span className="text-gray-400 text-[11px] block">الاسم</span>
+                    <span className="font-medium text-gray-900 text-xs">{selectedOrder.customerName}</span>
                   </div>
 
                   <div>
-                    <span className="text-gray-500 block text-[11px]">رقم الهاتف:</span>
+                    <span className="text-gray-400 text-[11px] block">رقم الهاتف</span>
                     <div className="flex items-center gap-2 mt-0.5">
-                      <strong className="text-gray-900 font-mono text-sm" dir="ltr">{selectedOrder.customerPhone}</strong>
+                      <span className="font-mono text-gray-900 text-xs" dir="ltr">{selectedOrder.customerPhone}</span>
                       <a
                         href={`https://wa.me/${formatPhoneForWhatsApp(selectedOrder.customerPhone)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold px-2 py-0.5 rounded-md transition-colors inline-flex items-center gap-1"
+                        className="inline-flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/60 text-emerald-700 text-[10px] font-medium px-2 py-0.5 rounded transition-colors"
                       >
-                        واتساب 💬
+                        <MessageCircle className="w-3 h-3 text-emerald-600" />
+                        واتساب
                       </a>
                     </div>
                   </div>
 
                   {selectedOrder.customerEmail && (
                     <div>
-                      <span className="text-gray-500 block text-[11px]">البريد الإلكتروني:</span>
-                      <strong className="text-gray-800 font-mono" dir="ltr">{selectedOrder.customerEmail}</strong>
+                      <span className="text-gray-400 text-[11px] block">البريد الإلكتروني</span>
+                      <span className="text-gray-700 font-mono text-xs" dir="ltr">{selectedOrder.customerEmail}</span>
                     </div>
                   )}
 
                   <div>
-                    <span className="text-gray-500 block text-[11px]">المدينة والعنوان:</span>
-                    <strong className="text-gray-900">{selectedOrder.customerCity} - {selectedOrder.customerAddress}</strong>
+                    <span className="text-gray-400 text-[11px] block">المدينة والعنوان</span>
+                    <span className="text-gray-900 text-xs">{selectedOrder.customerCity} - {selectedOrder.customerAddress}</span>
                   </div>
                 </div>
 
                 {selectedOrder.notes && (
-                  <div className="mt-2 pt-2 border-t border-gray-200 text-xs">
-                    <span className="text-gray-500 block text-[11px]">ملاحظات الزبون:</span>
-                    <p className="text-amber-800 bg-amber-50 p-2 rounded-lg border border-amber-200 mt-1">{selectedOrder.notes}</p>
+                  <div className="pt-2 border-t border-gray-200/60">
+                    <span className="text-gray-400 text-[11px] block">ملاحظات الزبون:</span>
+                    <p className="text-gray-700 mt-0.5 bg-white p-2 rounded border border-gray-200/60 text-[11px]">{selectedOrder.notes}</p>
                   </div>
                 )}
 
                 {selectedOrder.cancelReason && (
-                  <div className="mt-2 pt-2 border-t border-rose-200 text-xs">
-                    <span className="text-rose-600 font-bold block text-[11px]">سبب الإلغاء/الرفض:</span>
-                    <p className="text-rose-800 bg-rose-50 p-2 rounded-lg border border-rose-200 mt-1">{selectedOrder.cancelReason}</p>
+                  <div className="pt-2 border-t border-gray-200/60">
+                    <span className="text-red-500 font-medium text-[11px] block">سبب الإلغاء:</span>
+                    <p className="text-red-700 mt-0.5 bg-red-50/50 p-2 rounded border border-red-100 text-[11px]">{selectedOrder.cancelReason}</p>
                   </div>
                 )}
               </div>
 
               {/* Items List */}
-              <div>
-                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
-                  المنتجات المطلوبة ({selectedOrder.items?.length || 0})
-                </h3>
+              <div className="space-y-2">
+                <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wider block">
+                  المنتجات ({selectedOrder.items?.length || 0})
+                </span>
 
-                <div className="border border-gray-200 rounded-2xl overflow-hidden divide-y divide-gray-100 text-xs">
+                <div className="border border-gray-200/80 rounded-xl divide-y divide-gray-100 overflow-hidden">
                   {selectedOrder.items && selectedOrder.items.map((item, idx) => (
-                    <div key={idx} className="p-3.5 flex items-center justify-between gap-4 bg-white hover:bg-gray-50/50">
+                    <div key={idx} className="p-3 flex items-center justify-between gap-3 bg-white">
                       <div className="flex items-center gap-3">
                         {item.image ? (
-                          <img src={item.image} alt={item.nameAr} className="w-12 h-12 object-cover rounded-xl border border-gray-200 shrink-0" />
+                          <img src={item.image} alt={item.nameAr} className="w-10 h-10 object-cover rounded-lg border border-gray-200/60 shrink-0" />
                         ) : (
-                          <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center shrink-0 text-gray-400">
-                            <ShoppingCart className="w-5 h-5" />
+                          <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-400">
+                            <Package className="w-4 h-4" />
                           </div>
                         )}
                         <div>
-                          <div className="font-bold text-gray-900 text-xs">{item.nameAr || item.nameEn}</div>
-                          <div className="text-[11px] text-gray-400 mt-0.5">{item.nameEn}</div>
-                          {item.sku && <div className="text-[10px] text-gray-400 font-mono">SKU: {item.sku}</div>}
+                          <div className="font-medium text-gray-900 text-xs">{item.nameAr || item.nameEn}</div>
+                          <div className="text-[10px] text-gray-400 mt-0.5">{item.nameEn}</div>
                         </div>
                       </div>
 
                       <div className="text-end shrink-0">
-                        <div className="font-bold text-gray-900">
-                          {item.quantity} × {item.price.toFixed(2)} د.أ
+                        <div className="text-gray-500 font-medium text-[11px]">
+                          {item.quantity} × {item.price.toFixed(2)} JOD
                         </div>
-                        <div className="font-extrabold text-[#0066b2] text-xs mt-0.5" dir="ltr">
+                        <div className="font-semibold text-gray-900 text-xs mt-0.5" dir="ltr">
                           {(item.quantity * item.price).toFixed(2)} JOD
                         </div>
                       </div>
@@ -461,30 +468,30 @@ export default function AdminOrdersPage() {
                 </div>
               </div>
 
-              {/* Financial Totals Summary */}
-              <div className="bg-gray-50 rounded-2xl p-4 border border-gray-200 space-y-2 text-xs">
-                <div className="flex items-center justify-between text-gray-600">
+              {/* Totals */}
+              <div className="bg-gray-50/70 rounded-xl p-4 border border-gray-100 space-y-2">
+                <div className="flex justify-between text-gray-500">
                   <span>المجموع الفرعي:</span>
-                  <span className="font-bold" dir="ltr">{selectedOrder.subtotal.toFixed(2)} JOD</span>
+                  <span className="font-mono" dir="ltr">{selectedOrder.subtotal.toFixed(2)} JOD</span>
                 </div>
-                <div className="flex items-center justify-between text-gray-600">
-                  <span>رسوم التوصيل:</span>
-                  <span className="font-bold" dir="ltr">{selectedOrder.deliveryFee.toFixed(2)} JOD</span>
+                <div className="flex justify-between text-gray-500">
+                  <span>التوصيل:</span>
+                  <span className="font-mono" dir="ltr">{selectedOrder.deliveryFee.toFixed(2)} JOD</span>
                 </div>
-                <div className="flex items-center justify-between text-base font-extrabold text-[#0066b2] pt-2 border-t border-gray-200">
-                  <span>المجموع الإجمالي:</span>
-                  <span dir="ltr">{selectedOrder.total.toFixed(2)} JOD</span>
+                <div className="flex justify-between text-sm font-semibold text-gray-900 pt-2 border-t border-gray-200/80">
+                  <span>الإجمالي:</span>
+                  <span className="font-mono" dir="ltr">{selectedOrder.total.toFixed(2)} JOD</span>
                 </div>
               </div>
 
             </div>
 
-            {/* Modal Footer with Actions */}
-            <div className="bg-gray-50 border-t border-gray-200 p-4 flex items-center justify-between">
+            {/* Modal Footer */}
+            <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between">
               <div>{renderActionButtons(selectedOrder)}</div>
               <button
                 onClick={() => setSelectedOrder(null)}
-                className="bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-bold text-xs px-4 py-2 rounded-xl transition-colors cursor-pointer"
+                className="bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium text-xs px-4 py-2 rounded-lg transition-colors cursor-pointer"
               >
                 إغلاق
               </button>
