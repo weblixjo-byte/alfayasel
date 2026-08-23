@@ -174,8 +174,7 @@ export const Footer: React.FC<FooterProps> = ({ locale }) => {
               href="https://weblix-jo.com/en"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-bold hover:underline transition-opacity hover:opacity-90"
-              style={{ color: '#FF6A00' }}
+              className="font-bold text-[#0066b2] hover:underline transition-opacity hover:opacity-90"
             >
               Weblix-jo
             </a>
