@@ -164,10 +164,23 @@ export const Footer: React.FC<FooterProps> = ({ locale }) => {
 
       {/* ── Bottom Bar ── */}
       <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-        {/* Copyright */}
-        <p className="text-xs text-gray-500 order-2 sm:order-1">
-          © {new Date().getFullYear()} Al Fayasel Laboratories. {isAr ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}
-        </p>
+        {/* Copyright & Credit */}
+        <div className="text-xs text-gray-500 order-2 sm:order-1 flex items-center gap-2 flex-wrap">
+          <span>© {new Date().getFullYear()} Al Fayasel Laboratories. {isAr ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}</span>
+          <span className="text-gray-700 hidden sm:inline">•</span>
+          <span className="text-gray-400">
+            Created by{' '}
+            <a
+              href="https://weblix-jo.com/en"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold hover:underline transition-opacity hover:opacity-90"
+              style={{ color: '#FF6A00' }}
+            >
+              Weblix-jo
+            </a>
+          </span>
+        </div>
 
         {/* Payment Icons */}
         <div className="flex items-center gap-2 order-1 sm:order-2">
