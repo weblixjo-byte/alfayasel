@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Filter } from 'lucide-react';
 import { Locale, getDictionary } from '@/lib/i18n/config';
 import { INITIAL_CATEGORIES, CategoryData, ProductData } from '@/lib/data/products';
+import { getCachedCategories } from '@/lib/utils/categoriesCache';
 import { ProductCard } from '@/components/store/ProductCard';
 import { QuickViewModal } from '@/components/store/QuickViewModal';
 
@@ -25,34 +26,11 @@ export function ShopClient({ lang, initialProducts, initialCategory, initialQuer
   const [categoriesList, setCategoriesList] = useState<CategoryData[]>(INITIAL_CATEGORIES);
 
   useEffect(() => {
-    fetch('/api/categories')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.categories && data.categories.length > 0) {
-          const raw = data.categories;
-          const parents = raw.filter((c: any) => !c.parentSlug);
-          const subcats = raw.filter((c: any) => c.parentSlug);
-
-          const formatted: CategoryData[] = parents.map((p: any) => ({
-            id: p._id,
-            name: p.name,
-            slug: p.slug,
-            description: p.description || { en: '', ar: '' },
-            icon: p.icon || 'Package',
-            image: p.image || '/images/categories/default.png',
-            subcategories: subcats
-              .filter((s: any) => s.parentSlug === p.slug)
-              .map((s: any) => ({
-                id: s._id,
-                name: s.name,
-                slug: s.slug,
-                description: s.description || { en: '', ar: '' },
-              })),
-          }));
-          setCategoriesList(formatted);
-        }
-      })
-      .catch((err) => console.error('Failed to load dynamic categories:', err));
+    getCachedCategories().then((list) => {
+      if (list && list.length > 0) {
+        setCategoriesList(list);
+      }
+    });
   }, []);
 
   useEffect(() => {

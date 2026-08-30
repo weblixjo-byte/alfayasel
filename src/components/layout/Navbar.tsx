@@ -6,6 +6,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { Menu, ChevronDown, ChevronRight } from 'lucide-react';
 import { Locale, getLocalizedPath } from '@/lib/i18n/config';
 import { INITIAL_CATEGORIES, CategoryData } from '@/lib/data/products';
+import { getCachedCategories } from '@/lib/utils/categoriesCache';
 
 
 interface NavbarProps {
@@ -22,34 +23,11 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
   const [categoriesList, setCategoriesList] = useState<CategoryData[]>(INITIAL_CATEGORIES);
 
   useEffect(() => {
-    fetch('/api/categories')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.categories && data.categories.length > 0) {
-          const raw = data.categories;
-          const parents = raw.filter((c: any) => !c.parentSlug);
-          const subcats = raw.filter((c: any) => c.parentSlug);
-
-          const formatted: CategoryData[] = parents.map((p: any) => ({
-            id: p._id,
-            name: p.name,
-            slug: p.slug,
-            description: p.description || { en: '', ar: '' },
-            icon: p.icon || 'Package',
-            image: p.image || '/images/categories/default.png',
-            subcategories: subcats
-              .filter((s: any) => s.parentSlug === p.slug)
-              .map((s: any) => ({
-                id: s._id,
-                name: s.name,
-                slug: s.slug,
-                description: s.description || { en: '', ar: '' },
-              })),
-          }));
-          setCategoriesList(formatted);
-        }
-      })
-      .catch((err) => console.error('Failed to load dynamic categories:', err));
+    getCachedCategories().then((list) => {
+      if (list && list.length > 0) {
+        setCategoriesList(list);
+      }
+    });
   }, []);
 
   // Hide standalone Navbar on home page because HeroSection contains the exact Woodmart header nav bar

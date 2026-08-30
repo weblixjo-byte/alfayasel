@@ -9,6 +9,9 @@ interface PageProps {
   params: { lang: Locale };
 }
 
+// 1 Hour ISR - Cached on Vercel CDN Edge with 0 Serverless Function cost
+export const revalidate = 3600;
+
 export async function generateMetadata({ params: { lang } }: PageProps): Promise<Metadata> {
   const isAr = lang === 'ar';
   const title = isAr ? 'مختبرات الفياصل الدوائية | مستحضرات طبية وتجميلية متميزة' : 'Al Fayasel Laboratories | Premium Medical & Cosmetic Products';

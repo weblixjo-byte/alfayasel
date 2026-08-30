@@ -24,6 +24,8 @@ interface AboutUsPageProps {
   params: { lang: Locale };
 }
 
+export const revalidate = 86400; // 24 Hours ISR - Static Edge CDN
+
 export async function generateMetadata({ params }: { params: { lang: 'en' | 'ar' } }): Promise<Metadata> {
   const isAr = params.lang === 'ar';
   return {

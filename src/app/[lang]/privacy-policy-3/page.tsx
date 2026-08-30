@@ -5,6 +5,8 @@ interface PrivacyPolicyPageProps {
   params: { lang: Locale };
 }
 
+export const revalidate = 86400; // 24 Hours ISR - Static Edge CDN
+
 
 import { Metadata } from 'next';
 

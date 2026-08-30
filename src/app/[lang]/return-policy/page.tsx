@@ -5,6 +5,8 @@ interface ReturnPolicyPageProps {
   params: { lang: Locale };
 }
 
+export const revalidate = 86400; // 24 Hours ISR - Static Edge CDN
+
 export default function ReturnPolicyPage({ params: { lang } }: ReturnPolicyPageProps) {
   const isAr = lang === 'ar';
 
