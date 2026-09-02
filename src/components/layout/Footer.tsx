@@ -98,6 +98,7 @@ export const Footer: React.FC<FooterProps> = ({ locale }) => {
                 <li key={href}>
                   <Link
                     href={getLocalizedPath(href, locale)}
+                    prefetch={false}
                     className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors group"
                   >
                     <Arrow className="w-3 h-3 text-[#0066b2] shrink-0 group-hover:translate-x-0.5 transition-transform" />
@@ -118,6 +119,7 @@ export const Footer: React.FC<FooterProps> = ({ locale }) => {
                 <li key={href}>
                   <Link
                     href={getLocalizedPath(href, locale)}
+                    prefetch={false}
                     className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors group"
                   >
                     <Arrow className="w-3 h-3 text-[#0066b2] shrink-0 group-hover:translate-x-0.5 transition-transform" />

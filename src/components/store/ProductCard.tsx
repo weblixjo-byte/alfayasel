@@ -86,7 +86,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Product Image */}
         <Link
           href={getLocalizedPath(`/product/${product.slug}`, locale)}
-          
+          prefetch={false}
           className="block relative w-full aspect-square overflow-hidden bg-transparent mb-3 select-none"
         >
           {product.images && product.images.length > 1 ? (
@@ -125,7 +125,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Product Title */}
         <Link 
           href={getLocalizedPath(`/product/${product.slug}`, locale)} 
-          
+          prefetch={false}
           className="text-center block mb-1"
         >
           <h3 className="font-medium text-[13px] text-gray-800 hover:text-brand-600 transition-colors line-clamp-1 leading-snug px-1">

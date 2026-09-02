@@ -7,6 +7,14 @@ const LOCALES = ['en', 'ar'];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Bypass middleware execution for background prefetch requests
+  if (
+    request.headers.get('x-middleware-prefetch') === '1' ||
+    request.headers.get('purpose') === 'prefetch'
+  ) {
+    return NextResponse.next();
+  }
+
   if (pathname.includes('opengraph-image') || pathname.includes('twitter-image')) {
     return NextResponse.next();
   }

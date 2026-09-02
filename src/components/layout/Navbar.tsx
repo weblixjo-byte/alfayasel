@@ -124,6 +124,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
                     >
                       <Link
                         href={getLocalizedPath(`/shop/${cat.slug}`, locale)}
+                        prefetch={false}
                         className="flex-1 font-semibold text-gray-700 hover:text-[#0066b2] transition-colors capitalize"
                       >
                         {cat.name[locale]}
@@ -140,6 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
                               <Link
                                 key={sub.slug}
                                 href={getLocalizedPath(`/shop/${cat.slug}/${sub.slug}`, locale)}
+                                prefetch={false}
                                 className="block text-xs font-medium text-gray-600 hover:text-[#0066b2] transition-colors py-1 capitalize"
                               >
                                 {sub.name[locale]}
@@ -159,6 +161,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
           <div className="flex items-center gap-6 px-4 text-sm font-bold uppercase tracking-wider text-gray-800">
             <Link
               href={getLocalizedPath('/', locale)}
+              prefetch={false}
               className={`py-3.5 transition-colors font-bold ${
                 isActive('/') ? 'text-[#0066b2]' : 'text-gray-800 hover:text-[#0066b2]'
               }`}
@@ -167,6 +170,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
             </Link>
             <Link
               href={getLocalizedPath('/our-products', locale)}
+              prefetch={false}
               className={`py-3.5 transition-colors font-bold ${
                 isActive('/our-products') ? 'text-[#0066b2]' : 'text-gray-800 hover:text-[#0066b2]'
               }`}
@@ -175,6 +179,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
             </Link>
             <Link
               href={getLocalizedPath('/about-us', locale)}
+              prefetch={false}
               className={`py-3.5 transition-colors font-bold ${
                 isActive('/about-us') ? 'text-[#0066b2]' : 'text-gray-800 hover:text-[#0066b2]'
               }`}
@@ -183,6 +188,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
             </Link>
             <Link
               href={getLocalizedPath('/contact-us', locale)}
+              prefetch={false}
               className={`py-3.5 transition-colors font-bold ${
                 isActive('/contact-us') ? 'text-[#0066b2]' : 'text-gray-800 hover:text-[#0066b2]'
               }`}
@@ -191,6 +197,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
             </Link>
             <Link
               href={getLocalizedPath('/our-certificates', locale)}
+              prefetch={false}
               className={`py-3.5 transition-colors font-bold ${
                 isActive('/our-certificates') ? 'text-[#0066b2]' : 'text-gray-800 hover:text-[#0066b2]'
               }`}
@@ -200,6 +207,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
             {/* Language Switcher */}
             <Link
               href={getLanguageSwitcherPath()}
+              prefetch={false}
               className="text-gray-800 hover:text-[#0066b2] py-3.5 transition-colors flex items-center gap-1.5"
             >
               {isAr ? (
@@ -221,6 +229,7 @@ export const Navbar: React.FC<NavbarProps> = ({ locale }) => {
         <div className="pe-4 hidden lg:block">
           <Link
             href={getLocalizedPath('/shop?offer=special', locale)}
+            prefetch={false}
             className="text-sm font-bold text-[#0066b2] hover:text-[#005594] flex items-center gap-1.5 uppercase tracking-wider"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block" />
